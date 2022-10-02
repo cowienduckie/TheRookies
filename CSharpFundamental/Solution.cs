@@ -12,6 +12,7 @@ public static class Solution
 
     public static List<ClassMember> GetMembersByGender(Gender gender)
     {
+        Console.WriteLine($"\nClass member with gender is {gender}:\n" +  _divider);
         List<ClassMember> results = new();
 
         foreach (var member in _classMembers)
@@ -28,6 +29,7 @@ public static class Solution
 
     public static ClassMember GetOldestMember()
     {
+        Console.WriteLine("\nOldest member in class:\n" +  _divider);
         var result = new ClassMember();
 
         foreach (var member in _classMembers)
@@ -44,6 +46,7 @@ public static class Solution
 
     public static List<string> GetAllFullNames()
     {
+        Console.WriteLine("\nClass member full names:\n" +  _divider);
         var results = new List<string>();
 
         foreach (var member in _classMembers)
@@ -56,6 +59,62 @@ public static class Solution
 
         Console.WriteLine(_divider);
         return results;
+    }
+
+    public static void GetMembersGroupByBirthYear(
+        out List<ClassMember> birthYearLessThan,
+        out List<ClassMember> birthYearEqualTo,
+        out List<ClassMember> birthYearGreaterThan,
+        int queryYear
+    )
+    {
+        birthYearLessThan = new();
+        birthYearEqualTo = new();
+        birthYearGreaterThan = new();
+
+        foreach(var member in _classMembers)
+        {
+            var birthYear = member.DateOfBirth.Year;
+
+            if (birthYear < queryYear)
+            {
+                birthYearLessThan.Add(member);
+            }
+            else if (birthYear == queryYear)
+            {
+                birthYearEqualTo.Add(member);
+            }
+            else if (birthYear > queryYear)
+            {
+                birthYearGreaterThan.Add(member);
+            }
+        }
+
+        Console.WriteLine($"\nBirth year less than {queryYear}:\n" + _divider);
+        birthYearLessThan.ForEach(m => PrintProfile(m));
+
+        Console.WriteLine($"\nBirth year equal to {queryYear}:\n" + _divider);
+        birthYearEqualTo.ForEach(m => PrintProfile(m));
+
+        Console.WriteLine($"\nBirth year greater than {queryYear}:\n" + _divider);
+        birthYearGreaterThan.ForEach(m => PrintProfile(m));
+    }
+
+    public static ClassMember GetFirstMemberBornIn(string birthPlace)
+    {
+        Console.WriteLine($"\nFirst member born in {birthPlace}:\n" +  _divider);
+
+        foreach (var member in _classMembers)
+        {
+            if (member.BirthPlace == birthPlace)
+            {
+                PrintProfile(member);
+                return member;
+            }
+        }
+
+        Console.WriteLine($"Not found member born in {birthPlace}!\n" + _divider);
+        return new ClassMember();
     }
 
     private static void PrintProfile(ClassMember member)
