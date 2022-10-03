@@ -1,6 +1,13 @@
 namespace CSharpFundamental;
 
-public class ClassMember
+public enum Gender
+{
+    Male,
+    Female,
+    Other
+}
+
+public class Member
 {
     public string FirstName { get; set; }
     public string LastName { get; set; }
@@ -10,8 +17,9 @@ public class ClassMember
     public string BirthPlace { get; set; }
     public int Age => CalculateAge(DateOfBirth);
     public bool IsGraduated { get; set; }
+    public string FullName => LastName + " " + FirstName;
 
-    public ClassMember(
+    public Member(
         string firstName,
         string lastName,
         Gender gender,
@@ -29,13 +37,23 @@ public class ClassMember
         IsGraduated = isGraduated;
     }
 
-    public ClassMember()
+    public Member()
     {
         FirstName = string.Empty;
         LastName = string.Empty;
         PhoneNumber = string.Empty;
         BirthPlace = string.Empty;
         DateOfBirth = DateTime.MaxValue;
+    }
+
+    public void PrintInfo()
+    {
+        var graduationStatus = IsGraduated ? "Graduated" : "Not graduated";
+
+        Console.WriteLine($"First name: {FirstName} | Last name: {LastName} | Full name: {FullName}");
+        Console.WriteLine($"Gender: {Gender} | DOB: {DateOfBirth:dd/MM/yyyy} | Birth place: {BirthPlace}");
+        Console.WriteLine($"Phone: {PhoneNumber} | {graduationStatus}");
+        Console.WriteLine();
     }
 
     private static int CalculateAge(DateTime dateOfBirth)
@@ -45,11 +63,4 @@ public class ClassMember
 
         return dateOfBirth > today.AddYears(-age) ? --age : age;
     }
-}
-
-public enum Gender
-{
-    Male = 0,
-    Female = 1,
-    Other = 2
 }
