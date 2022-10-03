@@ -29,9 +29,10 @@ public static class Solution
             Console.WriteLine("\n#0: Exit");
             Console.WriteLine(_divider);
             Console.Write("Insert option number: ");
+
             var optionInput = Console.ReadLine();
 
-            if (int.TryParse(optionInput, out var option))
+            if (int.TryParse(optionInput, out int option))
             {
                 switch (option)
                 {
@@ -53,9 +54,9 @@ public static class Solution
 
                     case 4:
                         GetMembersGroupByBirthYear(
-                            out var birthYearLessThan,
-                            out var birthYearEqualTo,
-                            out var birthYearGreaterThan
+                            out List<Member> birthYearLessThan,
+                            out List<Member> birthYearEqualTo,
+                            out List<Member> birthYearGreaterThan
                         );
                         break;
 
@@ -88,12 +89,11 @@ public static class Solution
 
         var results = new List<Member>();
 
-        foreach (var member in _classMembers)
+        foreach (Member member in _classMembers)
         {
             if (member.Gender == gender)
             {
                 results.Add(member);
-
                 member.PrintInfo();
             }
         }
@@ -108,7 +108,7 @@ public static class Solution
 
         var oldestMember = new Member();
 
-        foreach (var member in _classMembers)
+        foreach (Member member in _classMembers)
         {
             if (member.Age > oldestMember.Age)
             {
@@ -128,7 +128,7 @@ public static class Solution
 
         var fullNames = new List<string>();
 
-        foreach (var member in _classMembers)
+        foreach (Member member in _classMembers)
         {
             fullNames.Add(member.FullName);
 
@@ -148,11 +148,11 @@ public static class Solution
     {
         Console.Clear();
 
-        birthYearLessThan = new List<Member>();
-        birthYearEqualTo = new List<Member>();
-        birthYearGreaterThan = new List<Member>();
+        birthYearLessThan = new();
+        birthYearEqualTo = new();
+        birthYearGreaterThan = new();
 
-        foreach (var member in _classMembers)
+        foreach (Member member in _classMembers)
         {
             switch (member.DateOfBirth.Year)
             {
@@ -185,11 +185,11 @@ public static class Solution
         Console.Clear();
         Console.WriteLine($"First member born in {birthPlace}:\n" + _divider);
 
-        var index = 0;
+        int index = 0;
 
         while (index < _classMembers.Count)
         {
-            var member = _classMembers[index];
+            Member member = _classMembers[index];
 
             if (string.Equals(member.BirthPlace, birthPlace, StringComparison.OrdinalIgnoreCase))
             {
@@ -198,7 +198,7 @@ public static class Solution
                 return member;
             }
 
-            ++index;
+            index++;
         }
 
         Console.WriteLine($"Not found member born in {birthPlace}!\n" + _divider);
