@@ -74,11 +74,11 @@ public static class Solution
                 Console.WriteLine("\nInvalid input!");
             }
 
-            Console.WriteLine("\nPress any key to back to menu ...");
+            Console.Write("\nPress any key to back to menu ...");
             Console.ReadKey();
         }
 
-        Console.WriteLine("\nPress any key to exit ...");
+        Console.Write("\n\nPress any key to exit ...");
         Console.ReadKey();
     }
 
@@ -88,8 +88,7 @@ public static class Solution
         Console.WriteLine($"Class member with gender is {gender}:\n" + _divider);
 
         List<Member> results = _classMembers
-            .Where(member => member.Gender == gender)
-            .ToList();
+            .FindAll(member => member.Gender == gender);
 
         results.ForEach(member => member.PrintInfo());
 
@@ -134,14 +133,13 @@ public static class Solution
         Console.Clear();
 
         birthYearLessThan = _classMembers
-            .Where(member => member.DateOfBirth.Year < 2000)
-            .ToList();
+            .FindAll(member => member.DateOfBirth.Year < 2000);
+
         birthYearEqualTo = _classMembers
-            .Where(member => member.DateOfBirth.Year == 2000)
-            .ToList();
+            .FindAll(member => member.DateOfBirth.Year == 2000);
+
         birthYearGreaterThan = _classMembers
-            .Where(member => member.DateOfBirth.Year > 2000)
-            .ToList();
+            .FindAll(member => member.DateOfBirth.Year > 2000);
 
         Console.WriteLine("Birth year less than 2000:\n" + _divider);
         birthYearLessThan.ForEach(member => member.PrintInfo());
