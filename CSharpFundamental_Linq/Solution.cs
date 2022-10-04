@@ -19,7 +19,7 @@ public static class Solution
         while (!isExit)
         {
             Console.Clear();
-            Console.WriteLine("C# Fundamentals Assignment #1");
+            Console.WriteLine("C# Fundamentals Assignment #2");
             Console.WriteLine(_divider);
             Console.WriteLine("#1: Return a list of members who is Male");
             Console.WriteLine("#2: Return the oldest one based on Age");
