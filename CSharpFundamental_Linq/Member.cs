@@ -37,15 +37,6 @@ public class Member
         IsGraduated = isGraduated;
     }
 
-    public Member()
-    {
-        FirstName = string.Empty;
-        LastName = string.Empty;
-        PhoneNumber = string.Empty;
-        BirthPlace = string.Empty;
-        DateOfBirth = DateTime.MaxValue;
-    }
-
     public void PrintInfo()
     {
         var graduationStatus = IsGraduated ? "Graduated" : "Not graduated";
