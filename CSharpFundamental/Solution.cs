@@ -53,11 +53,7 @@ public static class Solution
                         break;
 
                     case 4:
-                        GetMembersGroupByBirthYear(
-                            out List<Member> birthYearLessThan,
-                            out List<Member> birthYearEqualTo,
-                            out List<Member> birthYearGreaterThan
-                        );
+                        GetMembersGroupByBirthYear();
                         break;
 
                     case 5:
@@ -82,7 +78,7 @@ public static class Solution
         Console.ReadKey();
     }
 
-    private static List<Member> GetMembersByGender(Gender gender)
+    private static void GetMembersByGender(Gender gender)
     {
         Console.Clear();
         Console.WriteLine($"Class member with gender is {gender}:\n" + _divider);
@@ -97,16 +93,21 @@ public static class Solution
                 member.PrintInfo();
             }
         }
-
-        return results;
     }
 
-    private static Member GetOldestMember()
+    private static void GetOldestMember()
     {
         Console.Clear();
         Console.WriteLine("Oldest member in class:\n" + _divider);
 
-        var oldestMember = new Member();
+        if (_classMembers.Count == 0)
+        {
+            Console.WriteLine("No member in the class!");
+
+            return;
+        }
+
+        Member oldestMember = _classMembers[0];
 
         foreach (Member member in _classMembers)
         {
@@ -117,11 +118,9 @@ public static class Solution
         }
 
         oldestMember.PrintInfo();
-
-        return oldestMember;
     }
 
-    private static List<string> GetAllFullNames()
+    private static void GetAllFullNames()
     {
         Console.Clear();
         Console.WriteLine("Class member full names:\n" + _divider);
@@ -136,21 +135,15 @@ public static class Solution
         }
 
         Console.WriteLine("\n" + _divider);
-
-        return fullNames;
     }
 
-    private static void GetMembersGroupByBirthYear(
-        out List<Member> birthYearLessThan,
-        out List<Member> birthYearEqualTo,
-        out List<Member> birthYearGreaterThan
-    )
+    private static void GetMembersGroupByBirthYear()
     {
         Console.Clear();
 
-        birthYearLessThan = new();
-        birthYearEqualTo = new();
-        birthYearGreaterThan = new();
+        var birthYearLessThan = new List<Member>();
+        var birthYearEqualTo = new List<Member>();
+        var birthYearGreaterThan = new List<Member>();
 
         foreach (Member member in _classMembers)
         {
@@ -180,7 +173,7 @@ public static class Solution
         birthYearGreaterThan.ForEach(member => member.PrintInfo());
     }
 
-    private static Member GetFirstMemberBornIn(string birthPlace)
+    private static void GetFirstMemberBornIn(string birthPlace)
     {
         Console.Clear();
         Console.WriteLine($"First member born in {birthPlace}:\n" + _divider);
@@ -195,14 +188,12 @@ public static class Solution
             {
                 member.PrintInfo();
 
-                return member;
+                return;
             }
 
             index++;
         }
 
         Console.WriteLine($"Not found member born in {birthPlace}!\n" + _divider);
-
-        return new Member();
     }
 }
