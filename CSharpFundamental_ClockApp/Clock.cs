@@ -2,8 +2,8 @@ namespace ClockApp;
 
 public class Clock
 {
-    public delegate void ShowTimeHandler(DateTime currentDateTime);
-    public event ShowTimeHandler ShowTimeEvent;
+    public delegate void ShowTimeEventHandler(DateTime currentDateTime);
+    public event ShowTimeEventHandler ShowTimeEvent;
 
     public void OnShowTimeEvent(DateTime currentDateTime)
     {
