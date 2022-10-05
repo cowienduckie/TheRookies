@@ -31,8 +31,9 @@ public static class Solution
             Console.Write("Insert option number: ");
 
             var optionInput = Console.ReadLine();
+            var isInputValid = int.TryParse(optionInput, out int option);
 
-            if (int.TryParse(optionInput, out int option))
+            if (isInputValid)
             {
                 switch (option)
                 {
@@ -108,7 +109,8 @@ public static class Solution
         Console.WriteLine("Class member full names:\n" + _divider);
 
         List<string> fullNames = _classMembers
-            .ConvertAll(member => member.FullName);
+            .Select(member => member.FullName)
+            .ToList();
 
         fullNames.ForEach(name => Console.WriteLine(name));
         Console.WriteLine("\n" + _divider);
@@ -142,7 +144,7 @@ public static class Solution
         Console.Clear();
         Console.WriteLine($"First member born in {birthPlace}:\n" + _divider);
 
-        Member? firstMember = _classMembers.Find(member => string.Equals(
+        Member? firstMember = _classMembers.FirstOrDefault(member => string.Equals(
             member.BirthPlace, birthPlace.Trim(), StringComparison.OrdinalIgnoreCase));
 
         if (firstMember != null)
