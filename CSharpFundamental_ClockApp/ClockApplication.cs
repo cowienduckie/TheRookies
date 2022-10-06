@@ -20,11 +20,11 @@ public static class ClockApplication
 
             PublishShowCurrentDateTimeEvents();
 
-            isExit = ExitOrUpdateTime();
+            isExit = IsExitOrUpdateTime();
         }
     }
 
-    private static bool ExitOrUpdateTime()
+    private static bool IsExitOrUpdateTime()
     {
         Console.Write("\nPress any key to exit ...");
 
