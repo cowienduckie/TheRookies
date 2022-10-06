@@ -6,8 +6,8 @@ public class ClockDisplay
 {
     public void Subscribe(Clock clock)
     {
-        clock.showTime += ShowLocalTimeHandler;
-        clock.showTime += ShowUtcTimeHandler;
+        clock.ShowTime += ShowLocalTimeHandler;
+        clock.ShowTime += ShowUtcTimeHandler;
     }
 
     private void ShowLocalTimeHandler(object clock, ShowTimeEventArgs args)

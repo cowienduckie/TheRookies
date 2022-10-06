@@ -2,8 +2,8 @@ namespace ClockApp.Events;
 
 public class Clock
 {
-    public delegate void showTimeEventHandler(object clock, ShowTimeEventArgs args);
-    public event showTimeEventHandler? showTime;
+    public delegate void ShowTimeEventHandler(object clock, ShowTimeEventArgs args);
+    public event ShowTimeEventHandler? ShowTime;
     private const string _divider = "-------------------------------------------------\n";
 
     public void Run()
@@ -27,6 +27,6 @@ public class Clock
 
     protected void OnShowTime(object clock, ShowTimeEventArgs args)
     {
-        showTime?.Invoke(clock, args);
+        ShowTime?.Invoke(clock, args);
     }
 }
