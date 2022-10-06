@@ -1,117 +1,49 @@
+using System.Threading.Tasks;
 namespace PrimeNumberApp;
 
 public static class PrimeNumberApp
 {
     private const string _divider = "-------------------------------------------------------\n";
 
-    public static async Task RunApplicationAsync()
+    public static void Run()
     {
-        bool isExit = false;
+        Console.Clear();
+        Console.WriteLine("C# Fundamentals Assignment #3: Prime Number Application");
+        Console.WriteLine(_divider);
 
-        while (!isExit)
-        {
-            Console.Clear();
-            Console.WriteLine("C# Fundamentals Assignment #3: Prime Number Application");
-            Console.WriteLine(_divider);
+        const int leftBound = 1;
+        const int rightBound = 1000;
 
-            int leftBound = GetInputNumber("Insert left bound: ");
-            int rightBound = GetInputNumber("Insert right bound: ");
+        Console.Write($"Prime number(s) from {leftBound} to {rightBound}: ");
 
-            var primeNumbers = await GetPrimeNumbersAsync(leftBound, rightBound);
+        var findPrimeTasks = SplitRangeIntoTasks(leftBound, rightBound).ToArray();
 
-            if (primeNumbers.Any())
-            {
-                Console.WriteLine(_divider);
-                Console.Write($"Prime number(s) from {leftBound} to {rightBound}: ");
+        Task.WaitAll(findPrimeTasks);
 
-                primeNumbers.ForEach(primeNumber => Console.Write(primeNumber + " "));
-
-                Console.WriteLine();
-            }
-            else
-            {
-                Console.WriteLine(_divider);
-                Console.WriteLine($"Prime number(s) from {leftBound} to {rightBound}: There is no prime number!");
-            }
-
-            Console.Write("\n\nPress Esc key to exit or another key to continue ...");
-
-            var pressedKey = Console.ReadKey().Key;
-
-            if (pressedKey == ConsoleKey.Escape)
-            {
-                isExit = true;
-            }
-        }
+        Console.Write("\n\nPress any key to exit ...");
+        Console.ReadKey();
     }
 
-    private static int GetInputNumber(string inputMessage)
+    private static List<Task> SplitRangeIntoTasks(int leftBound, int rightBound)
     {
-        int outputNumber = 0;
-        bool isInputValid = false;
-
-        while (!isInputValid)
-        {
-            Console.Write(inputMessage);
-
-            var inputNumber = Console.ReadLine();
-            isInputValid = int.TryParse(inputNumber, out int number);
-
-            if (isInputValid)
-            {
-                outputNumber = number;
-            }
-            else
-            {
-                Console.WriteLine("\nInvalid input!\n");
-            }
-        }
-
-        Console.WriteLine();
-
-        return outputNumber;
-    }
-
-    private static async Task<List<int>> GetPrimeNumbersAsync(int leftBound, int rightBound)
-    {
+        const int interval = 50;
         const int smallestPrimeNumber = 2;
 
-        var primeNumbers = new List<int>();
+        var findPrimeTasks = new List<Task>();
 
         if (leftBound > rightBound || rightBound < smallestPrimeNumber)
         {
-            return primeNumbers;
+            return findPrimeTasks;
         }
 
         leftBound = Math.Max(leftBound, smallestPrimeNumber);
 
-        var findPrimeTasks = SplitFindPrimeTasksIntoChunks(leftBound, rightBound);
-
-        var taskResults = await Task.WhenAll(findPrimeTasks);
-
-        if (taskResults != null)
-        {
-            foreach (List<int> result in taskResults)
-            {
-                primeNumbers.AddRange(result);
-            }
-        }
-
-        return primeNumbers;
-    }
-
-    private static List<Task<List<int>>> SplitFindPrimeTasksIntoChunks(int leftBound, int rightBound)
-    {
-        const int chunkSize = 10;
-
-        var findPrimeTasks = new List<Task<List<int>>>();
-
-        for (int currentNumber = leftBound; currentNumber <= rightBound; currentNumber += chunkSize)
+        for (int currentNumber = leftBound; currentNumber <= rightBound; currentNumber += interval)
         {
             int fromNumber = currentNumber;
-            int toNumber = Math.Min(rightBound, fromNumber + chunkSize - 1);
+            int toNumber = Math.Min(rightBound, fromNumber + interval - 1);
 
-            var findPrimeTask = Task.Run(() => FindPrimeNumbersInRange(fromNumber, toNumber));
+            var findPrimeTask = Task.Run(() => GetPrimeNumbers(fromNumber, toNumber));
 
             findPrimeTasks.Add(findPrimeTask);
         }
@@ -119,21 +51,17 @@ public static class PrimeNumberApp
         return findPrimeTasks;
     }
 
-    private static List<int> FindPrimeNumbersInRange(int fromNumber, int toNumber)
+    private static void GetPrimeNumbers(int fromNumber, int toNumber)
     {
-        var primeNumbers = new List<int>();
-
         for (int currentNumber = fromNumber; currentNumber <= toNumber; ++currentNumber)
         {
             bool isPrimeNumber = IsPrimeNumber(currentNumber);
 
             if (isPrimeNumber)
             {
-                primeNumbers.Add(currentNumber);
+                Console.Write(currentNumber + " ");
             }
         }
-
-        return primeNumbers;
     }
 
     private static bool IsPrimeNumber(int number)
