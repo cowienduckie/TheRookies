@@ -1,4 +1,3 @@
-using System.Threading.Tasks;
 namespace PrimeNumberApp;
 
 public static class PrimeNumberApp
