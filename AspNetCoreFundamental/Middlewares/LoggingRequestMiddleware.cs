@@ -23,19 +23,19 @@ public class LoggingRequestMiddleware
 
         var bodyString = Encoding.UTF8.GetString(buffer);
 
-        var fileName = $"{DateTime.Now:yyMMddhhmmss}_Request.log";
-        var filePath = Path.Combine(
-            Directory.GetCurrentDirectory(), "Logs/", fileName);
+        var logName = $"{DateTime.Now:yyMMddhhmmss}_Request.log";
+        var logPath = Path.Combine(
+            Directory.GetCurrentDirectory(), "Logs/", logName);
 
-        var fileContent = string.Empty;
+        var logContent = string.Empty;
 
-        fileContent += $"Scheme: {request.Scheme}\n";
-        fileContent += $"Host: {request.Host}\n";
-        fileContent += $"Path: {request.Path}\n";
-        fileContent += $"Query String: {request.QueryString}\n";
-        fileContent += $"Request Body:\n{bodyString}\n";
+        logContent += $"Scheme: {request.Scheme}\n";
+        logContent += $"Host: {request.Host}\n";
+        logContent += $"Path: {request.Path}\n";
+        logContent += $"Query String: {request.QueryString}\n";
+        logContent += $"Request Body:\n{bodyString}\n";
 
-        File.WriteAllText(filePath, fileContent);
+        File.WriteAllText(logPath, logContent);
 
         request.Body.Position = 0;
 
