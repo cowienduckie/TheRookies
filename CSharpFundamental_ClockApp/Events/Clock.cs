@@ -15,9 +15,9 @@ public class Clock
             Console.Write(_divider);
 
             var currentDateTime = DateTime.Now;
-            var ShowTimeEventArgs = new ShowTimeEventArgs(currentDateTime);
+            var showTimeEventArgs = new ShowTimeEventArgs(currentDateTime);
 
-            OnShowTime(this, ShowTimeEventArgs);
+            OnShowTime(this, showTimeEventArgs);
 
             Console.Write("\nPress any key to exit ...");
 
