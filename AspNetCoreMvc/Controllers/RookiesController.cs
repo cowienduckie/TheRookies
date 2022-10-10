@@ -1,3 +1,4 @@
+using AspNetCoreMvc.Helpers;
 using AspNetCoreMvc.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -6,12 +7,12 @@ namespace AspNetCoreMvc.Controllers;
 [Route("NashTech/{controller}")]
 public class RookiesController : Controller
 {
-    private static readonly List<Person> _members = new()
+    private static readonly List<PersonModel> _members = new()
     {
-        new Person("Minh", "Tran", Gender.Male, new DateTime(2000, 04, 24), "0962215871", "Ha Noi", false),
-        new Person("Nam", "Nguyen", Gender.Male, new DateTime(2000, 09, 24), "0962215871", "Hoa Binh", false),
-        new Person("Mai", "Tran", Gender.Female, new DateTime(2002, 04, 26), "0962215871", "Ha Noi", true),
-        new Person("Hoa", "Tran", Gender.Other, new DateTime(1999, 09, 21), "0962215871", "Phu Tho", true)
+        new PersonModel("Minh", "Tran", Gender.Male, new DateTime(2000, 04, 24), "0962215871", "Ha Noi", false),
+        new PersonModel("Nam", "Nguyen", Gender.Male, new DateTime(2000, 09, 24), "0962215871", "Hoa Binh", false),
+        new PersonModel("Mai", "Tran", Gender.Female, new DateTime(2002, 04, 26), "0962215871", "Ha Noi", true),
+        new PersonModel("Hoa", "Tran", Gender.Other, new DateTime(1999, 09, 21), "0962215871", "Phu Tho", true)
     };
 
     [Route("{action}")]
@@ -45,63 +46,67 @@ public class RookiesController : Controller
     }
 
     [Route("{action}")]
-    public IActionResult GetMembersGroupByBirthYear(string compareTo2000)
+    public IActionResult GetMembersByBirthYear(int year, string compareType)
     {
-        if (compareTo2000 == "greater")
+        switch (compareType)
         {
-            return RedirectToAction("GetMembersBirthYearGreaterThan2000");
-        }
+            case "greaterThan":
+                {
+                    var birthYearGreaterThan = _members
+                        .FindAll(member => member.DateOfBirth.Year > year);
 
-        if (compareTo2000 == "equal")
-        {
-            return RedirectToAction("GetMembersBirthYearEqualTo2000");
-        }
+                    return Json(birthYearGreaterThan);
+                }
 
-        if (compareTo2000 == "less")
-        {
-            return RedirectToAction("GetMembersBirthYearLessThan2000");
-        }
+            case "equalTo":
+                {
+                    var birthYearEqualTo = _members
+                        .FindAll(member => member.DateOfBirth.Year == year);
 
-        return Content("Invalid query string!");
+                    return Json(birthYearEqualTo);
+                }
+
+            case "lessThan":
+                {
+                    var birthYearLessThan = _members
+                    .FindAll(member => member.DateOfBirth.Year < 2000);
+
+                    return Json(birthYearLessThan);
+                }
+
+            default:
+                {
+                    return Content("Invalid query string!");
+                }
+        }
     }
 
     [Route("{action}")]
-    public IActionResult GetMembersBirthYearGreaterThan2000()
+    public IActionResult GetMembersBornAfter2000()
     {
-        var birthYearGreaterThan2000 = _members
-            .FindAll(member => member.DateOfBirth.Year > 2000);
-
-        return Json(birthYearGreaterThan2000);
+        return RedirectToAction("GetMembersByBirthYear", new { year = 2000, compareType = "greaterThan" });
     }
 
     [Route("{action}")]
-    public IActionResult GetMembersBirthYearEqualTo2000()
+    public IActionResult GetMembersBornIn2000()
     {
-        var birthYearEqualTo2000 = _members
-            .FindAll(member => member.DateOfBirth.Year == 2000);
-
-        return Json(birthYearEqualTo2000);
+        return RedirectToAction("GetMembersByBirthYear", new { year = 2000, compareType = "equalTo" });
     }
 
     [Route("{action}")]
-    public IActionResult GetMembersBirthYearLessThan2000()
+    public IActionResult GetMembersBornBefore2000()
     {
-        var birthYearLessThan2000 = _members
-            .FindAll(member => member.DateOfBirth.Year < 2000);
-
-        return Json(birthYearLessThan2000);
+        return RedirectToAction("GetMembersByBirthYear", new { year = 2000, compareType = "lessThan" });
     }
 
     [Route("{action}")]
     public IActionResult ExportMembersData()
     {
-        const string fileName = "MembersData.xlsx";
-        var filePath = Path.Combine(
-            Directory.GetCurrentDirectory(), "wwwroot/exports/", fileName);
+        const string sheetName = "MembersData";
 
-        var file = System.IO.File.ReadAllBytes(filePath);
+        var dataTable = ExcelHelper.ToDataTable(_members);
+        var excelSheet = ExcelHelper.ExportExcel(dataTable, true, sheetName);
 
-        return File(file,
-            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        return File(excelSheet, ExcelHelper.ContentType, $"{sheetName}.xlsx");
     }
 }

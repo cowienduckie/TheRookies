@@ -7,7 +7,7 @@ public enum Gender
     Other
 }
 
-public class Person
+public class PersonModel
 {
     public string FirstName { get; set; }
     public string LastName { get; set; }
@@ -19,7 +19,7 @@ public class Person
     public int Age => CalculateAge(DateOfBirth);
     public string FullName => LastName + " " + FirstName;
 
-    public Person(
+    public PersonModel(
         string firstName,
         string lastName,
         Gender gender,
