@@ -90,6 +90,8 @@ public static class ExcelHelper
             {
                 range.Style.Font.Color.SetColor(Color.White);
                 range.Style.Font.Bold = true;
+                range.Style.Font.Size = 12;
+                range.Style.HorizontalAlignment =ExcelHorizontalAlignment.Center;
                 range.Style.Fill.PatternType = ExcelFillStyle.Solid;
                 range.Style.Fill.BackgroundColor.SetColor(Color.DarkGreen);
             }
@@ -124,6 +126,11 @@ public static class ExcelHelper
                 if (maxLength < maxCellWidth)
                 {
                     workSheet.Column(columnIndex).AutoFit();
+                }
+                else
+                {
+                    workSheet.Column(columnIndex).Width = maxCellWidth;
+                    workSheet.Column(columnIndex).Style.WrapText = true;
                 }
             }
 
