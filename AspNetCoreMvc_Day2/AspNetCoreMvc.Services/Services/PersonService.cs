@@ -3,6 +3,7 @@ using AspNetCoreMvc.DataAccess.Entities;
 using AspNetCoreMvc.Services.Models;
 
 namespace AspNetCoreMvc.Services;
+
 public class PersonService
 {
     private readonly StaticPersonDataAccess _dataAccess;
@@ -12,7 +13,7 @@ public class PersonService
         _dataAccess = new StaticPersonDataAccess();
     }
 
-    public  IEnumerable<PersonViewModel> GetAllPeople()
+    public IEnumerable<PersonViewModel> GetAllPeople()
     {
         var entities = _dataAccess.GetAllPeople();
 
@@ -28,25 +29,6 @@ public class PersonService
         .ToList();
 
         return viewModels;
-    }
-
-    public PersonViewModel? GetPersonByIndex(int index)
-    {
-        var entity = _dataAccess.GetPersonByIndex(index);
-
-        if (entity == null) return null;
-
-        var viewModel = new PersonViewModel
-        {
-            FirstName = entity.FirstName,
-            LastName = entity.LastName,
-            Gender = entity.Gender == 0 ? "Male" : "Female",
-            DateOfBirth = entity.DateOfBirth,
-            PhoneNumber = entity.PhoneNumber,
-            BirthPlace = entity.BirthPlace
-        };
-
-        return viewModel;
     }
 
     public PersonEditModel? GetPersonEditModel(int index)

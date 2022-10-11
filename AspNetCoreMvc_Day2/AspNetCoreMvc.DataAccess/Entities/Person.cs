@@ -8,8 +8,6 @@ public class Person
     public DateTime DateOfBirth { get; set; }
     public string PhoneNumber { get; set; }
     public string BirthPlace { get; set; }
-    public int Age => CalculateAge(DateOfBirth);
-    public string FullName => LastName + " " + FirstName;
 
     public Person(
         string firstName,
@@ -25,13 +23,5 @@ public class Person
         DateOfBirth = dateOfBirth;
         PhoneNumber = phoneNumber;
         BirthPlace = birthPlace;
-    }
-
-    private static int CalculateAge(DateTime dateOfBirth)
-    {
-        var today = DateTime.Today;
-        var age = today.Year - dateOfBirth.Year;
-
-        return dateOfBirth > today.AddYears(-age) ? --age : age;
     }
 }
