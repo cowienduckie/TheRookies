@@ -33,11 +33,17 @@ public class StaticPersonDataAccess : IPersonDataAccess
         _people[index] = person;
     }
 
-    public void DeletePerson(int index)
+    public Person? DeletePerson(int index)
     {
         if (index < _people.Count && index >= 0)
         {
+            var deletedPerson = _people[index];
+
             _people.RemoveAt(index);
+
+            return deletedPerson;
         }
+
+        return null;
     }
 }

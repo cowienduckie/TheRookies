@@ -10,6 +10,9 @@ public class PersonViewModel
     [Display(Name = "Last Name")]
     public string? LastName { get; set; }
 
+    [Display(Name = "Full Name")]
+    public string? FullName => $"{LastName} {FirstName}";
+
     [Display(Name = "Gender")]
     public string? Gender { get; set; }
 

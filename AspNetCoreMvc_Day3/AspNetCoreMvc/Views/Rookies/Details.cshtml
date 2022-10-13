@@ -1,0 +1,79 @@
+@model PersonViewModel
+
+@{
+    ViewData["Title"] = "Details";
+
+    var index = ViewBag.Index;
+}
+
+<h1>PERSON DETAILS</h1>
+<hr />
+<br />
+<dl class="row">
+    <dt class="col-4">
+        @Html.DisplayNameFor(model => model.FirstName)
+    </dt>
+    <dd class="col-8">
+        @Html.DisplayFor(model => model.FirstName)
+    </dd>
+    <dt class="col-4">
+        @Html.DisplayNameFor(model => model.LastName)
+    </dt>
+    <dd class="col-8">
+        @Html.DisplayFor(model => model.LastName)
+    </dd>
+    <dt class="col-4">
+        @Html.DisplayNameFor(model => model.Gender)
+    </dt>
+    <dd class="col-8">
+        @Html.DisplayFor(model => model.Gender)
+    </dd>
+    <dt class="col-4">
+        @Html.DisplayNameFor(model => model.DateOfBirth)
+    </dt>
+    <dd class="col-8">
+        @Html.DisplayFor(model => model.DateOfBirth)
+    </dd>
+    <dt class="col-4">
+        @Html.DisplayNameFor(model => model.PhoneNumber)
+    </dt>
+    <dd class="col-8">
+        @Html.DisplayFor(model => model.PhoneNumber)
+    </dd>
+    <dt class="col-4">
+        @Html.DisplayNameFor(model => model.BirthPlace)
+    </dt>
+    <dd class="col-8">
+        @Html.DisplayFor(model => model.BirthPlace)
+    </dd>
+</dl>
+<hr />
+<div class="d-grid gap-2 d-flex justify-content-center">
+    <a class="btn btn-secondary" asp-action="Index">
+        Back to List
+    </a>
+    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
+        Delete
+    </button>
+</div>
+
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Delete Person</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete <strong>@Model.FullName</strong>?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <a id="delete-confirm" class="btn btn-danger" asp-action="DeleteAndRedirectToResultView"
+                    asp-route-index="@index">
+                    Delete
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

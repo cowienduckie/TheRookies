@@ -8,5 +8,5 @@ public interface IPersonDataAccess
     Person? GetPersonByIndex(int index);
     void AddPerson(Person person);
     void EditPerson(int index, Person person);
-    void DeletePerson(int index);
+    Person? DeletePerson(int index);
 }

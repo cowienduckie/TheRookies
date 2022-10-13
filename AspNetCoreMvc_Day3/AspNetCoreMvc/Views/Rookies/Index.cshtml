@@ -1,4 +1,4 @@
-@model IEnumerable<AspNetCoreMvc.Services.Models.PersonViewModel>
+@model IEnumerable<PersonViewModel>
 
 @{
     ViewData["Title"] = "Rookies List";
@@ -20,11 +20,7 @@
                 #
             </th>
             <th scope="col" style="text-align: center">
-                @Html.DisplayNameFor(model => model.FirstName)
-            </th>
-            <th scope="col" style="text-align: center">
-                @Html.DisplayNameFor(model => model.LastName)
-
+                @Html.DisplayNameFor(model => model.FullName)
             </th>
             <th scope="col" style="text-align: center">
                 @Html.DisplayNameFor(model => model.Gender)
@@ -53,10 +49,9 @@
                     @i
                 </th>
                 <td class="align-middle" align="center">
-                    @Html.DisplayFor(modelItem => item.FirstName)
-                </td>
-                <td class="align-middle" align="center">
-                    @Html.DisplayFor(modelItem => item.LastName)
+                    <a class="link-secondary" asp-action="Details" asp-route-index="@i">
+                        @Html.DisplayFor(modelItem => item.FullName)
+                    </a>
                 </td>
                 <td class="align-middle" align="center">
                     @Html.DisplayFor(modelItem => item.Gender)
@@ -74,8 +69,8 @@
                     <a class="btn btn-sm btn-success" asp-action="Edit" asp-route-index="@i">
                         Edit
                     </a>
-                    <button type="button" class="btn btn-sm btn-danger btn-delete" value="@i"
-                    data-bs-toggle="modal" data-bs-target="#deleteModal">
+                    <button type="button" class="btn btn-sm btn-danger btn-delete" value="@i" data-bs-toggle="modal"
+                    data-bs-target="#deleteModal">
                         Delete
                     </button>
                 </td>
@@ -88,7 +83,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="deleteModalLabel">Deleate Person</h5>
+                <h5 class="modal-title" id="deleteModalLabel">Delete Person</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -115,10 +110,10 @@
 
             var index = this.value;
 
-            $("#delete-confirm").attr("href", 
-                                      $("#delete-confirm")
-                                        .attr("href")
-                                        .replace(/Delete\/\d/, `Delete/${index}`));
+            $("#delete-confirm").attr("href",
+                $("#delete-confirm")
+                    .attr("href")
+                    .replace(/Delete\/\d/, `Delete/${index}`));
         });
     });
 </script>

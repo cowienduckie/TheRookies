@@ -32,6 +32,25 @@ public class PersonService : IPersonService
         return viewModels;
     }
 
+    public PersonViewModel? GetPersonByIndex(int index)
+    {
+        var entity = _dataAccess.GetPersonByIndex(index);
+
+        if (entity == null) return null;
+
+        var viewModel = new PersonViewModel
+        {
+            FirstName = entity.FirstName,
+            LastName = entity.LastName,
+            Gender = entity.Gender == 0 ? "Male" : "Female",
+            DateOfBirth = entity.DateOfBirth,
+            PhoneNumber = entity.PhoneNumber,
+            BirthPlace = entity.BirthPlace
+        };
+
+        return viewModel;
+    }
+
     public PersonEditModel? GetPersonEditModel(int index)
     {
         var entity = _dataAccess.GetPersonByIndex(index);
@@ -79,8 +98,22 @@ public class PersonService : IPersonService
         _dataAccess.EditPerson(index, entity);
     }
 
-    public void DeletePerson(int index)
+    public PersonViewModel? DeletePerson(int index)
     {
-        _dataAccess.DeletePerson(index);
+        var entity = _dataAccess.DeletePerson(index);
+
+        if (entity == null) return null;
+
+        var deletedEntity = new PersonViewModel
+        {
+            FirstName = entity.FirstName,
+            LastName = entity.LastName,
+            Gender = entity.Gender == 0 ? "Male" : "Female",
+            DateOfBirth = entity.DateOfBirth,
+            PhoneNumber = entity.PhoneNumber,
+            BirthPlace = entity.BirthPlace
+        };
+
+        return deletedEntity;
     }
 }

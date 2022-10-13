@@ -1,0 +1,9 @@
+@{
+    ViewData["Title"] = "Delete Result";
+
+    const string deletedPersonSessionKey = "DeletedPersonName";
+}
+
+<p class="lead text-info text-center">
+    Person @Context.Session.GetString(deletedPersonSessionKey) was removed from the list successfully!
+</p>

@@ -5,8 +5,9 @@ namespace AspNetCoreMvc.Services.Interfaces;
 public interface IPersonService
 {
     IEnumerable<PersonViewModel> GetAllPeople();
+    PersonViewModel? GetPersonByIndex(int index);
     PersonEditModel? GetPersonEditModel(int index);
     void AddPerson(PersonCreateModel createModel);
     void EditPerson(int index, PersonEditModel editModel);
-    void DeletePerson(int index);
+    PersonViewModel? DeletePerson(int index);
 }

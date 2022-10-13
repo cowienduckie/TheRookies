@@ -6,6 +6,7 @@ namespace AspNetCoreMvc.Controllers;
 
 public class RookiesController : Controller
 {
+    private const string _deletedPersonSessionKey = "DeletedPersonName";
     private readonly IPersonService _personService;
 
     public RookiesController(IPersonService personService)
@@ -19,6 +20,16 @@ public class RookiesController : Controller
         var viewModels = _personService.GetAllPeople();
 
         return View(viewModels);
+    }
+
+    [HttpGet]
+    public IActionResult Details(int index)
+    {
+        var viewModel = _personService.GetPersonByIndex(index);
+
+        ViewBag.Index = index;
+
+        return viewModel != null ? View(viewModel) : RedirectToAction("Index");
     }
 
     [HttpGet]
@@ -65,5 +76,26 @@ public class RookiesController : Controller
         _personService.DeletePerson(index);
 
         return RedirectToAction("Index");
+    }
+
+    [HttpGet]
+    public IActionResult DeleteAndRedirectToResultView(int index)
+    {
+        var deletedPerson = _personService.DeletePerson(index);
+
+        if (deletedPerson != null)
+        {
+            HttpContext.Session.SetString(_deletedPersonSessionKey, deletedPerson.FullName ?? string.Empty);
+
+            return RedirectToAction("DeleteResult");
+        }
+
+        return RedirectToAction("Index");
+    }
+
+    [HttpGet]
+    public IActionResult DeleteResult()
+    {
+        return View();
     }
 }
