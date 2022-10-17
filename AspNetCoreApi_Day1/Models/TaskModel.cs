@@ -6,10 +6,10 @@ public class TaskModel
     public string Title { get; set; }
     public bool IsCompleted { get; set; }
 
-    public TaskModel(string title, bool isCompleted)
+    public TaskModel(string title)
     {
         Id = Guid.NewGuid();
         Title = title;
-        IsCompleted = isCompleted;
+        IsCompleted = false;
     }
 }

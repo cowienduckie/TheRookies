@@ -6,13 +6,13 @@ public class TaskService : ITaskService
 {
     private static readonly List<TaskModel> _taskList = new()
     {
-        new TaskModel("First task", false),
-        new TaskModel("Second task", true)
+        new TaskModel("First task"),
+        new TaskModel("Second task")
     };
 
     public IEnumerable<TaskModel> BulkCreate(IEnumerable<TaskCreateModel> createModels)
     {
-        var createEntities = createModels.Select(task => new TaskModel(task.Title, false));
+        var createEntities = createModels.Select(task => new TaskModel(task.Title));
 
         _taskList.AddRange(createEntities);
 
@@ -50,7 +50,7 @@ public class TaskService : ITaskService
 
     public TaskModel? Create(TaskCreateModel createModel)
     {
-        var createEntity = new TaskModel(createModel.Title, false);
+        var createEntity = new TaskModel(createModel.Title);
 
         _taskList.Add(createEntity);
 
