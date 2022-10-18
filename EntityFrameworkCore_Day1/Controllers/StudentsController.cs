@@ -100,6 +100,6 @@ public class StudentsController : ControllerBase
     {
         Console.WriteLine(exception);
 
-        return StatusCode(500, exception);
+        return StatusCode(500, "Unexpected Error!");
     }
 }
