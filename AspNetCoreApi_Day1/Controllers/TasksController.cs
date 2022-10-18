@@ -121,7 +121,7 @@ public class TasksController : ControllerBase
         }
     }
 
-    [HttpDelete("bulk")]
+    [HttpPost("bulk-deletion")]
     public ActionResult BulkDelete(List<Guid> deleteIds)
     {
         try
@@ -140,6 +140,6 @@ public class TasksController : ControllerBase
     {
         Console.WriteLine(exception);
 
-        return StatusCode(500, exception);
+        return StatusCode(500);
     }
 }
