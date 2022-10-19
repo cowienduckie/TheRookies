@@ -1,8 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace StudentManagement.Models;
+namespace StudentManagement.Dtos;
 
-public class StudentCreateModel
+public class UpdateStudentRequest
 {
     [Required]
     [StringLength(50)]

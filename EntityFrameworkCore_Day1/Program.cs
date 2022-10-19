@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using StudentManagement.Data;
 using StudentManagement.Repositories;
 using StudentManagement.Services;
+using StudentManagement.UnitOfWork;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,9 +11,12 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddScoped<IStudentService, StudentService>();
+builder.Services.AddTransient<IStudentService, StudentService>();
 
-builder.Services.AddScoped<IStudentRepository, StudentRepository>();
+builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
+
+builder.Services.AddTransient(typeof(IBaseRepository<>), typeof(BaseRepository<>));
+builder.Services.AddTransient<IStudentRepository, StudentRepository>();
 
 builder.Services.AddDbContext<StudentManagementContext>(
     options => options.UseSqlServer(builder.Configuration.GetConnectionString("DbConnectionString")));

@@ -1,6 +1,5 @@
-using EntityFrameworkCore_Day1.DTOs;
 using Microsoft.AspNetCore.Mvc;
-using StudentManagement.Models;
+using StudentManagement.Dtos;
 using StudentManagement.Services;
 
 namespace StudentManagement.Controllers;
@@ -16,97 +15,33 @@ public class StudentsController : ControllerBase
         _studentService = studentService;
     }
 
-    [HttpPost]
-    public AddStudentResponse Add([FromBody] AddStudentRequest addRequest)
+    [HttpGet]
+    public IEnumerable<GetStudentResponse> GetAll()
     {
-        return _studentService.Create(addRequest);
+        return _studentService.GetAll();
     }
 
-    // [HttpGet]
-    // public ActionResult<IEnumerable<StudentViewModel>> GetAll()
-    // {
-    //     try
-    //     {
-    //         var students = _studentService.GetAll();
+    [HttpGet("{id}")]
+    public GetStudentResponse? GetById(int id)
+    {
+        return _studentService.GetById(id);
+    }
 
-    //         return Ok(students);
-    //     }
-    //     catch (Exception exception)
-    //     {
-    //         return HandleException(exception);
-    //     }
-    // }
+    [HttpPost]
+    public AddStudentResponse? Add([FromBody] AddStudentRequest requestModel)
+    {
+        return _studentService.Create(requestModel);
+    }
 
-    // [HttpGet("{id}", Name="GetById")]
-    // public ActionResult<StudentViewModel> GetById(int id)
-    // {
-    //     try
-    //     {
-    //         var student = _studentService.GetById(id);
+    [HttpPut("{id}")]
+    public UpdateStudentResponse? Update(int id, [FromBody] UpdateStudentRequest requestModel)
+    {
+        return _studentService.Update(id, requestModel);
+    }
 
-    //         return student != null ? Ok(student) : NotFound();
-    //     }
-    //     catch (Exception exception)
-    //     {
-    //         return HandleException(exception);
-    //     }
-    // }
-
-    // [HttpPost]
-    // public ActionResult<StudentViewModel> Create([FromBody] StudentCreateModel createModel)
-    // {
-    //     if (createModel == null) return BadRequest();
-
-    //     try
-    //     {
-    //         var createdId = _studentService.Create(createModel);
-
-    //         return createdId != null
-    //             ? CreatedAtRoute(nameof(GetById), new { id = createdId }, null)
-    //             : StatusCode(500);
-    //     }
-    //     catch (Exception exception)
-    //     {
-    //         return HandleException(exception);
-    //     }
-    // }
-
-    // [HttpPut("{id}")]
-    // public ActionResult<StudentViewModel> Update(int id, [FromBody] StudentUpdateModel updateModel)
-    // {
-    //     if (updateModel == null) return BadRequest();
-
-    //     try
-    //     {
-    //         var updatedStudent = _studentService.Update(id, updateModel);
-
-    //         return updatedStudent != null ? Ok(updatedStudent) : StatusCode(500);
-    //     }
-    //     catch (Exception exception)
-    //     {
-    //         return HandleException(exception);
-    //     }
-    // }
-
-    // [HttpDelete("{id}")]
-    // public ActionResult Delete(int id)
-    // {
-    //     try
-    //     {
-    //         var isSucceeded = _studentService.Delete(id);
-
-    //         return isSucceeded ? NoContent() : StatusCode(500);
-    //     }
-    //     catch (Exception exception)
-    //     {
-    //         return HandleException(exception);
-    //     }
-    // }
-
-    // private ActionResult HandleException(Exception exception)
-    // {
-    //     Console.WriteLine(exception);
-
-    //     return StatusCode(500, "Unexpected Error!");
-    // }
+    [HttpDelete("{id}")]
+    public bool Delete(int id)
+    {
+        return _studentService.Delete(id);
+    }
 }

@@ -6,6 +6,6 @@ namespace StudentManagement.Models;
 public abstract class BaseEntity<T>
 {
     [Key]
-    [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public T Id { get; set; }
 }
