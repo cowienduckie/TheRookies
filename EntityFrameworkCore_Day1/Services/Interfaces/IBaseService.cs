@@ -1,15 +1,12 @@
-using EntityFrameworkCore_Day1.DTOs;
 using StudentManagement.Models;
 
 namespace StudentManagement.Services;
 
-public interface IStudentService
+public interface IBaseService<T, K> where T : class where K : class
 {
     // IEnumerable<StudentViewModel> GetAll();
     // StudentViewModel? GetById(int id);
-    // int? Create(StudentCreateModel createModel);
+    T Create(K createModel);
     // StudentViewModel? Update(int id, StudentUpdateModel updateModel);
     // bool Delete(int id);
-
-    AddStudentResponse Create(AddStudentRequest createModel);
 }

@@ -2,10 +2,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace StudentManagement.Models;
 
-public class Student
+public class Student : BaseEntity<int>
 {
-    [Key]
-    public int Id { get; set; }
     [Required]
     [StringLength(50)]
     public string FirstName { get; set; } = null!;
