@@ -65,15 +65,15 @@ public class TasksController : ControllerBase
     }
 
     [HttpPost("bulk")]
-    public ActionResult<IEnumerable<TaskModel>> BulkCreate([FromBody] List<TaskCreateModel> createModels)
+    public async Task<ActionResult> BulkCreate([FromBody] List<TaskCreateModel> createModels)
     {
         if (createModels == null) return BadRequest();
 
         try
         {
-            var createdEntities = _taskService.BulkCreate(createModels);
+            await _taskService.BulkCreate(createModels);
 
-            return Ok(createdEntities);
+            return Accepted();
         }
         catch (Exception exception)
         {
@@ -122,13 +122,13 @@ public class TasksController : ControllerBase
     }
 
     [HttpPost("bulk-deletion")]
-    public ActionResult BulkDelete(List<Guid> deleteIds)
+    public async Task<ActionResult> BulkDelete(List<Guid> deleteIds)
     {
         try
         {
-            var isSucceeded = _taskService.BulkDelete(deleteIds);
+            await _taskService.BulkDelete(deleteIds);
 
-            return isSucceeded ? NoContent() : StatusCode(500);
+            return Accepted();
         }
         catch (Exception exception)
         {

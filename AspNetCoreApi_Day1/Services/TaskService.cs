@@ -10,16 +10,16 @@ public class TaskService : ITaskService
         new TaskModel("Second task")
     };
 
-    public IEnumerable<TaskModel> BulkCreate(IEnumerable<TaskCreateModel> createModels)
+    public Task BulkCreate(IEnumerable<TaskCreateModel> createModels)
     {
         var createEntities = createModels.Select(task => new TaskModel(task.Title));
 
         _taskList.AddRange(createEntities);
 
-        return createEntities;
+        return Task.CompletedTask;
     }
 
-    public bool BulkDelete(IEnumerable<Guid> deleteIds)
+    public Task BulkDelete(IEnumerable<Guid> deleteIds)
     {
         bool isSucceeded = true;
         var deletedEntities = new List<TaskModel>();
@@ -45,7 +45,7 @@ public class TaskService : ITaskService
             _taskList.AddRange(deletedEntities);
         }
 
-        return isSucceeded;
+        return Task.CompletedTask;
     }
 
     public TaskModel? Create(TaskCreateModel createModel)

@@ -9,7 +9,7 @@ public interface ITaskService
     TaskModel? Create(TaskCreateModel createModel);
     TaskModel? Update(Guid id, TaskUpdateModel updateModel);
     bool Delete(Guid id);
-    IEnumerable<TaskModel> BulkCreate(IEnumerable<TaskCreateModel> createModels);
-    bool BulkDelete(IEnumerable<Guid> deleteIds);
+    Task BulkCreate(IEnumerable<TaskCreateModel> createModels);
+    Task BulkDelete(IEnumerable<Guid> deleteIds);
     bool IsExist(Guid id);
 }
