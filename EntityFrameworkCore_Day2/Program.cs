@@ -10,8 +10,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddTransient<IProductRepository, ProductRepository>();
-builder.Services.AddTransient<ICategoryRepository, CategoryRepository>();
+builder.Services.AddTransient(typeof(IBaseRepository<>), typeof(BaseRepository<>));
 
 builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
 

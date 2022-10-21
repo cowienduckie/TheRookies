@@ -1,4 +1,5 @@
 using System.Linq.Expressions;
+using ProductStore.Data;
 using ProductStore.Data.Entities;
 
 namespace ProductStore.Repositories;
@@ -10,4 +11,5 @@ public interface IBaseRepository<T> where T : BaseEntity<int>
     T Create(T entity);
     T Update(T entity);
     bool Delete(T entity);
+    IDatabaseTransaction DataBaseTransaction();
 }

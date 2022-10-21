@@ -8,10 +8,12 @@ namespace ProductStore.Repositories;
 public class BaseRepository<T> : IBaseRepository<T> where T : BaseEntity<int>
 {
     protected readonly DbSet<T> _dbSet;
+    protected readonly ProductStoreContext _context;
 
     public BaseRepository(ProductStoreContext context)
     {
-        _dbSet = context.Set<T>();
+        _context = context;
+        _dbSet = _context.Set<T>();
     }
 
     public T Create(T entity)
@@ -26,18 +28,23 @@ public class BaseRepository<T> : IBaseRepository<T> where T : BaseEntity<int>
         return true;
     }
 
-    public T? Get(Expression<Func<T, bool>> predicate)
+    public T? Get(Expression<Func<T, bool>>? predicate)
     {
-        return _dbSet.FirstOrDefault(predicate);
+        return predicate == null ? _dbSet.FirstOrDefault() : _dbSet.FirstOrDefault(predicate);
     }
 
-    public IEnumerable<T> GetAll(Expression<Func<T, bool>> predicate)
+    public IEnumerable<T> GetAll(Expression<Func<T, bool>>? predicate)
     {
-        return _dbSet.Where(predicate);
+        return predicate == null ? _dbSet : _dbSet.Where(predicate);
     }
 
     public T Update(T entity)
     {
         return _dbSet.Update(entity).Entity;
+    }
+
+    public IDatabaseTransaction DataBaseTransaction()
+    {
+        return new EntityDatabaseTransaction(_context);
     }
 }

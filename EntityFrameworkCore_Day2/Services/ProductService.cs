@@ -8,31 +8,53 @@ public class ProductService : IProductService
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IBaseRepository<Product> _productRepository;
+    private readonly IBaseRepository<Category> _categoryRepository;
 
     public ProductService(IUnitOfWork unitOfWork)
     {
         _unitOfWork = unitOfWork;
         _productRepository = _unitOfWork.GetRepository<Product>();
+        _categoryRepository = _unitOfWork.GetRepository<Category>();
     }
 
     public AddProductResponse? Create(AddProductRequest requestModel)
     {
-        var newEntity = new Product
+        using var transaction = _productRepository.DataBaseTransaction();
+
+        try
         {
-            Name = requestModel.Name,
-            Manufacture = requestModel.Manufacture,
-            CategoryId = requestModel.CategoryId
-        };
+            var category = _categoryRepository.Get(c => c.Id == requestModel.CategoryId);
 
-        var createdEntity = _productRepository.Create(newEntity);
-
-        return _unitOfWork.SaveChanges() > 0 ?
-            new AddProductResponse
+            if (category != null)
             {
-                Id = createdEntity.Id,
-                Name = createdEntity.Name
+                var newEntity = new Product
+                {
+                    Name = requestModel.Name,
+                    Manufacture = requestModel.Manufacture,
+                    CategoryId = requestModel.CategoryId
+                };
+
+                var createdEntity = _productRepository.Create(newEntity);
+
+                _unitOfWork.SaveChanges();
+
+                transaction.Commit();
+
+                return new AddProductResponse
+                {
+                    Id = createdEntity.Id,
+                    Name = createdEntity.Name
+                };
             }
-            : null;
+
+            return null;
+        }
+        catch
+        {
+            transaction.Rollback();
+
+            return null;
+        }
     }
 
     public bool Delete(int id)
