@@ -25,12 +25,10 @@ public class ProductStoreContext : DbContext
     private static void ConfigureTables(ModelBuilder builder)
     {
         builder.Entity<Product>()
-            .ToTable("Product")
-            .HasKey(p => p.Id);
+            .ToTable("Product");
 
         builder.Entity<Category>()
-            .ToTable("Category")
-            .HasKey(c => c.Id);
+            .ToTable("Category");
     }
 
     private static void ConfigureRelationships(ModelBuilder builder)

@@ -12,6 +12,11 @@ public class UnitOfWork : IUnitOfWork
         _context = context;
     }
 
+    public IDatabaseTransaction GetDatabaseTransaction()
+    {
+        return new EntityDatabaseTransaction(_context);
+    }
+
     public BaseRepository<T> GetRepository<T>() where T : BaseEntity<int>
     {
         return new BaseRepository<T>(_context);

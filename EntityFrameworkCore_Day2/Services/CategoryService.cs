@@ -17,39 +17,68 @@ public class CategoryService : ICategoryService
 
     public AddCategoryResponse? Create(AddCategoryRequest requestModel)
     {
-        var newEntity = new Category
+        using var transaction = _unitOfWork.GetDatabaseTransaction();
+
+        try
         {
-            Name = requestModel.Name
-        };
+            var newEntity = new Category
+            {
+                Name = requestModel.Name
+            };
 
-        var createdEntity = _categoryRepository.Create(newEntity);
+            var createdEntity = _categoryRepository.Create(newEntity);
 
-        return _unitOfWork.SaveChanges() > 0 ?
-            new AddCategoryResponse
+            _unitOfWork.SaveChanges();
+
+            transaction.Commit();
+
+            return new AddCategoryResponse
             {
                 Id = createdEntity.Id,
                 Name = createdEntity.Name
-            }
-            : null;
+            };
+        }
+        catch
+        {
+            transaction.Rollback();
+
+            return null;
+        }
     }
 
     public bool Delete(int id)
     {
-        var entity = _categoryRepository.Get(entity => entity.Id == id);
+        using var transaction = _unitOfWork.GetDatabaseTransaction();
 
-        if (entity == null) return false;
+        try
+        {
+            var entity = _categoryRepository.Get(entity => entity.Id == id);
 
-        bool isSucceeded = _categoryRepository.Delete(entity);
+            if (entity == null)
+            {
+                return false;
+            }
 
-        isSucceeded &= _unitOfWork.SaveChanges() > 0;
+            _categoryRepository.Delete(entity);
 
-        return isSucceeded;
+            _unitOfWork.SaveChanges();
+
+            transaction.Commit();
+
+            return true;
+        }
+        catch
+        {
+            transaction.Rollback();
+
+            return false;
+        }
     }
 
     public IEnumerable<GetCategoryResponse> GetAll()
     {
         return _categoryRepository
-            .GetAll(_ => true)
+            .GetAll(null)
             .Select(entity => new GetCategoryResponse
             {
                 Id = entity.Id,
@@ -61,31 +90,50 @@ public class CategoryService : ICategoryService
     {
         var entity = _categoryRepository.Get(entity => entity.Id == id);
 
-        return entity != null ?
-            new GetCategoryResponse
-            {
-                Id = entity.Id,
-                Name = entity.Name
-            }
-            : null;
+        if (entity == null)
+        {
+            return null;
+        }
+
+        return new GetCategoryResponse
+        {
+            Id = entity.Id,
+            Name = entity.Name
+        };
     }
 
     public UpdateCategoryResponse? Update(int id, UpdateCategoryRequest requestModel)
     {
-        var entity = _categoryRepository.Get(entity => entity.Id == id);
+        using var transaction = _unitOfWork.GetDatabaseTransaction();
 
-        if (entity == null) return null;
+        try
+        {
+            var entity = _categoryRepository.Get(entity => entity.Id == id);
 
-        entity.Name = requestModel.Name;
+            if (entity == null)
+            {
+                return null;
+            }
 
-        var updatedEntity = _categoryRepository.Update(entity);
+            entity.Name = requestModel.Name;
 
-        return _unitOfWork.SaveChanges() > 0 ?
-            new UpdateCategoryResponse
+            var updatedEntity = _categoryRepository.Update(entity);
+
+            _unitOfWork.SaveChanges();
+
+            transaction.Commit();
+
+            return new UpdateCategoryResponse
             {
                 Id = updatedEntity.Id,
                 Name = updatedEntity.Name
-            }
-            : null;
+            };
+        }
+        catch
+        {
+            transaction.Rollback();
+
+            return null;
+        }
     }
 }
