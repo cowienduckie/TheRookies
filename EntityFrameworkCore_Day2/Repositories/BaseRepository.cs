@@ -24,12 +24,12 @@ public class BaseRepository<T> : IBaseRepository<T> where T : BaseEntity<int>
         _dbSet.Remove(entity);
     }
 
-    public T? Get(Expression<Func<T, bool>>? predicate)
+    public T? Get(Expression<Func<T, bool>>? predicate = null)
     {
         return predicate == null ? _dbSet.FirstOrDefault() : _dbSet.FirstOrDefault(predicate);
     }
 
-    public IEnumerable<T> GetAll(Expression<Func<T, bool>>? predicate)
+    public IEnumerable<T> GetAll(Expression<Func<T, bool>>? predicate = null)
     {
         return predicate == null ? _dbSet : _dbSet.Where(predicate);
     }

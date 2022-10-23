@@ -34,9 +34,9 @@ public class ProductsController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public UpdateProductResponse? Update(int id, [FromBody] UpdateProductRequest requestModel)
+    public UpdateProductResponse? Update([FromBody] UpdateProductRequest requestModel)
     {
-        return _productService.Update(id, requestModel);
+        return _productService.Update(requestModel);
     }
 
     [HttpDelete("{id}")]

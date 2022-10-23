@@ -78,7 +78,7 @@ public class CategoryService : ICategoryService
     public IEnumerable<GetCategoryResponse> GetAll()
     {
         return _categoryRepository
-            .GetAll(null)
+            .GetAll()
             .Select(entity => new GetCategoryResponse
             {
                 Id = entity.Id,
@@ -102,13 +102,13 @@ public class CategoryService : ICategoryService
         };
     }
 
-    public UpdateCategoryResponse? Update(int id, UpdateCategoryRequest requestModel)
+    public UpdateCategoryResponse? Update(UpdateCategoryRequest requestModel)
     {
         using var transaction = _unitOfWork.GetDatabaseTransaction();
 
         try
         {
-            var entity = _categoryRepository.Get(entity => entity.Id == id);
+            var entity = _categoryRepository.Get(entity => entity.Id == requestModel.Id);
 
             if (entity == null)
             {

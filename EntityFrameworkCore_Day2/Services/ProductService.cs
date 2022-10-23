@@ -89,7 +89,7 @@ public class ProductService : IProductService
     public IEnumerable<GetProductResponse> GetAll()
     {
         return _productRepository
-            .GetAll(null)
+            .GetAll()
             .Select(entity => new GetProductResponse
             {
                 Id = entity.Id,
@@ -117,13 +117,13 @@ public class ProductService : IProductService
         };
     }
 
-    public UpdateProductResponse? Update(int id, UpdateProductRequest requestModel)
+    public UpdateProductResponse? Update(UpdateProductRequest requestModel)
     {
         using var transaction = _unitOfWork.GetDatabaseTransaction();
 
         try
         {
-            var entity = _productRepository.Get(entity => entity.Id == id);
+            var entity = _productRepository.Get(entity => entity.Id == requestModel.Id);
 
             if (entity == null)
             {
