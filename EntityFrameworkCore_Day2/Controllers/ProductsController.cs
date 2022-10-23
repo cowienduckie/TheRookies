@@ -33,7 +33,7 @@ public class ProductsController : ControllerBase
         return _productService.Create(requestModel);
     }
 
-    [HttpPut("{id}")]
+    [HttpPut]
     public UpdateProductResponse? Update([FromBody] UpdateProductRequest requestModel)
     {
         return _productService.Update(requestModel);
