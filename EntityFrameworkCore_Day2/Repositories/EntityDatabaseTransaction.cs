@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 
-namespace ProductStore.Data;
+namespace ProductStore.Repositories;
 
 public class EntityDatabaseTransaction : IDatabaseTransaction
 {
@@ -24,6 +24,6 @@ public class EntityDatabaseTransaction : IDatabaseTransaction
 
     public void Dispose()
     {
-        _transaction.Dispose();
+        GC.SuppressFinalize(this);
     }
 }

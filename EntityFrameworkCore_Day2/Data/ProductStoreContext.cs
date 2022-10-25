@@ -25,12 +25,10 @@ public class ProductStoreContext : DbContext
     private static void ConfigureTables(ModelBuilder builder)
     {
         builder.Entity<Product>()
-            .ToTable("Product")
-            .HasKey(p => p.Id);
+            .ToTable("Product");
 
         builder.Entity<Category>()
-            .ToTable("Category")
-            .HasKey(c => c.Id);
+            .ToTable("Category");
     }
 
     private static void ConfigureRelationships(ModelBuilder builder)
@@ -38,11 +36,6 @@ public class ProductStoreContext : DbContext
         builder.Entity<Product>()
             .HasOne(p => p.Category)
             .WithMany(c => c.Products)
-            .HasForeignKey(p => p.CategoryId);
-
-        builder.Entity<Category>()
-            .HasMany(c => c.Products)
-            .WithOne(p => p.Category)
             .HasForeignKey(p => p.CategoryId);
     }
 

@@ -1,4 +1,4 @@
-namespace ProductStore.Data;
+namespace ProductStore.Repositories;
 
 public interface IDatabaseTransaction : IDisposable
 {

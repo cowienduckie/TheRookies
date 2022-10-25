@@ -33,10 +33,10 @@ public class CategoriesController : ControllerBase
         return _categoryService.Create(requestModel);
     }
 
-    [HttpPut("{id}")]
-    public UpdateCategoryResponse? Update(int id, [FromBody] UpdateCategoryRequest requestModel)
+    [HttpPut]
+    public UpdateCategoryResponse? Update([FromBody] UpdateCategoryRequest requestModel)
     {
-        return _categoryService.Update(id, requestModel);
+        return _categoryService.Update(requestModel);
     }
 
     [HttpDelete("{id}")]

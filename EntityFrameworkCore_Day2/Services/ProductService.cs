@@ -19,35 +19,35 @@ public class ProductService : IProductService
 
     public AddProductResponse? Create(AddProductRequest requestModel)
     {
-        using var transaction = _productRepository.DataBaseTransaction();
+        using var transaction = _unitOfWork.GetDatabaseTransaction();
 
         try
         {
             var category = _categoryRepository.Get(c => c.Id == requestModel.CategoryId);
 
-            if (category != null)
+            if (category == null)
             {
-                var newEntity = new Product
-                {
-                    Name = requestModel.Name,
-                    Manufacture = requestModel.Manufacture,
-                    CategoryId = requestModel.CategoryId
-                };
-
-                var createdEntity = _productRepository.Create(newEntity);
-
-                _unitOfWork.SaveChanges();
-
-                transaction.Commit();
-
-                return new AddProductResponse
-                {
-                    Id = createdEntity.Id,
-                    Name = createdEntity.Name
-                };
+                return null;
             }
 
-            return null;
+            var newEntity = new Product
+            {
+                Name = requestModel.Name,
+                Manufacture = requestModel.Manufacture,
+                CategoryId = requestModel.CategoryId
+            };
+
+            var createdEntity = _productRepository.Create(newEntity);
+
+            _unitOfWork.SaveChanges();
+
+            transaction.Commit();
+
+            return new AddProductResponse
+            {
+                Id = createdEntity.Id,
+                Name = createdEntity.Name
+            };
         }
         catch
         {
@@ -59,21 +59,37 @@ public class ProductService : IProductService
 
     public bool Delete(int id)
     {
-        var entity = _productRepository.Get(entity => entity.Id == id);
+        using var transaction = _unitOfWork.GetDatabaseTransaction();
 
-        if (entity == null) return false;
+        try
+        {
+            var entity = _productRepository.Get(entity => entity.Id == id);
 
-        bool isSucceeded = _productRepository.Delete(entity);
+            if (entity == null)
+            {
+                return false;
+            }
 
-        isSucceeded &= _unitOfWork.SaveChanges() > 0;
+            _productRepository.Delete(entity);
 
-        return isSucceeded;
+            _unitOfWork.SaveChanges();
+
+            transaction.Commit();
+
+            return true;
+        }
+        catch
+        {
+            transaction.Rollback();
+
+            return false;
+        }
     }
 
     public IEnumerable<GetProductResponse> GetAll()
     {
         return _productRepository
-            .GetAll(_ => true)
+            .GetAll()
             .Select(entity => new GetProductResponse
             {
                 Id = entity.Id,
@@ -87,37 +103,63 @@ public class ProductService : IProductService
     {
         var entity = _productRepository.Get(entity => entity.Id == id);
 
-        return entity != null ?
-            new GetProductResponse
-            {
-                Id = entity.Id,
-                Name = entity.Name,
-                Manufacture = entity.Manufacture,
-                CategoryId = entity.CategoryId
-            }
-            : null;
+        if (entity == null)
+        {
+            return null;
+        }
+
+        return new GetProductResponse
+        {
+            Id = entity.Id,
+            Name = entity.Name,
+            Manufacture = entity.Manufacture,
+            CategoryId = entity.CategoryId
+        };
     }
 
-    public UpdateProductResponse? Update(int id, UpdateProductRequest requestModel)
+    public UpdateProductResponse? Update(UpdateProductRequest requestModel)
     {
-        var entity = _productRepository.Get(entity => entity.Id == id);
+        using var transaction = _unitOfWork.GetDatabaseTransaction();
 
-        if (entity == null) return null;
+        try
+        {
+            var entity = _productRepository.Get(entity => entity.Id == requestModel.Id);
 
-        entity.Name = requestModel.Name;
-        entity.Manufacture = requestModel.Manufacture;
-        entity.CategoryId = requestModel.CategoryId;
+            if (entity == null)
+            {
+                return null;
+            }
 
-        var updatedEntity = _productRepository.Update(entity);
+            var category = _categoryRepository.Get(c => c.Id == requestModel.CategoryId);
 
-        return _unitOfWork.SaveChanges() > 0 ?
-            new UpdateProductResponse
+            if (category == null)
+            {
+                return null;
+            }
+
+            entity.Name = requestModel.Name;
+            entity.Manufacture = requestModel.Manufacture;
+            entity.CategoryId = requestModel.CategoryId;
+
+            var updatedEntity = _productRepository.Update(entity);
+
+            _unitOfWork.SaveChanges();
+
+            transaction.Commit();
+
+            return new UpdateProductResponse
             {
                 Id = updatedEntity.Id,
                 Name = updatedEntity.Name,
                 Manufacture = entity.Manufacture,
                 CategoryId = entity.CategoryId
-            }
-            : null;
+            };
+        }
+        catch
+        {
+            transaction.Rollback();
+
+            return null;
+        }
     }
 }
