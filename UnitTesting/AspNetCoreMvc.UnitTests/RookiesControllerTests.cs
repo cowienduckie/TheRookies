@@ -3,7 +3,6 @@ using AspNetCoreMvc.Services.Interfaces;
 using AspNetCoreMvc.Services.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Session;
 using Moq;
 using NUnit.Framework;
 
