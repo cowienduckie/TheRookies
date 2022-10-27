@@ -1,7 +1,9 @@
 using AspNetCoreMvc.Controllers;
 using AspNetCoreMvc.Services.Interfaces;
 using AspNetCoreMvc.Services.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Session;
 using Moq;
 using NUnit.Framework;
 
@@ -66,13 +68,7 @@ public class RookiesControllerTests
     [Test]
     public void AddHttpPost_ReturnsRedirectToIndexAction()
     {
-        var mockModel = new PersonCreateModel
-        {
-            FirstName = "Minh",
-            LastName = "Tran",
-            Gender = "Male",
-            DateOfBirth = new DateTime(2000, 04, 24)
-        };
+        var mockModel = new PersonCreateModel();
 
         var result = _rookiesController.Add(mockModel);
 
@@ -182,5 +178,90 @@ public class RookiesControllerTests
 
             Assert.That(((PersonEditModel?)model)?.LastName, Is.EqualTo(expectedModel.LastName));
         });
+    }
+
+    [Test]
+    public void EditHttpPost_ReturnsRedirectToIndexAction()
+    {
+        var mockModel = new PersonEditModel();
+
+        const int index = 0;
+
+        var result = _rookiesController.Edit(index, mockModel);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(result, Is.InstanceOf<RedirectToActionResult>());
+
+            Assert.That(((RedirectToActionResult)result).ActionName, Is.EqualTo("Index"));
+        });
+    }
+
+    [Test]
+    public void Delete_ReturnsRedirectToIndexAction()
+    {
+        const int index = 0;
+
+        var result = _rookiesController.Delete(index);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(result, Is.InstanceOf<RedirectToActionResult>());
+
+            Assert.That(((RedirectToActionResult)result).ActionName, Is.EqualTo("Index"));
+        });
+    }
+
+    [Test]
+    public void DeleteAndRedirectToResultView_InvalidIndex_ReturnsRedirectToIndexAction()
+    {
+        _personService
+            .Setup(p => p.DeletePerson(It.IsAny<int>()))
+            .Returns(null as PersonViewModel);
+
+        const int index = -1;
+
+        var result = _rookiesController.DeleteAndRedirectToResultView(index);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(result, Is.InstanceOf<RedirectToActionResult>());
+
+            Assert.That(((RedirectToActionResult)result).ActionName, Is.EqualTo("Index"));
+        });
+    }
+
+    [Test]
+    public void DeleteAndRedirectToResultView_ValidIndex_ReturnsRedirectToDeleteResultAction()
+    {
+        var httpContext = new Mock<HttpContext>();
+        var session = new Mock<ISession>();
+
+        httpContext.Setup(c => c.Session).Returns(session.Object);
+
+        _rookiesController.ControllerContext.HttpContext = httpContext.Object;
+
+        _personService
+            .Setup(p => p.DeletePerson(It.IsAny<int>()))
+            .Returns(new PersonViewModel());
+
+        const int index = 0;
+
+        var result = _rookiesController.DeleteAndRedirectToResultView(index);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(result, Is.InstanceOf<RedirectToActionResult>());
+
+            Assert.That(((RedirectToActionResult)result).ActionName, Is.EqualTo("DeleteResult"));
+        });
+    }
+
+    [Test]
+    public void DeleteResult_ReturnsView()
+    {
+        var result = _rookiesController.DeleteResult();
+
+        Assert.That(result, Is.InstanceOf<ViewResult>());
     }
 }
