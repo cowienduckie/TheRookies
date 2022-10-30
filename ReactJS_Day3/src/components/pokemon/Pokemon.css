@@ -1,0 +1,33 @@
+.pokemon-icons {
+  display: flex;
+  justify-content: center;
+}
+
+.pokemon-icons img {
+  display: inline-block;
+  margin-inline: 1rem;
+}
+
+.controls {
+  display: flex;
+  justify-content: center;
+}
+
+.controls button {
+  display: inline-block;
+  margin-inline: 1.5rem;
+}
+
+.loading {
+  border: 16px solid #f3f3f3;
+  border-top: 16px solid #3498db;
+  border-radius: 50%;
+  width: 120px;
+  height: 120px;
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}

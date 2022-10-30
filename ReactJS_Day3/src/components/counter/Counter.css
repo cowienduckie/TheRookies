@@ -1,0 +1,13 @@
+.counter {
+  display: flex;
+}
+
+.counter p,
+.counter button {
+  display: inline-block;
+  margin: 0.5em;
+}
+
+.counter button {
+  padding: 1.5rem;
+}

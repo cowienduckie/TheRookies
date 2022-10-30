@@ -1,0 +1,14 @@
+.checkboxes, .selected-checkboxes {
+  display: flex;
+  justify-content: center;
+}
+
+.checkboxes label {
+  display: inline-block;
+  margin-inline: 1rem;
+}
+
+.selected-checkboxes p {
+  display: inline-block;
+  margin-inline: 0.5rem;
+}
