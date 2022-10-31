@@ -12,6 +12,10 @@ export function Pokemon() {
     icons: []
   });
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState({
+    isError: false,
+    msg: ''
+  });
 
   useEffect(
     () => {
@@ -33,10 +37,20 @@ export function Pokemon() {
           
           return {...info};
         });
-
+        setError({
+          isError: false,
+          msg: ''
+        });
         setLoading(false);
       })
-      .catch(error => console.log(error));
+      .catch(error => {
+        console.log(error);
+        setError({
+          isError: true,
+          msg: error.message
+        });
+        setLoading(false);
+      });
     }, 
     [pokemonId]);
 
@@ -58,11 +72,19 @@ export function Pokemon() {
   return (
     <div>
       { loading && <div className='loading'></div> }
-      { !loading && <PokemonInfo /> }
+      { !loading && !error.isError && <PokemonInfo /> }
+      { !loading && error.isError && <span className='error-msg'>{ error.msg }</span> }
       
       <div className='controls'>
-        <button onClick={() => setPokemonId(pokemonId - 1 > 0 ? pokemonId - 1 : 1)}>Previous</button>
-        <button onClick={() => setPokemonId(pokemonId + 1)}>Next</button>
+        <button 
+          onClick={() => setPokemonId(pokemonId - 1 > 0 ? pokemonId - 1 : 1)} 
+          disabled={pokemonId === 1}>
+          Previous
+        </button>
+        <button 
+          onClick={() => setPokemonId(pokemonId + 1)}>
+          Next
+        </button>
       </div>
     </div>
   );
