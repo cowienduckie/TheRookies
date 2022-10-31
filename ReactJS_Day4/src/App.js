@@ -1,12 +1,11 @@
-import logo from './logo.svg';
 import './App.css';
+import RegisterForm from './components/form/RegisterForm';
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <h1>Rookies ReactJS Day 4</h1>
+        <RegisterForm />
       </header>
     </div>
   );
