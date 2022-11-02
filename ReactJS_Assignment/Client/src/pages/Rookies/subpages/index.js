@@ -1,0 +1,1 @@
+export { RookiesList, loader as rookiesLoader } from "./rookies-list";

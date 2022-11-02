@@ -39,7 +39,7 @@ export function Pokemon() {
         });
         setError({
           isError: false,
-          msg: ''
+          msg: '' 
         });
         setLoading(false);
       })
