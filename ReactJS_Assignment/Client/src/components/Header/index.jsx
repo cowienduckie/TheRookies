@@ -1,4 +1,4 @@
-import { Flex, Link, Heading, Button, Spacer } from '@chakra-ui/react';
+import { Flex, Link, Heading, Button, Spacer, LinkBox } from '@chakra-ui/react';
 import { NavLink } from 'react-router-dom';
 
 export function Header() {
@@ -17,7 +17,9 @@ export function Header() {
       <Link as={NavLink} to='/'>Home</Link>
       <Link as={NavLink} to='/rookies'>Rookies</Link>
       <Spacer />
-      <Button>Log In</Button>
+      <LinkBox as={NavLink} to='/login'>
+        <Button colorScheme='blue'>Login</Button>
+      </LinkBox>
     </Flex>
   </>
 }
