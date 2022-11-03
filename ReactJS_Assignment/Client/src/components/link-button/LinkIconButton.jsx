@@ -9,7 +9,8 @@ export function LinkIconButton(props) {
       <IconButton
         aria-label={label}
         colorScheme={colorScheme}
-        icon={<Icon as={icon} />} />
+        icon={<Icon as={icon} />}
+        {...otherProps} />
     </LinkBox>
   );
 }

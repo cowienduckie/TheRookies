@@ -1,4 +1,4 @@
-import { Table, TableContainer, Tbody, Thead, Tr, Th } from "@chakra-ui/react";
+import { Table, TableContainer, Tbody, Thead, Tr, Th, Td } from "@chakra-ui/react";
 import { TableAction } from "./TableAction";
 
 export function SimpleTable(props) {
