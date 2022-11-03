@@ -70,6 +70,11 @@ public class PersonService : IPersonService
         return entities;
     }
 
+    public PersonModel? GetById(Guid id)
+    {
+        return _peopleList.FirstOrDefault(p => p.Id == id);
+    }
+
     public bool IsExist(Guid id)
     {
         return _peopleList.Any(person => person.Id == id);

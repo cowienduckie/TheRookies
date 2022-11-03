@@ -30,6 +30,26 @@ public class RookiesController : ControllerBase
         }
     }
 
+    [HttpGet("{id}")]
+    public ActionResult<PersonModel?> GetById(Guid id)
+    {
+        try
+        {
+            var entity = _personService.GetById(id);
+
+            if (entity == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(entity);
+        }
+        catch (Exception exception)
+        {
+            return HandleException(exception);
+        }
+    }
+
     [HttpPost]
     public ActionResult<PersonModel> Create([FromBody] PersonCreateModel createModel)
     {

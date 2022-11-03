@@ -1,11 +1,11 @@
 import { ViewIcon, EditIcon, DeleteIcon, AddIcon, SearchIcon } from '@chakra-ui/icons';
-import { 
+import {
   Button, ButtonGroup, IconButton,
   TableContainer, Table, Thead, Tbody, Th, Td, Tr,
   Menu, MenuOptionGroup, MenuButton, MenuList, MenuDivider, MenuItemOption,
-  Flex, Heading, Input
+  Flex, Heading, Input, LinkBox
 } from '@chakra-ui/react';
-import { useLoaderData } from 'react-router-dom';
+import { useLoaderData, NavLink, Form } from 'react-router-dom';
 import { getRookies } from '../../../apis/rookies';
 
 export async function loader() {
@@ -44,18 +44,34 @@ export function RookiesList() {
               <Td>{value.birthPlace}</Td>
               <Td>
                 <ButtonGroup>
-                  <IconButton
-                    aria-label='Details'
-                    colorScheme='blue'
-                    icon={<ViewIcon />} />
+                  <LinkBox as={NavLink} to={`/rookies/${value.id}`}>
+                    <IconButton
+                      aria-label='Details'
+                      colorScheme='blue'
+                      icon={<ViewIcon />} />
+                  </LinkBox>
                   <IconButton
                     aria-label='Edit'
                     colorScheme='teal'
                     icon={<EditIcon />} />
-                  <IconButton
-                    aria-label='Delete'
-                    colorScheme='red'
-                    icon={<DeleteIcon />} />
+                  <Form 
+                    action={`/rookies/${value.id}/delete`} 
+                    method='post'
+                    onSubmit={(event) => {
+                      if (
+                        !confirm(
+                          "Please confirm you want to delete this record."
+                        )
+                      ) {
+                        event.preventDefault();
+                      }
+                    }}>
+                    <IconButton
+                      type='submit'
+                      aria-label='Delete'
+                      colorScheme='red'
+                      icon={<DeleteIcon />} />
+                  </Form>
                 </ButtonGroup>
               </Td>
             </Tr>
