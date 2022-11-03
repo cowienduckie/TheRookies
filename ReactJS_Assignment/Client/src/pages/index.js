@@ -1,4 +1,4 @@
-export { HomePage } from './Home';
-export { ErrorPage } from './Error';
-export { RookiesPage } from './Rookies';
-export { LogInPage } from './Login';
+export { HomePage } from './home';
+export { ErrorPage } from './error';
+export { RookiesPage } from './rookies';
+export { LogInPage } from './authentication';

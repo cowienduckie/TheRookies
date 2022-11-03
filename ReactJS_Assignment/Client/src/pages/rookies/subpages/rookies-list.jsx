@@ -7,6 +7,7 @@ import {
 } from '@chakra-ui/react';
 import { useLoaderData, NavLink, Form } from 'react-router-dom';
 import { getRookies } from '../../../apis/rookies';
+import { SimpleTable } from '../../../components/table/SimpleTable';
 
 export async function loader() {
   const data = await getRookies();
@@ -20,65 +21,9 @@ export function RookiesList() {
   const noContent = (
     <Heading size='lg' textAlign='center'>NO CONTENT TO DISPLAY</Heading>
   );
-
-  const tableContainer = (
-    <TableContainer>
-      <Table variant='simple' size='lg'>
-        <Thead>
-          <Tr>
-            <Th>#</Th>
-            <Th>Name</Th>
-            <Th>Gender</Th>
-            <Th>Date of Birth</Th>
-            <Th>Birth Place</Th>
-            <Th>Actions</Th>
-          </Tr>
-        </Thead>
-        <Tbody>
-          {rookiesData.map(((value, index) =>
-            <Tr key={index}>
-              <Td>{index + 1}</Td>
-              <Td>{value.fullName}</Td>
-              <Td>{value.gender}</Td>
-              <Td>{value.dateOfBirth}</Td>
-              <Td>{value.birthPlace}</Td>
-              <Td>
-                <ButtonGroup>
-                  <LinkBox as={NavLink} to={`/rookies/${value.id}`}>
-                    <IconButton
-                      aria-label='Details'
-                      colorScheme='blue'
-                      icon={<ViewIcon />} />
-                  </LinkBox>
-                  <IconButton
-                    aria-label='Edit'
-                    colorScheme='teal'
-                    icon={<EditIcon />} />
-                  <Form 
-                    action={`/rookies/${value.id}/delete`} 
-                    method='post'
-                    onSubmit={(event) => {
-                      if (
-                        !confirm(
-                          "Please confirm you want to delete this record."
-                        )
-                      ) {
-                        event.preventDefault();
-                      }
-                    }}>
-                    <IconButton
-                      type='submit'
-                      aria-label='Delete'
-                      colorScheme='red'
-                      icon={<DeleteIcon />} />
-                  </Form>
-                </ButtonGroup>
-              </Td>
-            </Tr>
-          ))}
-        </Tbody>
-      </Table>
-    </TableContainer>)
+  
+  const headers = ['Name', 'Gender', 'Date of Birth', 'Birth Place'];
+  const fields = ['fullName', 'gender', 'dateOfBirth', 'birthPlace'];
 
   return <>
     <Flex
@@ -122,6 +67,8 @@ export function RookiesList() {
       </Menu>
     </Flex>
 
-    {rookiesData.length ? tableContainer : noContent}
+    {rookiesData.length > 0
+      ? <SimpleTable data={data} headers={headers} fields={fields} hasIndex hasAction /> 
+      : noContent}
   </>
 }
