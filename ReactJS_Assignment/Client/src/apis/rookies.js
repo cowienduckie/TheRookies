@@ -11,7 +11,7 @@ export async function getRookies() {
       console.log(error);
     });
 
-    return rookiesList;
+  return rookiesList;
 }
 
 export async function getRookieById(id) {
@@ -24,7 +24,7 @@ export async function getRookieById(id) {
     .catch(error => {
       console.log(error.data);
     })
-  
+
   return rookie;
 }
 
@@ -32,12 +32,26 @@ export async function createNewRookie(createModel) {
   let responseModel = undefined;
 
   await axios.post('https://localhost:7069/rookies', createModel)
-  .then(result => {
-    responseModel = result.data;
-  })
-  .catch(error => {
-    console.log(error.data);
-  })
+    .then(result => {
+      responseModel = result.data;
+    })
+    .catch(error => {
+      console.log(error.data);
+    })
+
+  return responseModel;
+}
+
+export async function updateRookie(id, updateModel) {
+  let responseModel = undefined;
+
+  await axios.put(`http://localhost:7069/rookies/${id}`, updateModel)
+    .then(result => {
+      responseModel = result.data;
+    })
+    .catch(error => {
+      console.log(error.data);
+    })
 
   return responseModel;
 }
