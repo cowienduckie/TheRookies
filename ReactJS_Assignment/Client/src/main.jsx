@@ -4,7 +4,7 @@ import App from './App'
 import { ChakraProvider } from '@chakra-ui/react'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { ErrorPage, HomePage, LogInPage, RookiesPage } from './pages'
-import { rookieDeleteAction, rookieDetailsLoader, RookieDetailsPage, RookiesList, rookiesLoader } from './pages/Rookies/subpages'
+import { rookieCreateAction, rookieCreateLoader, RookieCreatePage, rookieDeleteAction, rookieDetailsLoader, RookieDetailsPage, RookiesList, rookiesLoader, rookieUpdateAction, RookieUpdatePage } from './pages/Rookies/subpages'
 
 const router = createBrowserRouter([
   {
@@ -28,6 +28,18 @@ const router = createBrowserRouter([
           {
             path:'/rookies/:rookieId',
             element: <RookieDetailsPage />,
+            loader: rookieDetailsLoader
+          },
+          {
+            path: '/rookies/new',
+            element: <RookieCreatePage />,
+            action: rookieCreateAction,
+            loader: rookieCreateLoader
+          },
+          {
+            path: '/rookies/:rookieId/edit',
+            element: <RookieUpdatePage />,
+            action: rookieUpdateAction,
             loader: rookieDetailsLoader
           },
           {

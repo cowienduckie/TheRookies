@@ -22,7 +22,7 @@ export async function getRookieById(id) {
       rookie = result.data;
     })
     .catch(error => {
-      console.log(error.data);
+      console.log(error);
     })
 
   return rookie;
@@ -36,7 +36,7 @@ export async function createNewRookie(createModel) {
       responseModel = result.data;
     })
     .catch(error => {
-      console.log(error.data);
+      console.log(error);
     })
 
   return responseModel;
@@ -45,22 +45,28 @@ export async function createNewRookie(createModel) {
 export async function updateRookie(id, updateModel) {
   let responseModel = undefined;
 
-  await axios.put(`http://localhost:7069/rookies/${id}`, updateModel)
+  console.log(updateModel)
+
+  await axios({
+    method: 'put',
+    url: `https://localhost:7069/rookies/${id}`,
+    data: updateModel
+  })
     .then(result => {
       responseModel = result.data;
     })
     .catch(error => {
-      console.log(error.data);
+      console.log(error);
     })
+
+  console.log(responseModel);
 
   return responseModel;
 }
 
 export async function deleteRookie(id) {
-  console.log(id);
-
   await axios.delete(`https://localhost:7069/rookies/${id}`)
     .catch(error => {
-      console.log(error.data);
+      console.log(error);
     })
 }

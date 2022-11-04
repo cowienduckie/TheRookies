@@ -12,17 +12,14 @@ export async function loader() {
 
 export function RookiesList() {
   const rookiesData = useLoaderData();
-
   const sortOrders = [
     { value: 'asc', text: 'Ascending' },
     { value: 'desc', text: 'Descending' }
   ];
-
   const sortOptions = [
     { value: 'name', text: 'Name' },
     { value: 'dob', text: 'Date of Birth' }
   ];
-
   const headers = ['Name', 'Gender', 'Date of Birth', 'Birth Place'];
   const fields = ['fullName', 'gender', 'dateOfBirth', 'birthPlace'];
 
@@ -32,6 +29,7 @@ export function RookiesList() {
 
   return <>
     <ToolBar
+      createPath='/rookies/new'
       sortOrders={sortOrders}
       sortOptions={sortOptions}
       minW='max-content'

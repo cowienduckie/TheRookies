@@ -14,7 +14,7 @@ export function TableAction(props) {
         colorScheme='blue'
         icon={ViewIcon} />
       <LinkIconButton
-        path={``}
+        path={`/rookies/${objectId}/edit`}
         label='Edit'
         colorScheme='teal'
         icon={EditIcon} />

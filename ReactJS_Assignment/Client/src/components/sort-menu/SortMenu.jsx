@@ -19,14 +19,14 @@ export function SortMenu(props) {
       <MenuList>
         <MenuOptionGroup defaultValue={defaultOrder} title='Order' type='radio'>
           {sortOrders.map(order =>
-            <MenuItemOption value={order.value}>{order.text}</MenuItemOption>
+            <MenuItemOption key={order.value} value={order.value}>{order.text}</MenuItemOption>
           )}
         </MenuOptionGroup>
         <MenuDivider />
         <MenuOptionGroup defaultValue={defaultOption} title='Option' type='radio'>
           <MenuItemOption value=''>(none)</MenuItemOption>
           {sortOptions.map(option =>
-            <MenuItemOption value={option.value}>{option.text}</MenuItemOption>
+            <MenuItemOption key={option.value} value={option.value}>{option.text}</MenuItemOption>
           )}
         </MenuOptionGroup>
       </MenuList>

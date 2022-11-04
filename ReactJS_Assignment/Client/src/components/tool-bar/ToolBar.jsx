@@ -5,12 +5,12 @@ import { LinkIconButton } from "../link-button/LinkIconButton";
 import { SortMenu } from "../sort-menu/SortMenu";
 
 export function ToolBar(props) {
-  const { sortOptions, sortOrders, ...otherProps } = props;
+  const { createPath, sortOptions, sortOrders, ...otherProps } = props;
 
   return (
     <Flex {...otherProps}>
       <LinkButton
-        path={``}
+        path={createPath}
         px={10}
         label='Create'
         variant='outline'

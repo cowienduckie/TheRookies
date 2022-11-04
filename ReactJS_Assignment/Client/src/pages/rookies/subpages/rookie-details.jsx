@@ -5,8 +5,6 @@ import { getRookieById } from "../../../apis/rookies";
 export async function loader({ params }) {
   const rookie = await getRookieById(params.rookieId);
 
-  console.log(rookie);
-
   if (!rookie) {
     throw new Response("", {
       status: 404,
