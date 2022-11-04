@@ -38,7 +38,7 @@ export function RookiesList() {
       gap='6'
       bg="gray.50" />
       
-    {rookiesData.length > 0
+    {(rookiesData && rookiesData.length > 0)
       ? <SimpleTable data={rookiesData} headers={headers} fields={fields} hasIndex hasAction />
       : noContent}
   </>

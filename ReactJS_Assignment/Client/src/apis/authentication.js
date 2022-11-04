@@ -1,14 +1,17 @@
+import axios from "axios";
+import { BASE_URL, TOKEN_KEY } from "../constants/system-constants";
+
 export async function login(loginModel) {
   let responseModel = undefined;
 
-  await axios.post('https://localhost:7069/authentication/login', loginModel)
+  await axios.post(`${BASE_URL}/authentication/login`, loginModel)
     .then(result => {
       responseModel = result.data;
 
-      // Set token to local storage here
+      localStorage.setItem(TOKEN_KEY, responseModel.token);
     })
     .catch(error => {
-      console.log(error.data);
+      console.log(error);
     })
 
   return responseModel;

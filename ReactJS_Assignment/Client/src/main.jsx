@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client'
 import App from './App'
 import { ChakraProvider } from '@chakra-ui/react'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-import { ErrorPage, HomePage, LogInPage, RookiesPage } from './pages'
+import { ErrorPage, HomePage, LoginAction, LoginLoader, LogInPage, ProfileLoader, ProfilePage, RookiesPage } from './pages'
 import { rookieCreateAction, rookieCreateLoader, RookieCreatePage, rookieDeleteAction, rookieDetailsLoader, RookieDetailsPage, RookiesList, rookiesLoader, rookieUpdateAction, RookieUpdatePage } from './pages/Rookies/subpages'
 
 const router = createBrowserRouter([
@@ -50,7 +50,14 @@ const router = createBrowserRouter([
       },
       {
         path: '/login',
-        element: <LogInPage />
+        element: <LogInPage />,
+        action: LoginAction,
+        loader: LoginLoader
+      },
+      {
+        path: '/profile',
+        element: <ProfilePage />,
+        loader: ProfileLoader
       }
     ]
   }

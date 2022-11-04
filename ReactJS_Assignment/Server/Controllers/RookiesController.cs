@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using AspNetCoreAPi.Services;
 using AspNetCoreAPi.Models;
+using AspNetCoreAPi.Helpers;
 
 namespace AspNetCoreApi.Controllers;
 
@@ -15,6 +16,7 @@ public class RookiesController : ControllerBase
         _personService = personService;
     }
 
+    [Authorize]
     [HttpGet]
     public ActionResult<IEnumerable<PersonModel>> GetAll(string? name, string? gender, string? birthPlace)
     {

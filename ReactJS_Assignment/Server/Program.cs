@@ -1,3 +1,4 @@
+using AspNetCoreAPi.Helpers;
 using AspNetCoreAPi.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,10 +14,13 @@ builder.Services.AddCors(options =>
     )
 );
 
+builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddSingleton<IPersonService, PersonService>();
+builder.Services.AddSingleton<IUserService, UserService>();
 
 var app = builder.Build();
 
@@ -31,6 +35,8 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.UseCors("CorsPolicy");
+
+app.UseMiddleware<JwtMiddleware>();
 
 app.MapControllers();
 

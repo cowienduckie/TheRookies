@@ -1,7 +1,17 @@
 import { Flex, Link, Heading, Button, Spacer, LinkBox } from '@chakra-ui/react';
+import { useContext } from 'react';
 import { NavLink } from 'react-router-dom';
+import { TOKEN_KEY } from '../../constants/system-constants';
+import { authContext } from '../../contexts/auth-context';
 
 export function Header() {
+  const { authenticated, setAuthenticated } = useContext(authContext);
+
+  const onLogOut = () => {
+    localStorage.removeItem(TOKEN_KEY);
+    setAuthenticated(false);
+  }
+
   return <>
     <Flex
       minW='max-content'
@@ -17,9 +27,15 @@ export function Header() {
       <Link as={NavLink} to='/'>Home</Link>
       <Link as={NavLink} to='/rookies'>Rookies</Link>
       <Spacer />
-      <LinkBox as={NavLink} to='/login'>
-        <Button colorScheme='blue'>Login</Button>
-      </LinkBox>
+      {!authenticated ?
+        (
+          <LinkBox as={NavLink} to='/login'>
+            <Button colorScheme='blue'>Login</Button>
+          </LinkBox>
+        ) : <>
+          <Link>Profile</Link>
+          <Link as={NavLink} to='/' onClick={onLogOut}>Logout</Link>
+        </>}
     </Flex>
   </>
 }

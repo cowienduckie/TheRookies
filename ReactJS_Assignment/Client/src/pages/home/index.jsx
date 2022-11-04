@@ -1,6 +1,13 @@
 import { Box, Heading, Text, Divider, Image, Spacer } from '@chakra-ui/react';
+import { useContext } from 'react';
+import { TOKEN_KEY } from '../../constants/system-constants';
+import { authContext } from '../../contexts/auth-context';
 
 export function HomePage() {
+  const { setAuthenticated } = useContext(authContext);
+
+  setAuthenticated(localStorage.getItem(TOKEN_KEY) != null);
+
   return <>
     <Box p={10}>
       <Heading size='xl'>HOME PAGE</Heading>

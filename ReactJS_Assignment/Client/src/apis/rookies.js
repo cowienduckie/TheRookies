@@ -1,72 +1,61 @@
 import axios from "axios";
+import { BASE_URL, TOKEN_KEY } from "../constants/system-constants";
 
 export async function getRookies() {
-  let rookiesList = [];
+  const url = `${BASE_URL}/rookies`
+  const response = await callApi('get', url);
 
-  await axios.get(`https://localhost:7069/rookies`)
-    .then(result => {
-      rookiesList = [...result.data];
-    })
-    .catch(error => {
-      console.log(error);
-    });
-
-  return rookiesList;
+  return response;
 }
 
 export async function getRookieById(id) {
-  let rookie = undefined;
+  const url = `${BASE_URL}/rookies/${id}`;
+  const response = await callApi('get', url);
 
-  await axios.get(`https://localhost:7069/rookies/${id}`)
-    .then(result => {
-      rookie = result.data;
-    })
-    .catch(error => {
-      console.log(error);
-    })
-
-  return rookie;
+  return response;
 }
 
 export async function createNewRookie(createModel) {
-  let responseModel = undefined;
+  const url = `${BASE_URL}/rookies`;
+  const response = await callApi('post', url, createModel);
 
-  await axios.post('https://localhost:7069/rookies', createModel)
-    .then(result => {
-      responseModel = result.data;
-    })
-    .catch(error => {
-      console.log(error);
-    })
-
-  return responseModel;
+  return response;
 }
 
 export async function updateRookie(id, updateModel) {
-  let responseModel = undefined;
+  const url = `${BASE_URL}/rookies/${id}`;
+  const response = await callApi('put', url, updateModel);
 
-  console.log(updateModel)
-
-  await axios({
-    method: 'put',
-    url: `https://localhost:7069/rookies/${id}`,
-    data: updateModel
-  })
-    .then(result => {
-      responseModel = result.data;
-    })
-    .catch(error => {
-      console.log(error);
-    })
-
-  console.log(responseModel);
-
-  return responseModel;
+  return response;
 }
 
 export async function deleteRookie(id) {
-  await axios.delete(`https://localhost:7069/rookies/${id}`)
-    .catch(error => {
-      console.log(error);
+  const url = `${BASE_URL}/rookies/${id}`;
+  await callApi('delete', url);
+}
+
+export async function getProfile() {
+  const url = `${BASE_URL}/users/profile`;
+  const response = await callApi('get', url);
+
+  return response;
+}
+
+export async function callApi(method, url, data = null) {
+  let response = undefined;
+
+  await axios({
+    method: method,
+    url: url,
+    headers: { "Authorization": localStorage.getItem(TOKEN_KEY) },
+    data: data
+  })
+    .then(result => {
+      response = result.data
     })
+    .catch(error => {
+      console.log(error)
+    })
+
+  return response;
 }
