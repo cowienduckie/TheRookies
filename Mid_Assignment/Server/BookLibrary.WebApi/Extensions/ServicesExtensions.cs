@@ -17,6 +17,9 @@ public static class ServicesExtensions
     public static void ConfigureServices(this IServiceCollection services)
     {
         services.AddTransient<IBookService, BookService>();
+        services.AddTransient<ICategoryService, CategoryService>();
+        services.AddTransient<IBorrowRequestService, BorrowRequestService>();
+        services.AddTransient<IUserService, UserService>();
     }
 
     public static void ConfigureUnitOfWork(this IServiceCollection services)
