@@ -6,7 +6,7 @@ namespace BookLibrary.Data.Repositories;
 public class BookRepository : BaseRepository<Book>, IBookRepository
 {
     public BookRepository(BookLibraryContext context)
-    : base(context)
+        : base(context)
     {
     }
 }

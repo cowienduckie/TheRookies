@@ -1,12 +1,12 @@
 ﻿using BookLibrary.Data.Interfaces;
-using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace BookLibrary.Data;
 
 public class EntityDatabaseTransaction : IDatabaseTransaction
 {
-    private readonly IDbContextTransaction  _transaction;
+    private readonly IDbContextTransaction _transaction;
 
     public EntityDatabaseTransaction(DbContext context)
     {

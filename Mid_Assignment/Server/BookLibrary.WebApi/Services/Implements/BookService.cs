@@ -4,5 +4,4 @@ namespace BookLibrary.WebApi.Services.Implements;
 
 public class BookService : IBookService
 {
-    
 }

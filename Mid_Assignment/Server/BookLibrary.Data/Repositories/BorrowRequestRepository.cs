@@ -6,7 +6,7 @@ namespace BookLibrary.Data.Repositories;
 public class BorrowRequestRepository : BaseRepository<BorrowRequest>, IBorrowRequestRepository
 {
     public BorrowRequestRepository(BookLibraryContext context)
-    : base(context)
+        : base(context)
     {
     }
 }
