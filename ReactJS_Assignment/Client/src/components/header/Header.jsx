@@ -33,7 +33,7 @@ export function Header() {
             <Button colorScheme='blue'>Login</Button>
           </LinkBox>
         ) : <>
-          <Link>Profile</Link>
+          <Link as={NavLink} to='/profile'>Profile</Link>
           <Link as={NavLink} to='/' onClick={onLogOut}>Logout</Link>
         </>}
     </Flex>

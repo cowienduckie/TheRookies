@@ -1,8 +1,13 @@
 import { HStack, VStack, Heading, Text, Image } from "@chakra-ui/react";
-import { useLoaderData } from "react-router-dom";
+import { redirect, useLoaderData } from "react-router-dom";
 import { getProfile } from "../../apis/rookies";
+import { TOKEN_KEY } from "../../constants/system-constants";
 
 export async function loader({ params }) {
+  if (localStorage.getItem(TOKEN_KEY) === null) {
+    return redirect('/login');
+  }
+
   const profile = await getProfile();
 
   if (!profile) {
