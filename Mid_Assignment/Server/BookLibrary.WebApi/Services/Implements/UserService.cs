@@ -7,8 +7,8 @@ namespace BookLibrary.WebApi.Services.Implements;
 
 public class UserService : IUserService
 {
-    private readonly IUserRepository _userRepository;
     private readonly IJwtHelper _jwtHelper;
+    private readonly IUserRepository _userRepository;
 
     public UserService(IUserRepository userRepository, IJwtHelper jwtHelper)
     {
@@ -34,10 +34,7 @@ public class UserService : IUserService
         var user = await _userRepository
             .GetSingleAsync(user => user.Username == requestModel.Username &&
                                     user.Password == requestModel.Password);
-        if (user == null)
-        {
-            return null;
-        }
+        if (user == null) return null;
 
         var token = _jwtHelper.GenerateJwtToken(new UserModel
         {

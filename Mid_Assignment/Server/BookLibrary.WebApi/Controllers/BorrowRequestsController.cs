@@ -57,18 +57,17 @@ public class BorrowRequestsController : BaseController
 
     [HttpPost]
     [Authorize(Roles.NormalUser)]
-    public async Task<ActionResult<CreateBorrowRequestResponse>> Create([FromBody] CreateBorrowRequestRequest requestModel)
+    public async Task<ActionResult<CreateBorrowRequestResponse>> Create(
+        [FromBody] CreateBorrowRequestRequest requestModel)
     {
         if (requestModel == null) return BadRequest();
 
         try
         {
-            var limitCheckMessage = await _borrowRequestService.CheckRequestLimit(1, requestModel);  // TODO: Pass current userId here
+            var limitCheckMessage =
+                await _borrowRequestService.CheckRequestLimit(1, requestModel); // TODO: Pass current userId here
 
-            if (!string.IsNullOrEmpty(limitCheckMessage))
-            {
-                return BadRequest(limitCheckMessage);
-            }
+            if (!string.IsNullOrEmpty(limitCheckMessage)) return BadRequest(limitCheckMessage);
 
             var result = await _borrowRequestService.CreateAsync(requestModel);
 
@@ -84,7 +83,8 @@ public class BorrowRequestsController : BaseController
 
     [HttpPost("approval")]
     [Authorize(Roles.SuperUser)]
-    public async Task<ActionResult<ApproveBorrowRequestResponse>> Approve([FromBody] ApproveBorrowRequestRequest requestModel)
+    public async Task<ActionResult<ApproveBorrowRequestResponse>> Approve(
+        [FromBody] ApproveBorrowRequestRequest requestModel)
     {
         if (requestModel == null) return BadRequest();
 

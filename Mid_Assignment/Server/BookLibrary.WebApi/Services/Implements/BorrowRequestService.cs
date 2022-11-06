@@ -9,8 +9,8 @@ namespace BookLibrary.WebApi.Services.Implements;
 
 public class BorrowRequestService : IBorrowRequestService
 {
-    private readonly IBorrowRequestRepository _borrowRequestRepository;
     private readonly IBaseRepository<Book> _bookRepository;
+    private readonly IBorrowRequestRepository _borrowRequestRepository;
     private readonly IUnitOfWork _unitOfWork;
 
     public BorrowRequestService(IUnitOfWork unitOfWork, IBorrowRequestRepository borrowRequestRepository)
@@ -34,9 +34,7 @@ public class BorrowRequestService : IBorrowRequestService
 
             if (books == null ||
                 books.Count != bookIds.Count())
-            {
                 return null;
-            }
 
             var newBorrowRequest = new BorrowRequest
             {
@@ -86,10 +84,7 @@ public class BorrowRequestService : IBorrowRequestService
 
     public async Task<string> CheckRequestLimit(int userId, CreateBorrowRequestRequest request)
     {
-        if (request.BookIds.Count > Settings.MaxBooksPerRequest)
-        {
-            return ErrorMessages.BooksPerRequestLimitExceeded;
-        }
+        if (request.BookIds.Count > Settings.MaxBooksPerRequest) return ErrorMessages.BooksPerRequestLimitExceeded;
 
         var currentMonth = DateTime.UtcNow.Month;
 
@@ -99,9 +94,7 @@ public class BorrowRequestService : IBorrowRequestService
                 br.RequestedAt.Month == currentMonth);
 
         if (bookRequestsThisMonth.Count() >= Settings.MaxBorrowRequestsPerMonth)
-        {
             return ErrorMessages.RequestsPerMonthLimitExceeded;
-        }
 
         return string.Empty;
     }
@@ -112,17 +105,15 @@ public class BorrowRequestService : IBorrowRequestService
 
         try
         {
-            var borrowRequest = await _borrowRequestRepository.GetAsync(borrowRequest => borrowRequest.Id == requestModel.Id);
+            var borrowRequest =
+                await _borrowRequestRepository.GetAsync(borrowRequest => borrowRequest.Id == requestModel.Id);
 
-            if (borrowRequest == null)
-            {
-                return null;
-            }
+            if (borrowRequest == null) return null;
 
             borrowRequest.Status = requestModel.IsApproved
                 ? RequestStatuses.Approved
                 : RequestStatuses.Rejected;
-            borrowRequest.ApprovedBy = 4;  // TODO: Get current super user approved this
+            borrowRequest.ApprovedBy = 4; // TODO: Get current super user approved this
             borrowRequest.ApprovedAt = DateTime.UtcNow;
 
             var updatedBorrowRequest = _borrowRequestRepository.Update(borrowRequest);

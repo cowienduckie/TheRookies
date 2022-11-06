@@ -8,7 +8,7 @@ using Microsoft.OpenApi.Models;
 
 namespace BookLibrary.WebApi.Extensions;
 
-public static class ServicesExtensions
+public static class ConfigureServicesExtension
 {
     public static void ConfigureRepositories(this IServiceCollection services)
     {

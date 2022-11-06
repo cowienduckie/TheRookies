@@ -7,8 +7,8 @@ namespace BookLibrary.WebApi.Middlewares;
 
 public class JwtMiddleware
 {
-    private readonly RequestDelegate _next;
     private readonly AppSettings _appSettings;
+    private readonly RequestDelegate _next;
 
     public JwtMiddleware(RequestDelegate next, IOptions<AppSettings> appSettings)
     {
@@ -26,9 +26,7 @@ public class JwtMiddleware
         var userId = jwtHelper.ValidateJwtToken(token);
 
         if (userId != null)
-        {
             context.Items[Settings.CurrentUserContextKey] = await userService.GetByIdAsync(userId.Value);
-        }
 
         await _next(context);
     }

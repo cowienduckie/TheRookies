@@ -34,9 +34,7 @@ public class BookService : IBookService
 
             if (categories == null ||
                 categories.Count != categoryIds.Count())
-            {
                 return null;
-            }
 
             var newBook = new Book
             {
@@ -85,10 +83,7 @@ public class BookService : IBookService
         {
             var book = await _bookRepository.GetAsync(book => book.Id == id);
 
-            if (book == null)
-            {
-                return false;
-            }
+            if (book == null) return false;
 
             _bookRepository.Delete(book);
 
@@ -168,16 +163,11 @@ public class BookService : IBookService
 
             if (categories == null ||
                 categories.Count != categoryIds.Count())
-            {
                 return null;
-            }
 
             var book = await _bookRepository.GetAsync(book => book.Id == requestModel.Id);
 
-            if (book == null)
-            {
-                return null;
-            }
+            if (book == null) return null;
 
             book.Name = requestModel.Name;
             book.Description = requestModel.Description;

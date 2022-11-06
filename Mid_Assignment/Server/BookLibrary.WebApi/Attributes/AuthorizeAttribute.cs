@@ -26,14 +26,12 @@ public class AuthorizeAttribute : Attribute, IAuthorizationFilter
 
         if (isAnonymousAllowed) return;
 
-        var user = (UserModel?)context.HttpContext.Items[Settings.CurrentUserContextKey];
+        var user = (UserModel?) context.HttpContext.Items[Settings.CurrentUserContextKey];
 
         if (user == null || (_roles.Any() && !_roles.Contains(user.Role)))
-        {
             context.Result = new JsonResult(new {message = ErrorMessages.Unauthorized})
             {
                 StatusCode = StatusCodes.Status401Unauthorized
             };
-        }
     }
 }

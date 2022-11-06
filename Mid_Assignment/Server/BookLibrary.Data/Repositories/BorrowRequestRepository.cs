@@ -1,6 +1,6 @@
-﻿using BookLibrary.Data.Entities;
+﻿using System.Linq.Expressions;
+using BookLibrary.Data.Entities;
 using BookLibrary.Data.Interfaces;
-using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 
 namespace BookLibrary.Data.Repositories;
@@ -12,7 +12,8 @@ public class BorrowRequestRepository : BaseRepository<BorrowRequest>, IBorrowReq
     {
     }
 
-    public override async Task<IEnumerable<BorrowRequest>> GetAllAsync(Expression<Func<BorrowRequest, bool>>? predicate = null)
+    public override async Task<IEnumerable<BorrowRequest>> GetAllAsync(
+        Expression<Func<BorrowRequest, bool>>? predicate = null)
     {
         var dbSet = predicate == null ? _dbSet : _dbSet.Where(predicate);
 
