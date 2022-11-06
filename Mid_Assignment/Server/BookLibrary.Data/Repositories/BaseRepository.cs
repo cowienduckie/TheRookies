@@ -14,7 +14,7 @@ public class BaseRepository<T> : IBaseRepository<T> where T : BaseEntity
         _dbSet = context.Set<T>();
     }
 
-    public virtual T Create(T entity)
+    public T Create(T entity)
     {
         return _dbSet.Add(entity).Entity;
     }
@@ -36,7 +36,7 @@ public class BaseRepository<T> : IBaseRepository<T> where T : BaseEntity
         return await dbSet.ToListAsync();
     }
 
-    public virtual T Update(T entity)
+    public T Update(T entity)
     {
         return _dbSet.Update(entity).Entity;
     }
