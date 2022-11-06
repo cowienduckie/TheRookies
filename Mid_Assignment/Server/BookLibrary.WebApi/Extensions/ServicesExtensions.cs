@@ -14,6 +14,8 @@ public static class ServicesExtensions
         services.AddTransient(typeof(IBaseRepository<>), typeof(BaseRepository<>));
 
         services.AddTransient<IBookRepository, BookRepository>();
+        services.AddTransient<IBorrowRequestRepository, BorrowRequestRepository>();
+        services.AddTransient<IUserRepository, UserRepository>();
     }
 
     public static void ConfigureServices(this IServiceCollection services)

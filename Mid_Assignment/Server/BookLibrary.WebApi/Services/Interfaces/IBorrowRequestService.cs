@@ -5,7 +5,8 @@ namespace BookLibrary.WebApi.Services.Interfaces;
 public interface IBorrowRequestService
 {
     Task<IEnumerable<GetBorrowRequestResponse>> GetAllAsync();
-    GetBorrowRequestResponse? GetById(int id);
+    Task<GetBorrowRequestResponse?> GetByIdAsync(int id);
     Task<CreateBorrowRequestResponse?> CreateAsync(CreateBorrowRequestRequest requestModel);
     Task<ApproveBorrowRequestResponse?> ApproveAsync(ApproveBorrowRequestRequest requestModel);
+    bool IsExist(int id);
 }
