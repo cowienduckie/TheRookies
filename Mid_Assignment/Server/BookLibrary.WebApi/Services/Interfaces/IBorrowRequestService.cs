@@ -9,4 +9,5 @@ public interface IBorrowRequestService
     Task<CreateBorrowRequestResponse?> CreateAsync(CreateBorrowRequestRequest requestModel);
     Task<ApproveBorrowRequestResponse?> ApproveAsync(ApproveBorrowRequestRequest requestModel);
     bool IsExist(int id);
+    Task<string> CheckRequestLimit(int userId, CreateBorrowRequestRequest request);
 }

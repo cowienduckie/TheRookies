@@ -57,9 +57,12 @@ public class BorrowRequestsController : BaseController
 
         try
         {
-            // TODO: Check requests per month limit
+            var limitCheckMessage = await _borrowRequestService.CheckRequestLimit(1, requestModel);  // TODO: Pass current userId here
 
-            // TODO: Check books per request limit
+            if (!string.IsNullOrEmpty(limitCheckMessage))
+            {
+                return BadRequest(limitCheckMessage);
+            }
 
             var result = await _borrowRequestService.CreateAsync(requestModel);
 

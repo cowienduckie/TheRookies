@@ -2,6 +2,7 @@
 using BookLibrary.Data.Interfaces;
 using BookLibrary.WebApi.Dtos.BorrowRequest;
 using BookLibrary.WebApi.Services.Interfaces;
+using Common.Constants;
 using Common.Enums;
 
 namespace BookLibrary.WebApi.Services.Implements;
@@ -81,6 +82,28 @@ public class BorrowRequestService : IBorrowRequestService
     public bool IsExist(int id)
     {
         return _borrowRequestRepository.IsExist(borrowRequest => borrowRequest.Id == id);
+    }
+
+    public async Task<string> CheckRequestLimit(int userId, CreateBorrowRequestRequest request)
+    {
+        if (request.BookIds.Count > SystemConstants.MaxBooksPerRequest)
+        {
+            return ErrorMessages.BooksPerRequestLimitExceeded;
+        }
+
+        var currentMonth = DateTime.UtcNow.Month;
+
+        var bookRequestsThisMonth = await _borrowRequestRepository
+            .GetAllAsync(br =>
+                br.RequestedBy == userId &&
+                br.RequestedAt.Month == currentMonth);
+
+        if (bookRequestsThisMonth.Count() >= SystemConstants.MaxBorrowRequestsPerMonth)
+        {
+            return ErrorMessages.RequestsPerMonthLimitExceeded;
+        }
+
+        return string.Empty;
     }
 
     public async Task<ApproveBorrowRequestResponse?> ApproveAsync(ApproveBorrowRequestRequest requestModel)
