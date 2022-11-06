@@ -69,14 +69,14 @@ public class BooksController : BaseController
         }
     }
 
-    [HttpPut("{id}")]
-    public async Task<ActionResult<UpdateBookResponse>> Update(int id, [FromBody] UpdateBookRequest requestModel)
+    [HttpPut]
+    public async Task<ActionResult<UpdateBookResponse>> Update([FromBody] UpdateBookRequest requestModel)
     {
-        var isExist = _bookService.IsExist(id);
+        if (requestModel == null) return BadRequest();
+
+        var isExist = _bookService.IsExist(requestModel.Id);
 
         if (!isExist) return NotFound();
-
-        if (requestModel == null) return BadRequest();
 
         try
         {
@@ -93,7 +93,7 @@ public class BooksController : BaseController
     }
 
     [HttpDelete("{id}")]
-    public IActionResult Delete(int id)
+    public async Task<IActionResult> Delete(int id)
     {
         var isExist = _bookService.IsExist(id);
 
@@ -101,7 +101,7 @@ public class BooksController : BaseController
 
         try
         {
-            var result = _bookService.Delete(id);
+            var result = await _bookService.Delete(id);
 
             if (!result) return StatusCode(500, ErrorMessages.DeleteError);
 

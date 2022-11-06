@@ -8,6 +8,6 @@ public interface IBookService
     Task<GetBookResponse?> GetByIdAsync(int id);
     Task<CreateBookResponse?> CreateAsync(CreateBookRequest requestModel);
     Task<UpdateBookResponse?> UpdateAsync(UpdateBookRequest requestModel);
-    bool Delete(int id);
+    Task<bool> Delete(int id);
     bool IsExist(int id);
 }
