@@ -10,7 +10,7 @@ namespace BookLibrary.WebApi.Helpers;
 
 public class JwtHelper : IJwtHelper
 {
-    private const string _tokenClaimType = "id";
+    private const string TOKEN_CLAIM_TYPE = "id";
     private readonly byte[] _securityKey;
 
     public JwtHelper(IOptions<AppSettings> appSettings)
@@ -26,7 +26,7 @@ public class JwtHelper : IJwtHelper
         {
             Subject = new ClaimsIdentity(new[]
             {
-                new Claim(_tokenClaimType, user.Id.ToString())
+                new Claim(TOKEN_CLAIM_TYPE, user.Id.ToString())
             }),
 
             Expires = DateTime.UtcNow
@@ -62,7 +62,7 @@ public class JwtHelper : IJwtHelper
 
             var jwtToken = (JwtSecurityToken) validatedToken;
 
-            var userId = int.Parse(jwtToken.Claims.First(c => c.Type == _tokenClaimType).Value);
+            var userId = int.Parse(jwtToken.Claims.First(c => c.Type == TOKEN_CLAIM_TYPE).Value);
 
             return userId;
         }

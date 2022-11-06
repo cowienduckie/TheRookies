@@ -59,8 +59,6 @@ public class CategoriesController : BaseController
     [Authorize(Roles.SuperUser)]
     public async Task<ActionResult<CreateCategoryResponse>> Create([FromBody] CreateCategoryRequest requestModel)
     {
-        if (requestModel == null) return BadRequest();
-
         try
         {
             var result = await _categoryService.CreateAsync(requestModel);
@@ -79,8 +77,6 @@ public class CategoriesController : BaseController
     [Authorize(Roles.SuperUser)]
     public async Task<ActionResult<UpdateCategoryResponse>> Update([FromBody] UpdateCategoryRequest requestModel)
     {
-        if (requestModel == null) return BadRequest();
-
         var isExist = _categoryService.IsExist(requestModel.Id);
 
         if (!isExist) return NotFound();

@@ -60,8 +60,6 @@ public class BorrowRequestsController : BaseController
     public async Task<ActionResult<CreateBorrowRequestResponse>> Create(
         [FromBody] CreateBorrowRequestRequest requestModel)
     {
-        if (requestModel == null) return BadRequest();
-
         try
         {
             var limitCheckMessage =
@@ -86,8 +84,6 @@ public class BorrowRequestsController : BaseController
     public async Task<ActionResult<ApproveBorrowRequestResponse>> Approve(
         [FromBody] ApproveBorrowRequestRequest requestModel)
     {
-        if (requestModel == null) return BadRequest();
-
         var isExist = _borrowRequestService.IsExist(requestModel.Id);
 
         if (!isExist) return NotFound();

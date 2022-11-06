@@ -5,6 +5,14 @@ namespace BookLibrary.WebApi.Dtos.BorrowRequest;
 
 public class GetBorrowRequestResponse
 {
+    public int Id { get; set; }
+    public string Status { get; set; }
+    public GetUserResponse Requester { get; set; }
+    public DateTime RequestedAt { get; set; }
+    public GetUserResponse? Approver { get; set; }
+    public DateTime? ApprovedAt { get; set; }
+    public List<BookModel> Books { get; set; }
+
     public GetBorrowRequestResponse(Data.Entities.BorrowRequest request)
     {
         Id = request.Id;
@@ -37,12 +45,4 @@ public class GetBorrowRequestResponse
             };
         }
     }
-
-    public int Id { get; set; }
-    public string Status { get; set; } = null!;
-    public GetUserResponse Requester { get; set; } = null!;
-    public DateTime RequestedAt { get; set; }
-    public GetUserResponse? Approver { get; set; }
-    public DateTime? ApprovedAt { get; set; }
-    public List<BookModel> Books { get; set; } = null!;
 }

@@ -59,8 +59,6 @@ public class BooksController : BaseController
     [Authorize(Roles.SuperUser)]
     public async Task<ActionResult<CreateBookResponse>> Create([FromBody] CreateBookRequest requestModel)
     {
-        if (requestModel == null) return BadRequest();
-
         try
         {
             var result = await _bookService.CreateAsync(requestModel);
@@ -79,8 +77,6 @@ public class BooksController : BaseController
     [Authorize(Roles.SuperUser)]
     public async Task<ActionResult<UpdateBookResponse>> Update([FromBody] UpdateBookRequest requestModel)
     {
-        if (requestModel == null) return BadRequest();
-
         var isExist = _bookService.IsExist(requestModel.Id);
 
         if (!isExist) return NotFound();

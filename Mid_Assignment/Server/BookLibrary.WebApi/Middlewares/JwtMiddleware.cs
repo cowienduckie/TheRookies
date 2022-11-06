@@ -1,19 +1,16 @@
 ﻿using BookLibrary.WebApi.Helpers;
 using BookLibrary.WebApi.Services.Interfaces;
 using Common.Constants;
-using Microsoft.Extensions.Options;
 
 namespace BookLibrary.WebApi.Middlewares;
 
 public class JwtMiddleware
 {
-    private readonly AppSettings _appSettings;
     private readonly RequestDelegate _next;
 
-    public JwtMiddleware(RequestDelegate next, IOptions<AppSettings> appSettings)
+    public JwtMiddleware(RequestDelegate next)
     {
         _next = next;
-        _appSettings = appSettings.Value;
     }
 
     public async Task Invoke(HttpContext context, IUserService userService, IJwtHelper jwtHelper)
