@@ -1,12 +1,13 @@
-﻿using BookLibrary.WebApi.Dtos.User;
+﻿using BookLibrary.WebApi.Attributes;
+using BookLibrary.WebApi.Dtos.User;
 using BookLibrary.WebApi.Services.Interfaces;
 using Common.Constants;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookLibrary.WebApi.Controllers;
 
-[Route("api/authentication")]
 [ApiController]
+[Route("api/authentication")]
 public class AuthenticationController : BaseController
 {
     private readonly IUserService _userService;
@@ -17,6 +18,7 @@ public class AuthenticationController : BaseController
     }
 
     [HttpPost]
+    [AllowAnonymous]
     public async Task<ActionResult<AuthenticationResponse>> Login([FromBody] AuthenticationRequest requestModel)
     {
         try

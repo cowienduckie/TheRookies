@@ -7,9 +7,9 @@ public class GetBorrowRequestResponse
 {
     public int Id { get; set; }
     public string Status { get; set; } = null!;
-    public UserModel Requester { get; set; } = null!;
+    public GetUserResponse Requester { get; set; } = null!;
     public DateTime RequestedAt { get; set; }
-    public UserModel? Approver { get; set; }
+    public GetUserResponse? Approver { get; set; }
     public DateTime? ApprovedAt { get; set; }
     public List<BookModel> Books { get; set; } = null!;
 
@@ -18,7 +18,7 @@ public class GetBorrowRequestResponse
         Id = request.Id;
         Status = request.Status.ToString();
         RequestedAt = request.RequestedAt;
-        Requester = new UserModel
+        Requester = new GetUserResponse
         {
             Id = request.Requester.Id,
             Name = request.Requester.Name,
@@ -36,7 +36,7 @@ public class GetBorrowRequestResponse
         if (request.Approver != null)
         {
             ApprovedAt = request.ApprovedAt;
-            Approver = new UserModel
+            Approver = new GetUserResponse
             {
                 Id = request.Approver.Id,
                 Name = request.Approver.Name,

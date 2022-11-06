@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace BookLibrary.Data.Migrations
 {
-    public partial class InitialDB : Migration
+    public partial class InitalDB : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -160,7 +160,7 @@ namespace BookLibrary.Data.Migrations
                     { 1, "Normal 1", "normie1", 0, "normie1" },
                     { 2, "Normal 2", "normie2", 0, "normie2" },
                     { 3, "Super 1", "supreme2", 1, "supreme1" },
-                    { 4, "Super 2", "supreme2", 1, "supreme1" }
+                    { 4, "Super 2", "supreme2", 1, "supreme2" }
                 });
 
             migrationBuilder.InsertData(
@@ -183,9 +183,9 @@ namespace BookLibrary.Data.Migrations
                 columns: new[] { "Id", "ApprovedAt", "ApprovedBy", "RequestedAt", "RequestedBy", "Status" },
                 values: new object[,]
                 {
-                    { 1, null, null, new DateTime(2022, 11, 6, 18, 24, 18, 473, DateTimeKind.Local).AddTicks(6761), 1, 0 },
-                    { 2, new DateTime(2022, 11, 6, 18, 24, 18, 473, DateTimeKind.Local).AddTicks(6776), 3, new DateTime(2022, 11, 6, 18, 24, 18, 473, DateTimeKind.Local).AddTicks(6775), 1, 1 },
-                    { 3, new DateTime(2022, 11, 6, 18, 24, 18, 473, DateTimeKind.Local).AddTicks(6781), 4, new DateTime(2022, 11, 6, 18, 24, 18, 473, DateTimeKind.Local).AddTicks(6780), 2, 2 }
+                    { 1, null, null, new DateTime(2022, 11, 7, 2, 17, 6, 589, DateTimeKind.Local).AddTicks(7973), 1, 0 },
+                    { 2, new DateTime(2022, 11, 7, 2, 17, 6, 589, DateTimeKind.Local).AddTicks(7983), 3, new DateTime(2022, 11, 7, 2, 17, 6, 589, DateTimeKind.Local).AddTicks(7982), 1, 1 },
+                    { 3, new DateTime(2022, 11, 7, 2, 17, 6, 589, DateTimeKind.Local).AddTicks(7986), 4, new DateTime(2022, 11, 7, 2, 17, 6, 589, DateTimeKind.Local).AddTicks(7986), 2, 2 }
                 });
 
             migrationBuilder.InsertData(

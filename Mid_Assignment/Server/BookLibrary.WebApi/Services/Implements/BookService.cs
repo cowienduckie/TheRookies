@@ -42,7 +42,7 @@ public class BookService : IBookService
             {
                 Name = requestModel.Name,
                 Description = requestModel.Description,
-                Cover = requestModel.Cover ?? CommonConstants.BaseBookCoverUrl,
+                Cover = requestModel.Cover ?? Settings.BaseBookCoverUrl,
                 Categories = categories
             };
 

@@ -86,7 +86,7 @@ public class BorrowRequestService : IBorrowRequestService
 
     public async Task<string> CheckRequestLimit(int userId, CreateBorrowRequestRequest request)
     {
-        if (request.BookIds.Count > SystemConstants.MaxBooksPerRequest)
+        if (request.BookIds.Count > Settings.MaxBooksPerRequest)
         {
             return ErrorMessages.BooksPerRequestLimitExceeded;
         }
@@ -98,7 +98,7 @@ public class BorrowRequestService : IBorrowRequestService
                 br.RequestedBy == userId &&
                 br.RequestedAt.Month == currentMonth);
 
-        if (bookRequestsThisMonth.Count() >= SystemConstants.MaxBorrowRequestsPerMonth)
+        if (bookRequestsThisMonth.Count() >= Settings.MaxBorrowRequestsPerMonth)
         {
             return ErrorMessages.RequestsPerMonthLimitExceeded;
         }

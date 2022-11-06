@@ -1,5 +1,7 @@
 using BookLibrary.Data;
 using BookLibrary.WebApi.Extensions;
+using BookLibrary.WebApi.Helpers;
+using BookLibrary.WebApi.Middlewares;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,9 +15,13 @@ builder.Services.AddDbContext<BookLibraryContext>(opt =>
     opt.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
 });
 
+builder.Services.Configure<AppSettings>(configuration.GetSection("AppSettings"));
+
 builder.Services.ConfigureRepositories();
 
 builder.Services.ConfigureServices();
+
+builder.Services.ConfigureHelpers();
 
 builder.Services.ConfigureUnitOfWork();
 
@@ -36,6 +42,8 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.UseCors("CorsPolicy");
+
+app.UseMiddleware<JwtMiddleware>();
 
 app.MapControllers();
 

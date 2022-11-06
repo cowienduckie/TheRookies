@@ -1,11 +1,14 @@
-﻿using BookLibrary.WebApi.Dtos.BorrowRequest;
+﻿using BookLibrary.WebApi.Attributes;
+using BookLibrary.WebApi.Dtos.BorrowRequest;
 using BookLibrary.WebApi.Services.Interfaces;
 using Common.Constants;
+using Common.Enums;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookLibrary.WebApi.Controllers;
 
 [ApiController]
+[Authorize]
 [Route("api/borrow-requests")]
 public class BorrowRequestsController : BaseController
 {
@@ -17,6 +20,7 @@ public class BorrowRequestsController : BaseController
     }
 
     [HttpGet]
+    [Authorize(Roles.NormalUser, Roles.SuperUser)]
     public async Task<ActionResult<IEnumerable<GetBorrowRequestResponse>>> GetAll()
     {
         try
@@ -34,6 +38,7 @@ public class BorrowRequestsController : BaseController
     }
 
     [HttpGet("{id}")]
+    [Authorize(Roles.NormalUser, Roles.SuperUser)]
     public async Task<ActionResult<GetBorrowRequestResponse>> GetById(int id)
     {
         try
@@ -51,6 +56,7 @@ public class BorrowRequestsController : BaseController
     }
 
     [HttpPost]
+    [Authorize(Roles.NormalUser)]
     public async Task<ActionResult<CreateBorrowRequestResponse>> Create([FromBody] CreateBorrowRequestRequest requestModel)
     {
         if (requestModel == null) return BadRequest();
@@ -77,6 +83,7 @@ public class BorrowRequestsController : BaseController
     }
 
     [HttpPost("approval")]
+    [Authorize(Roles.SuperUser)]
     public async Task<ActionResult<ApproveBorrowRequestResponse>> Approve([FromBody] ApproveBorrowRequestRequest requestModel)
     {
         if (requestModel == null) return BadRequest();

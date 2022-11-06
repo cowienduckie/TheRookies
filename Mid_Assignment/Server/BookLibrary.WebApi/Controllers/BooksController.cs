@@ -1,11 +1,14 @@
-﻿using BookLibrary.WebApi.Dtos.Book;
+﻿using BookLibrary.WebApi.Attributes;
+using BookLibrary.WebApi.Dtos.Book;
 using BookLibrary.WebApi.Services.Interfaces;
 using Common.Constants;
+using Common.Enums;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookLibrary.WebApi.Controllers;
 
 [ApiController]
+[Authorize]
 [Route("api/books")]
 public class BooksController : BaseController
 {
@@ -17,6 +20,7 @@ public class BooksController : BaseController
     }
 
     [HttpGet]
+    [Authorize(Roles.NormalUser, Roles.SuperUser)]
     public async Task<ActionResult<IEnumerable<GetBookResponse>>> GetAll()
     {
         try
@@ -34,6 +38,7 @@ public class BooksController : BaseController
     }
 
     [HttpGet("{id}")]
+    [Authorize(Roles.NormalUser, Roles.SuperUser)]
     public async Task<ActionResult<GetBookResponse>> GetById(int id)
     {
         try
@@ -51,6 +56,7 @@ public class BooksController : BaseController
     }
 
     [HttpPost]
+    [Authorize(Roles.SuperUser)]
     public async Task<ActionResult<CreateBookResponse>> Create([FromBody] CreateBookRequest requestModel)
     {
         if (requestModel == null) return BadRequest();
@@ -70,6 +76,7 @@ public class BooksController : BaseController
     }
 
     [HttpPut]
+    [Authorize(Roles.SuperUser)]
     public async Task<ActionResult<UpdateBookResponse>> Update([FromBody] UpdateBookRequest requestModel)
     {
         if (requestModel == null) return BadRequest();
@@ -93,6 +100,7 @@ public class BooksController : BaseController
     }
 
     [HttpDelete("{id}")]
+    [Authorize(Roles.SuperUser)]
     public async Task<IActionResult> Delete(int id)
     {
         var isExist = _bookService.IsExist(id);

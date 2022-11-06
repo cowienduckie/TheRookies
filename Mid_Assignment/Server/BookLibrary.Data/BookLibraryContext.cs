@@ -98,7 +98,7 @@ public class BookLibraryContext : DbContext
             new User {Id = 1, Username = "normie1", Password = "normie1", Name = "Normal 1", Role = Roles.NormalUser},
             new User {Id = 2, Username = "normie2", Password = "normie2", Name = "Normal 2", Role = Roles.NormalUser},
             new User {Id = 3, Username = "supreme1", Password = "supreme2", Name = "Super 1", Role = Roles.SuperUser},
-            new User {Id = 4, Username = "supreme1", Password = "supreme2", Name = "Super 2", Role = Roles.SuperUser}
+            new User {Id = 4, Username = "supreme2", Password = "supreme2", Name = "Super 2", Role = Roles.SuperUser}
         );
 
         builder.Entity<BorrowRequest>().HasData(

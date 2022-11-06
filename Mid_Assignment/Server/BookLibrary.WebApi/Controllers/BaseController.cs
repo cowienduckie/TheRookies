@@ -1,4 +1,4 @@
-﻿using BookLibrary.Data.Entities;
+﻿using BookLibrary.WebApi.Dtos.User;
 using Common.Constants;
 using Microsoft.AspNetCore.Mvc;
 
@@ -6,7 +6,7 @@ namespace BookLibrary.WebApi.Controllers;
 
 public class BaseController : ControllerBase
 {
-    protected User? CurrentUser => (User?) HttpContext.Items["User"];
+    protected UserModel? CurrentUser => (UserModel?) HttpContext.Items[Settings.CurrentUserContextKey];
 
     protected ActionResult HandleException(Exception exception)
     {

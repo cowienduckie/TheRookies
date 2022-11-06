@@ -1,11 +1,14 @@
-﻿using BookLibrary.WebApi.Dtos.Category;
+﻿using BookLibrary.WebApi.Attributes;
+using BookLibrary.WebApi.Dtos.Category;
 using BookLibrary.WebApi.Services.Interfaces;
 using Common.Constants;
+using Common.Enums;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookLibrary.WebApi.Controllers;
 
 [ApiController]
+[Authorize]
 [Route("api/categories")]
 public class CategoriesController : BaseController
 {
@@ -17,6 +20,7 @@ public class CategoriesController : BaseController
     }
 
     [HttpGet]
+    [Authorize(Roles.NormalUser, Roles.SuperUser)]
     public async Task<ActionResult<IEnumerable<GetCategoryResponse>>> GetAll()
     {
         try
@@ -34,6 +38,7 @@ public class CategoriesController : BaseController
     }
 
     [HttpGet("{id}")]
+    [Authorize(Roles.NormalUser, Roles.SuperUser)]
     public async Task<ActionResult<GetCategoryResponse>> GetById(int id)
     {
         try
@@ -51,6 +56,7 @@ public class CategoriesController : BaseController
     }
 
     [HttpPost]
+    [Authorize(Roles.SuperUser)]
     public async Task<ActionResult<CreateCategoryResponse>> Create([FromBody] CreateCategoryRequest requestModel)
     {
         if (requestModel == null) return BadRequest();
@@ -70,6 +76,7 @@ public class CategoriesController : BaseController
     }
 
     [HttpPut]
+    [Authorize(Roles.SuperUser)]
     public async Task<ActionResult<UpdateCategoryResponse>> Update([FromBody] UpdateCategoryRequest requestModel)
     {
         if (requestModel == null) return BadRequest();
@@ -93,6 +100,7 @@ public class CategoriesController : BaseController
     }
 
     [HttpDelete("{id}")]
+    [Authorize(Roles.SuperUser)]
     public async Task<IActionResult> Delete(int id)
     {
         var isExist = _categoryService.IsExist(id);

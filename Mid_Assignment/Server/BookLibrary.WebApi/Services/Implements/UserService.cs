@@ -1,6 +1,6 @@
-﻿using BookLibrary.Data.Entities;
-using BookLibrary.Data.Interfaces;
+﻿using BookLibrary.Data.Interfaces;
 using BookLibrary.WebApi.Dtos.User;
+using BookLibrary.WebApi.Helpers;
 using BookLibrary.WebApi.Services.Interfaces;
 
 namespace BookLibrary.WebApi.Services.Implements;
@@ -8,10 +8,12 @@ namespace BookLibrary.WebApi.Services.Implements;
 public class UserService : IUserService
 {
     private readonly IUserRepository _userRepository;
+    private readonly IJwtHelper _jwtHelper;
 
-    public UserService(IUserRepository userRepository)
+    public UserService(IUserRepository userRepository, IJwtHelper jwtHelper)
     {
         _userRepository = userRepository;
+        _jwtHelper = jwtHelper;
     }
 
     public async Task<UserModel?> GetByIdAsync(int id)
@@ -23,9 +25,7 @@ public class UserService : IUserService
         return new UserModel
         {
             Id = user.Id,
-            Name = user.Name,
-            Username = user.Username,
-            Role = user.Role.ToString()
+            Role = user.Role
         };
     }
 
@@ -39,7 +39,11 @@ public class UserService : IUserService
             return null;
         }
 
-        var token = GenerateJwtToken(user);
+        var token = _jwtHelper.GenerateJwtToken(new UserModel
+        {
+            Id = user.Id,
+            Role = user.Role
+        });
 
         return new AuthenticationResponse
         {
@@ -49,11 +53,5 @@ public class UserService : IUserService
             Role = user.Role.ToString(),
             Token = token
         };
-    }
-
-    private string GenerateJwtToken(User user)
-    {
-        // TODO: Implement this function to generate token by User
-        return "Here is your token";
     }
 }
