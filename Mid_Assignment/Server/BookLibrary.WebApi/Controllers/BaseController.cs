@@ -1,4 +1,5 @@
 ﻿using BookLibrary.Data.Entities;
+using Common.Constants;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookLibrary.WebApi.Controllers;
@@ -11,6 +12,6 @@ public class BaseController : ControllerBase
     {
         Console.WriteLine(exception);
 
-        return StatusCode(500, "Internal Server Error");
+        return StatusCode(500, ErrorMessages.InternalServerError);
     }
 }

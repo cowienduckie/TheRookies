@@ -14,7 +14,7 @@ public class BaseRepository<T> : IBaseRepository<T> where T : BaseEntity
         _dbSet = context.Set<T>();
     }
 
-    public T Create(T entity)
+    public virtual T Create(T entity)
     {
         return _dbSet.Add(entity).Entity;
     }
@@ -24,18 +24,25 @@ public class BaseRepository<T> : IBaseRepository<T> where T : BaseEntity
         _dbSet.Remove(entity);
     }
 
-    public T? Get(Expression<Func<T, bool>>? predicate = null)
+    public virtual Task<T?> GetAsync(Expression<Func<T, bool>>? predicate = null)
     {
-        return predicate == null ? _dbSet.FirstOrDefault() : _dbSet.FirstOrDefault(predicate);
+        return predicate == null ? _dbSet.FirstOrDefaultAsync() : _dbSet.FirstOrDefaultAsync(predicate);
     }
 
-    public IEnumerable<T> GetAll(Expression<Func<T, bool>>? predicate = null)
+    public virtual async Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>>? predicate = null)
     {
-        return predicate == null ? _dbSet : _dbSet.Where(predicate);
+        var dbSet = predicate == null ? _dbSet : _dbSet.Where(predicate);
+
+        return await dbSet.ToListAsync();
     }
 
-    public T Update(T entity)
+    public virtual T Update(T entity)
     {
         return _dbSet.Update(entity).Entity;
+    }
+
+    public bool IsExist(Expression<Func<T, bool>> predicate)
+    {
+        return _dbSet.Any(predicate);
     }
 }

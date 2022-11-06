@@ -5,22 +5,22 @@ namespace BookLibrary.WebApi.Services.Implements;
 
 public class BorrowRequestService : IBorrowRequestService
 {
-    public IEnumerable<GetBorrowRequestResponse> GetAll()
+    public Task<ApproveBorrowRequestResponse?> ApproveAsync(ApproveBorrowRequestRequest requestModel)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<CreateBorrowRequestResponse?> CreateAsync(CreateBorrowRequestRequest requestModel)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<IEnumerable<GetBorrowRequestResponse>> GetAllAsync()
     {
         throw new NotImplementedException();
     }
 
     public GetBorrowRequestResponse? GetById(int id)
-    {
-        throw new NotImplementedException();
-    }
-
-    public CreateBorrowRequestResponse? Create(CreateBorrowRequestRequest requestModel)
-    {
-        throw new NotImplementedException();
-    }
-
-    public ApproveBorrowRequestResponse? Update(ApproveBorrowRequestRequest requestModel)
     {
         throw new NotImplementedException();
     }

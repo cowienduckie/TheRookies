@@ -5,12 +5,12 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace BookLibrary.Data.Migrations
 {
-    public partial class InitialMigration : Migration
+    public partial class InitialDB : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Book",
+                name: "Books",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -21,11 +21,11 @@ namespace BookLibrary.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Book", x => x.Id);
+                    table.PrimaryKey("PK_Books", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Category",
+                name: "Categories",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -34,11 +34,11 @@ namespace BookLibrary.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Category", x => x.Id);
+                    table.PrimaryKey("PK_Categories", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "User",
+                name: "Users",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -50,37 +50,35 @@ namespace BookLibrary.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_User", x => x.Id);
+                    table.PrimaryKey("PK_Users", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "BookCategory",
+                name: "BookCategories",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    BookId = table.Column<int>(type: "int", nullable: false),
-                    CategoryId = table.Column<int>(type: "int", nullable: false)
+                    BooksId = table.Column<int>(type: "int", nullable: false),
+                    CategoriesId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_BookCategory", x => x.Id);
+                    table.PrimaryKey("PK_BookCategories", x => new { x.BooksId, x.CategoriesId });
                     table.ForeignKey(
-                        name: "FK_BookCategory_Book_BookId",
-                        column: x => x.BookId,
-                        principalTable: "Book",
+                        name: "FK_BookCategories_Books_BooksId",
+                        column: x => x.BooksId,
+                        principalTable: "Books",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_BookCategory_Category_CategoryId",
-                        column: x => x.CategoryId,
-                        principalTable: "Category",
+                        name: "FK_BookCategories_Categories_CategoriesId",
+                        column: x => x.CategoriesId,
+                        principalTable: "Categories",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "BorrowRequest",
+                name: "BorrowRequests",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -93,48 +91,46 @@ namespace BookLibrary.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_BorrowRequest", x => x.Id);
+                    table.PrimaryKey("PK_BorrowRequests", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_BorrowRequest_User_ApprovedBy",
+                        name: "FK_BorrowRequests_Users_ApprovedBy",
                         column: x => x.ApprovedBy,
-                        principalTable: "User",
+                        principalTable: "Users",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_BorrowRequest_User_RequestedBy",
+                        name: "FK_BorrowRequests_Users_RequestedBy",
                         column: x => x.RequestedBy,
-                        principalTable: "User",
+                        principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "BorrowRequestDetail",
+                name: "BorrowRequestDetails",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    BookId = table.Column<int>(type: "int", nullable: false),
-                    BorrowRequestId = table.Column<int>(type: "int", nullable: false)
+                    BooksId = table.Column<int>(type: "int", nullable: false),
+                    BorrowRequestsId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_BorrowRequestDetail", x => x.Id);
+                    table.PrimaryKey("PK_BorrowRequestDetails", x => new { x.BooksId, x.BorrowRequestsId });
                     table.ForeignKey(
-                        name: "FK_BorrowRequestDetail_Book_BookId",
-                        column: x => x.BookId,
-                        principalTable: "Book",
+                        name: "FK_BorrowRequestDetails_Books_BooksId",
+                        column: x => x.BooksId,
+                        principalTable: "Books",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_BorrowRequestDetail_BorrowRequest_BorrowRequestId",
-                        column: x => x.BorrowRequestId,
-                        principalTable: "BorrowRequest",
+                        name: "FK_BorrowRequestDetails_BorrowRequests_BorrowRequestsId",
+                        column: x => x.BorrowRequestsId,
+                        principalTable: "BorrowRequests",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.InsertData(
-                table: "Book",
+                table: "Books",
                 columns: new[] { "Id", "Cover", "Description", "Name" },
                 values: new object[,]
                 {
@@ -147,7 +143,7 @@ namespace BookLibrary.Data.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "Category",
+                table: "Categories",
                 columns: new[] { "Id", "Name" },
                 values: new object[,]
                 {
@@ -157,7 +153,7 @@ namespace BookLibrary.Data.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "User",
+                table: "Users",
                 columns: new[] { "Id", "Name", "Password", "Role", "Username" },
                 values: new object[,]
                 {
@@ -168,97 +164,87 @@ namespace BookLibrary.Data.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "BookCategory",
-                columns: new[] { "Id", "BookId", "CategoryId" },
+                table: "BookCategories",
+                columns: new[] { "BooksId", "CategoriesId" },
                 values: new object[,]
                 {
-                    { 1, 1, 1 },
-                    { 2, 2, 2 },
-                    { 3, 3, 2 },
-                    { 4, 4, 3 },
-                    { 5, 5, 3 },
-                    { 6, 6, 3 },
-                    { 7, 3, 1 },
-                    { 8, 4, 2 }
+                    { 1, 1 },
+                    { 2, 2 },
+                    { 3, 1 },
+                    { 3, 2 },
+                    { 4, 2 },
+                    { 4, 3 },
+                    { 5, 3 },
+                    { 6, 3 }
                 });
 
             migrationBuilder.InsertData(
-                table: "BorrowRequest",
+                table: "BorrowRequests",
                 columns: new[] { "Id", "ApprovedAt", "ApprovedBy", "RequestedAt", "RequestedBy", "Status" },
                 values: new object[,]
                 {
-                    { 1, null, null, new DateTime(2022, 11, 5, 22, 8, 53, 477, DateTimeKind.Local).AddTicks(4828), 1, 0 },
-                    { 2, new DateTime(2022, 11, 5, 22, 8, 53, 477, DateTimeKind.Local).AddTicks(4837), 3, new DateTime(2022, 11, 5, 22, 8, 53, 477, DateTimeKind.Local).AddTicks(4836), 1, 1 },
-                    { 3, new DateTime(2022, 11, 5, 22, 8, 53, 477, DateTimeKind.Local).AddTicks(4840), 4, new DateTime(2022, 11, 5, 22, 8, 53, 477, DateTimeKind.Local).AddTicks(4840), 2, 2 }
+                    { 1, null, null, new DateTime(2022, 11, 6, 18, 24, 18, 473, DateTimeKind.Local).AddTicks(6761), 1, 0 },
+                    { 2, new DateTime(2022, 11, 6, 18, 24, 18, 473, DateTimeKind.Local).AddTicks(6776), 3, new DateTime(2022, 11, 6, 18, 24, 18, 473, DateTimeKind.Local).AddTicks(6775), 1, 1 },
+                    { 3, new DateTime(2022, 11, 6, 18, 24, 18, 473, DateTimeKind.Local).AddTicks(6781), 4, new DateTime(2022, 11, 6, 18, 24, 18, 473, DateTimeKind.Local).AddTicks(6780), 2, 2 }
                 });
 
             migrationBuilder.InsertData(
-                table: "BorrowRequestDetail",
-                columns: new[] { "Id", "BookId", "BorrowRequestId" },
+                table: "BorrowRequestDetails",
+                columns: new[] { "BooksId", "BorrowRequestsId" },
                 values: new object[,]
                 {
-                    { 1, 1, 1 },
-                    { 2, 2, 1 },
-                    { 3, 3, 1 },
-                    { 4, 4, 2 },
-                    { 5, 5, 2 },
-                    { 6, 6, 2 },
-                    { 7, 1, 2 },
-                    { 8, 2, 2 },
-                    { 9, 3, 3 },
-                    { 10, 4, 3 }
+                    { 1, 1 },
+                    { 1, 2 },
+                    { 2, 1 },
+                    { 2, 2 },
+                    { 3, 1 },
+                    { 3, 3 },
+                    { 4, 2 },
+                    { 4, 3 },
+                    { 5, 2 },
+                    { 6, 2 }
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_BookCategory_BookId",
-                table: "BookCategory",
-                column: "BookId");
+                name: "IX_BookCategories_CategoriesId",
+                table: "BookCategories",
+                column: "CategoriesId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_BookCategory_CategoryId",
-                table: "BookCategory",
-                column: "CategoryId");
+                name: "IX_BorrowRequestDetails_BorrowRequestsId",
+                table: "BorrowRequestDetails",
+                column: "BorrowRequestsId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_BorrowRequest_ApprovedBy",
-                table: "BorrowRequest",
+                name: "IX_BorrowRequests_ApprovedBy",
+                table: "BorrowRequests",
                 column: "ApprovedBy");
 
             migrationBuilder.CreateIndex(
-                name: "IX_BorrowRequest_RequestedBy",
-                table: "BorrowRequest",
+                name: "IX_BorrowRequests_RequestedBy",
+                table: "BorrowRequests",
                 column: "RequestedBy");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_BorrowRequestDetail_BookId",
-                table: "BorrowRequestDetail",
-                column: "BookId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_BorrowRequestDetail_BorrowRequestId",
-                table: "BorrowRequestDetail",
-                column: "BorrowRequestId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "BookCategory");
+                name: "BookCategories");
 
             migrationBuilder.DropTable(
-                name: "BorrowRequestDetail");
+                name: "BorrowRequestDetails");
 
             migrationBuilder.DropTable(
-                name: "Category");
+                name: "Categories");
 
             migrationBuilder.DropTable(
-                name: "Book");
+                name: "Books");
 
             migrationBuilder.DropTable(
-                name: "BorrowRequest");
+                name: "BorrowRequests");
 
             migrationBuilder.DropTable(
-                name: "User");
+                name: "Users");
         }
     }
 }

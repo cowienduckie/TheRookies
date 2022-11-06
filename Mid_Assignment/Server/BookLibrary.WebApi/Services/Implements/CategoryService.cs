@@ -5,7 +5,17 @@ namespace BookLibrary.WebApi.Services.Implements;
 
 public class CategoryService : ICategoryService
 {
-    public IEnumerable<GetCategoryResponse> GetAll()
+    public Task<CreateCategoryResponse?> CreateAsync(CreateCategoryRequest requestModel)
+    {
+        throw new NotImplementedException();
+    }
+
+    public bool Delete(int id)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<IEnumerable<GetCategoryResponse>> GetAllAsync()
     {
         throw new NotImplementedException();
     }
@@ -15,17 +25,7 @@ public class CategoryService : ICategoryService
         throw new NotImplementedException();
     }
 
-    public CreateCategoryResponse? Create(CreateCategoryRequest requestModel)
-    {
-        throw new NotImplementedException();
-    }
-
-    public UpdateCategoryResponse? Update(UpdateCategoryRequest requestModel)
-    {
-        throw new NotImplementedException();
-    }
-
-    public bool Delete(int id)
+    public Task<UpdateCategoryResponse?> UpdateAsync(UpdateCategoryRequest requestModel)
     {
         throw new NotImplementedException();
     }

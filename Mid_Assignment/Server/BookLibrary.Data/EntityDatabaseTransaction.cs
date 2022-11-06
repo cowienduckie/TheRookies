@@ -13,14 +13,14 @@ public class EntityDatabaseTransaction : IDatabaseTransaction
         _transaction = context.Database.BeginTransaction();
     }
 
-    public void Commit()
+    public Task CommitAsync()
     {
-        _transaction.Commit();
+        return _transaction.CommitAsync();
     }
 
-    public void Rollback()
+    public Task RollbackAsync()
     {
-        _transaction.Rollback();
+        return _transaction.RollbackAsync();
     }
 
     public void Dispose()

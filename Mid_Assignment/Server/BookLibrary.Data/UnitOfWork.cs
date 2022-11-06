@@ -23,8 +23,8 @@ public class UnitOfWork : IUnitOfWork
         return new BaseRepository<T>(_context);
     }
 
-    public int SaveChanges()
+    public async Task<int> SaveChangesAsync()
     {
-        return _context.SaveChanges();
+        return await _context.SaveChangesAsync();
     }
 }

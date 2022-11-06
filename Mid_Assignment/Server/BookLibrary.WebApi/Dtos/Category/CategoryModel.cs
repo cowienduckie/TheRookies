@@ -1,8 +1,7 @@
-﻿namespace BookLibrary.WebApi.Dtos.Category
+﻿namespace BookLibrary.WebApi.Dtos.Category;
+
+public class CategoryModel
 {
-    public class CategoryModel
-    {
-        public int Id { get; set; }
-        public string Name { get; set; } = null!;
-    }
+    public int Id { get; set; }
+    public string Name { get; set; } = null!;
 }

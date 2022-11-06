@@ -1,12 +1,11 @@
 ﻿using BookLibrary.WebApi.Dtos.BorrowRequest;
-using BookLibrary.WebApi.Dtos.Category;
 
 namespace BookLibrary.WebApi.Services.Interfaces;
 
 public interface IBorrowRequestService
 {
-    IEnumerable<GetBorrowRequestResponse> GetAll();
+    Task<IEnumerable<GetBorrowRequestResponse>> GetAllAsync();
     GetBorrowRequestResponse? GetById(int id);
-    CreateBorrowRequestResponse? Create(CreateBorrowRequestRequest requestModel);
-    ApproveBorrowRequestResponse? Update(ApproveBorrowRequestRequest requestModel);
+    Task<CreateBorrowRequestResponse?> CreateAsync(CreateBorrowRequestRequest requestModel);
+    Task<ApproveBorrowRequestResponse?> ApproveAsync(ApproveBorrowRequestRequest requestModel);
 }

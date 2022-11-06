@@ -6,6 +6,6 @@ namespace BookLibrary.Data.Interfaces;
 public interface IUnitOfWork
 {
     BaseRepository<T> GetRepository<T>() where T : BaseEntity;
-    int SaveChanges();
+    Task<int> SaveChangesAsync();
     IDatabaseTransaction GetDatabaseTransaction();
 }

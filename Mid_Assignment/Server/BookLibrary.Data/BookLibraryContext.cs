@@ -13,9 +13,7 @@ public class BookLibraryContext : DbContext
 
     public DbSet<Book> Books { get; set; } = null!;
     public DbSet<Category> Categories { get; set; } = null!;
-    public DbSet<BookCategory> BookCategories { get; set; } = null!;
     public DbSet<BorrowRequest> BorrowRequests { get; set; } = null!;
-    public DbSet<BorrowRequestDetail> BorrowRequestDetails { get; set; } = null!;
     public DbSet<User> Users { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder builder)
@@ -30,45 +28,29 @@ public class BookLibraryContext : DbContext
     private static void ConfigureTables(ModelBuilder builder)
     {
         builder.Entity<Book>()
-            .ToTable("Book");
+            .ToTable("Books");
 
         builder.Entity<Category>()
-            .ToTable("Category");
-
-        builder.Entity<BookCategory>()
-            .ToTable("BookCategory");
+            .ToTable("Categories");
 
         builder.Entity<BorrowRequest>()
-            .ToTable("BorrowRequest");
-
-        builder.Entity<BorrowRequestDetail>()
-            .ToTable("BorrowRequestDetail");
+            .ToTable("BorrowRequests");
 
         builder.Entity<User>()
-            .ToTable("User");
+            .ToTable("Users");
     }
 
     private static void ConfigureRelationships(ModelBuilder builder)
     {
         builder.Entity<Book>()
-            .HasMany(b => b.BookCategories)
-            .WithOne(bc => bc.Book)
-            .HasForeignKey(bc => bc.BookId);
-
-        builder.Entity<Category>()
-            .HasMany(c => c.BookCategories)
-            .WithOne(bc => bc.Category)
-            .HasForeignKey(bc => bc.CategoryId);
+            .HasMany(b => b.Categories)
+            .WithMany(c => c.Books)
+            .UsingEntity(b => b.ToTable("BookCategories"));
 
         builder.Entity<Book>()
-            .HasMany(b => b.BoorBorrowRequestDetails)
-            .WithOne(brd => brd.Book)
-            .HasForeignKey(brd => brd.BookId);
-
-        builder.Entity<BorrowRequest>()
-            .HasMany(br => br.BorrowRequestDetails)
-            .WithOne(brd => brd.BorrowRequest)
-            .HasForeignKey(brd => brd.BorrowRequestId);
+            .HasMany(b => b.BorrowRequests)
+            .WithMany(bc => bc.Books)
+            .UsingEntity(b => b.ToTable("BorrowRequestDetails"));
 
         builder.Entity<User>()
             .HasMany(u => u.RequestedBorrowRequests)
@@ -98,16 +80,19 @@ public class BookLibraryContext : DbContext
             new Book {Id = 6, Name = "Head First: Design Pattern"}
         );
 
-        builder.Entity<BookCategory>().HasData(
-            new BookCategory {Id = 1, BookId = 1, CategoryId = 1},
-            new BookCategory {Id = 2, BookId = 2, CategoryId = 2},
-            new BookCategory {Id = 3, BookId = 3, CategoryId = 2},
-            new BookCategory {Id = 4, BookId = 4, CategoryId = 3},
-            new BookCategory {Id = 5, BookId = 5, CategoryId = 3},
-            new BookCategory {Id = 6, BookId = 6, CategoryId = 3},
-            new BookCategory {Id = 7, BookId = 3, CategoryId = 1},
-            new BookCategory {Id = 8, BookId = 4, CategoryId = 2}
-        );
+        builder.Entity<Book>()
+            .HasMany(b => b.Categories)
+            .WithMany(c => c.Books)
+            .UsingEntity(b => b.HasData(
+                new {BooksId = 1, CategoriesId = 1},
+                new {BooksId = 2, CategoriesId = 2},
+                new {BooksId = 3, CategoriesId = 2},
+                new {BooksId = 4, CategoriesId = 3},
+                new {BooksId = 5, CategoriesId = 3},
+                new {BooksId = 6, CategoriesId = 3},
+                new {BooksId = 3, CategoriesId = 1},
+                new {BooksId = 4, CategoriesId = 2}
+            ));
 
         builder.Entity<User>().HasData(
             new User {Id = 1, Username = "normie1", Password = "normie1", Name = "Normal 1", Role = Roles.NormalUser},
@@ -130,17 +115,20 @@ public class BookLibraryContext : DbContext
             }
         );
 
-        builder.Entity<BorrowRequestDetail>().HasData(
-            new BorrowRequestDetail {Id = 1, BookId = 1, BorrowRequestId = 1},
-            new BorrowRequestDetail {Id = 2, BookId = 2, BorrowRequestId = 1},
-            new BorrowRequestDetail {Id = 3, BookId = 3, BorrowRequestId = 1},
-            new BorrowRequestDetail {Id = 4, BookId = 4, BorrowRequestId = 2},
-            new BorrowRequestDetail {Id = 5, BookId = 5, BorrowRequestId = 2},
-            new BorrowRequestDetail {Id = 6, BookId = 6, BorrowRequestId = 2},
-            new BorrowRequestDetail {Id = 7, BookId = 1, BorrowRequestId = 2},
-            new BorrowRequestDetail {Id = 8, BookId = 2, BorrowRequestId = 2},
-            new BorrowRequestDetail {Id = 9, BookId = 3, BorrowRequestId = 3},
-            new BorrowRequestDetail {Id = 10, BookId = 4, BorrowRequestId = 3}
-        );
+        builder.Entity<Book>()
+            .HasMany(b => b.BorrowRequests)
+            .WithMany(br => br.Books)
+            .UsingEntity(b => b.HasData(
+                new {BooksId = 1, BorrowRequestsId = 1},
+                new {BooksId = 2, BorrowRequestsId = 1},
+                new {BooksId = 3, BorrowRequestsId = 1},
+                new {BooksId = 4, BorrowRequestsId = 2},
+                new {BooksId = 5, BorrowRequestsId = 2},
+                new {BooksId = 6, BorrowRequestsId = 2},
+                new {BooksId = 1, BorrowRequestsId = 2},
+                new {BooksId = 2, BorrowRequestsId = 2},
+                new {BooksId = 3, BorrowRequestsId = 3},
+                new {BooksId = 4, BorrowRequestsId = 3}
+            ));
     }
 }

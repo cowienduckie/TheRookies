@@ -11,5 +11,5 @@ public class BorrowRequest : BaseEntity
     public int? ApprovedBy { get; set; }
     public User? Approver { get; set; }
     public DateTime? ApprovedAt { get; set; }
-    public ICollection<BorrowRequestDetail> BorrowRequestDetails { get; set; } = null!;
+    public ICollection<Book> Books { get; set; } = null!;
 }

@@ -2,6 +2,6 @@
 
 public interface IDatabaseTransaction : IDisposable
 {
-    void Commit();
-    void Rollback();
+    Task CommitAsync();
+    Task RollbackAsync();
 }

@@ -1,13 +1,13 @@
 ﻿using BookLibrary.WebApi.Dtos.Book;
-using BookLibrary.WebApi.Dtos.Category;
 
 namespace BookLibrary.WebApi.Services.Interfaces;
 
 public interface IBookService
 {
-    IEnumerable<GetCategoryResponse> GetAll();
-    GetBookResponse? GetById(int id);
-    CreateBookResponse? Create(CreateBookRequest requestModel);
-    UpdateBookResponse? Update(UpdateBookRequest requestModel);
+    Task<IEnumerable<GetBookResponse>> GetAllAsync();
+    Task<GetBookResponse?> GetByIdAsync(int id);
+    Task<CreateBookResponse?> CreateAsync(CreateBookRequest requestModel);
+    Task<UpdateBookResponse?> UpdateAsync(UpdateBookRequest requestModel);
     bool Delete(int id);
+    bool IsExist(int id);
 }
