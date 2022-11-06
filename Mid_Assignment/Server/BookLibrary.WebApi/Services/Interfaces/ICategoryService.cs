@@ -5,8 +5,9 @@ namespace BookLibrary.WebApi.Services.Interfaces;
 public interface ICategoryService
 {
     Task<IEnumerable<GetCategoryResponse>> GetAllAsync();
-    GetCategoryResponse? GetById(int id);
+    Task<GetCategoryResponse?> GetByIdAsync(int id);
     Task<CreateCategoryResponse?> CreateAsync(CreateCategoryRequest requestModel);
     Task<UpdateCategoryResponse?> UpdateAsync(UpdateCategoryRequest requestModel);
-    bool Delete(int id);
+    Task<bool> Delete(int id);
+    bool IsExist(int id);
 }
