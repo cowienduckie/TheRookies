@@ -20,7 +20,7 @@ public class CategoriesController : BaseController
     }
 
     [HttpGet]
-    [Authorize(Roles.NormalUser, Roles.SuperUser)]
+    [Authorize(Role.NormalUser, Role.SuperUser)]
     public async Task<ActionResult<IEnumerable<GetCategoryResponse>>> GetAll()
     {
         try
@@ -38,7 +38,7 @@ public class CategoriesController : BaseController
     }
 
     [HttpGet("{id}")]
-    [Authorize(Roles.NormalUser, Roles.SuperUser)]
+    [Authorize(Role.NormalUser, Role.SuperUser)]
     public async Task<ActionResult<GetCategoryResponse>> GetById(int id)
     {
         try
@@ -56,7 +56,7 @@ public class CategoriesController : BaseController
     }
 
     [HttpPost]
-    [Authorize(Roles.SuperUser)]
+    [Authorize(Role.SuperUser)]
     public async Task<ActionResult<CreateCategoryResponse>> Create([FromBody] CreateCategoryRequest requestModel)
     {
         try
@@ -74,7 +74,7 @@ public class CategoriesController : BaseController
     }
 
     [HttpPut]
-    [Authorize(Roles.SuperUser)]
+    [Authorize(Role.SuperUser)]
     public async Task<ActionResult<UpdateCategoryResponse>> Update([FromBody] UpdateCategoryRequest requestModel)
     {
         var isExist = _categoryService.IsExist(requestModel.Id);
@@ -96,7 +96,7 @@ public class CategoriesController : BaseController
     }
 
     [HttpDelete("{id}")]
-    [Authorize(Roles.SuperUser)]
+    [Authorize(Role.SuperUser)]
     public async Task<IActionResult> Delete(int id)
     {
         var isExist = _categoryService.IsExist(id);

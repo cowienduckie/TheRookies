@@ -20,7 +20,7 @@ public class BooksController : BaseController
     }
 
     [HttpGet]
-    [Authorize(Roles.NormalUser, Roles.SuperUser)]
+    [Authorize(Role.NormalUser, Role.SuperUser)]
     public async Task<ActionResult<IEnumerable<GetBookResponse>>> GetAll()
     {
         try
@@ -38,7 +38,7 @@ public class BooksController : BaseController
     }
 
     [HttpGet("{id}")]
-    [Authorize(Roles.NormalUser, Roles.SuperUser)]
+    [Authorize(Role.NormalUser, Role.SuperUser)]
     public async Task<ActionResult<GetBookResponse>> GetById(int id)
     {
         try
@@ -56,7 +56,7 @@ public class BooksController : BaseController
     }
 
     [HttpPost]
-    [Authorize(Roles.SuperUser)]
+    [Authorize(Role.SuperUser)]
     public async Task<ActionResult<CreateBookResponse>> Create([FromBody] CreateBookRequest requestModel)
     {
         try
@@ -74,7 +74,7 @@ public class BooksController : BaseController
     }
 
     [HttpPut]
-    [Authorize(Roles.SuperUser)]
+    [Authorize(Role.SuperUser)]
     public async Task<ActionResult<UpdateBookResponse>> Update([FromBody] UpdateBookRequest requestModel)
     {
         var isExist = _bookService.IsExist(requestModel.Id);
@@ -96,7 +96,7 @@ public class BooksController : BaseController
     }
 
     [HttpDelete("{id}")]
-    [Authorize(Roles.SuperUser)]
+    [Authorize(Role.SuperUser)]
     public async Task<IActionResult> Delete(int id)
     {
         var isExist = _bookService.IsExist(id);

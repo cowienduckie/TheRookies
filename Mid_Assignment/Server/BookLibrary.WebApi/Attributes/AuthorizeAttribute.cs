@@ -9,11 +9,11 @@ namespace BookLibrary.WebApi.Attributes;
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
 public class AuthorizeAttribute : Attribute, IAuthorizationFilter
 {
-    private readonly IList<Roles> _roles;
+    private readonly IList<Role> _roles;
 
-    public AuthorizeAttribute(params Roles[]? roles)
+    public AuthorizeAttribute(params Role[]? roles)
     {
-        _roles = roles ?? Array.Empty<Roles>();
+        _roles = roles ?? Array.Empty<Role>();
     }
 
     public void OnAuthorization(AuthorizationFilterContext context)

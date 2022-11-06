@@ -4,7 +4,7 @@ namespace BookLibrary.Data.Entities;
 
 public class BorrowRequest : BaseEntity
 {
-    public RequestStatuses Status { get; set; }
+    public RequestStatus Status { get; set; }
     public int RequestedBy { get; set; }
     public User Requester { get; set; } = null!;
     public DateTime RequestedAt { get; set; }

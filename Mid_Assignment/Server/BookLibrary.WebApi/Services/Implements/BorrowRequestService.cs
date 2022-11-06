@@ -38,7 +38,7 @@ public class BorrowRequestService : IBorrowRequestService
 
             var newBorrowRequest = new BorrowRequest
             {
-                Status = RequestStatuses.Waiting,
+                Status = RequestStatus.Waiting,
                 Books = books,
                 RequestedBy = 1, // TODO: Get current user ID
                 RequestedAt = DateTime.UtcNow
@@ -111,8 +111,8 @@ public class BorrowRequestService : IBorrowRequestService
             if (borrowRequest == null) return null;
 
             borrowRequest.Status = requestModel.IsApproved
-                ? RequestStatuses.Approved
-                : RequestStatuses.Rejected;
+                ? RequestStatus.Approved
+                : RequestStatus.Rejected;
             borrowRequest.ApprovedBy = 4; // TODO: Get current super user approved this
             borrowRequest.ApprovedAt = DateTime.UtcNow;
 

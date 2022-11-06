@@ -95,22 +95,22 @@ public class BookLibraryContext : DbContext
             ));
 
         builder.Entity<User>().HasData(
-            new User {Id = 1, Username = "normie1", Password = "normie1", Name = "Normal 1", Role = Roles.NormalUser},
-            new User {Id = 2, Username = "normie2", Password = "normie2", Name = "Normal 2", Role = Roles.NormalUser},
-            new User {Id = 3, Username = "supreme1", Password = "supreme2", Name = "Super 1", Role = Roles.SuperUser},
-            new User {Id = 4, Username = "supreme2", Password = "supreme2", Name = "Super 2", Role = Roles.SuperUser}
+            new User {Id = 1, Username = "normie1", Password = "normie1", Name = "Normal 1", Role = Role.NormalUser},
+            new User {Id = 2, Username = "normie2", Password = "normie2", Name = "Normal 2", Role = Role.NormalUser},
+            new User {Id = 3, Username = "supreme1", Password = "supreme2", Name = "Super 1", Role = Role.SuperUser},
+            new User {Id = 4, Username = "supreme2", Password = "supreme2", Name = "Super 2", Role = Role.SuperUser}
         );
 
         builder.Entity<BorrowRequest>().HasData(
-            new BorrowRequest {Id = 1, Status = RequestStatuses.Waiting, RequestedBy = 1, RequestedAt = DateTime.Now},
+            new BorrowRequest {Id = 1, Status = RequestStatus.Waiting, RequestedBy = 1, RequestedAt = DateTime.Now},
             new BorrowRequest
             {
-                Id = 2, Status = RequestStatuses.Approved, RequestedBy = 1, RequestedAt = DateTime.Now, ApprovedBy = 3,
+                Id = 2, Status = RequestStatus.Approved, RequestedBy = 1, RequestedAt = DateTime.Now, ApprovedBy = 3,
                 ApprovedAt = DateTime.Now
             },
             new BorrowRequest
             {
-                Id = 3, Status = RequestStatuses.Rejected, RequestedBy = 2, RequestedAt = DateTime.Now, ApprovedBy = 4,
+                Id = 3, Status = RequestStatus.Rejected, RequestedBy = 2, RequestedAt = DateTime.Now, ApprovedBy = 4,
                 ApprovedAt = DateTime.Now
             }
         );

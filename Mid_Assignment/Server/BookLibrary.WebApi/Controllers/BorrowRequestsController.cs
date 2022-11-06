@@ -20,7 +20,7 @@ public class BorrowRequestsController : BaseController
     }
 
     [HttpGet]
-    [Authorize(Roles.NormalUser, Roles.SuperUser)]
+    [Authorize(Role.NormalUser, Role.SuperUser)]
     public async Task<ActionResult<IEnumerable<GetBorrowRequestResponse>>> GetAll()
     {
         try
@@ -38,7 +38,7 @@ public class BorrowRequestsController : BaseController
     }
 
     [HttpGet("{id}")]
-    [Authorize(Roles.NormalUser, Roles.SuperUser)]
+    [Authorize(Role.NormalUser, Role.SuperUser)]
     public async Task<ActionResult<GetBorrowRequestResponse>> GetById(int id)
     {
         try
@@ -56,7 +56,7 @@ public class BorrowRequestsController : BaseController
     }
 
     [HttpPost]
-    [Authorize(Roles.NormalUser)]
+    [Authorize(Role.NormalUser)]
     public async Task<ActionResult<CreateBorrowRequestResponse>> Create(
         [FromBody] CreateBorrowRequestRequest requestModel)
     {
@@ -80,7 +80,7 @@ public class BorrowRequestsController : BaseController
     }
 
     [HttpPost("approval")]
-    [Authorize(Roles.SuperUser)]
+    [Authorize(Role.SuperUser)]
     public async Task<ActionResult<ApproveBorrowRequestResponse>> Approve(
         [FromBody] ApproveBorrowRequestRequest requestModel)
     {
