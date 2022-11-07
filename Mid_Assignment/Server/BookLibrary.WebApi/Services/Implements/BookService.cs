@@ -1,6 +1,4 @@
-﻿using System.Linq.Expressions;
-using System.Reflection;
-using BookLibrary.Data.Entities;
+﻿using BookLibrary.Data.Entities;
 using BookLibrary.Data.Interfaces;
 using BookLibrary.WebApi.Dtos.Book;
 using BookLibrary.WebApi.Dtos.Category;
@@ -110,12 +108,12 @@ public class BookService : IBookService
     }
 
     public async Task<PagedList<GetBookResponse>> GetAllAsync(
-        PagingFilter pagingFilter, 
+        PagingFilter pagingFilter,
         SortFilter sortFilter)
     {
         var books = (await _bookRepository.GetAllAsync()).AsQueryable();
 
-        var validSortFields = new []
+        var validSortFields = new[]
         {
             SortField.Id,
             SortField.Name

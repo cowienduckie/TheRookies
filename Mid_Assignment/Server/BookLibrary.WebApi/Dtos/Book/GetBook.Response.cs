@@ -4,12 +4,6 @@ namespace BookLibrary.WebApi.Dtos.Book;
 
 public class GetBookResponse
 {
-    public int Id { get; set; }
-    public string Name { get; set; } = null!;
-    public string? Description { get; set; }
-    public string? Cover { get; set; }
-    public List<CategoryModel> Categories { get; set; } = null!;
-
     public GetBookResponse(Data.Entities.Book book)
     {
         Id = book.Id;
@@ -24,4 +18,10 @@ public class GetBookResponse
             })
             .ToList();
     }
+
+    public int Id { get; set; }
+    public string Name { get; set; } = null!;
+    public string? Description { get; set; }
+    public string? Cover { get; set; }
+    public List<CategoryModel> Categories { get; set; } = null!;
 }

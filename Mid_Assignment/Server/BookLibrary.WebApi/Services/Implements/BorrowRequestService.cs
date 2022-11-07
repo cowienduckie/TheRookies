@@ -41,7 +41,7 @@ public class BorrowRequestService : IBorrowRequestService
             {
                 Status = RequestStatus.Waiting,
                 Books = books,
-                RequestedBy = requestModel.Requester.Id, 
+                RequestedBy = requestModel.Requester.Id,
                 RequestedAt = DateTime.UtcNow
             };
 
@@ -67,10 +67,7 @@ public class BorrowRequestService : IBorrowRequestService
     {
         Expression<Func<BorrowRequest, bool>>? predicate = null;
 
-        if (request.Requester.Role == Role.NormalUser)
-        {
-            predicate = br => br.Requester.Id == request.Requester.Id;
-        }
+        if (request.Requester.Role == Role.NormalUser) predicate = br => br.Requester.Id == request.Requester.Id;
 
         return (await _borrowRequestRepository.GetAllAsync(predicate))
             .Select(borrowRequest => new GetBorrowRequestResponse(borrowRequest));
@@ -78,19 +75,13 @@ public class BorrowRequestService : IBorrowRequestService
 
     public async Task<GetBorrowRequestResponse?> GetByIdAsync(GetBorrowRequestRequest request)
     {
-        if (request.Id == null)
-        {
-            return null;
-        }
+        if (request.Id == null) return null;
 
         Expression<Func<BorrowRequest, bool>>? predicate = borrowRequest => borrowRequest.Id == request.Id;
 
         if (request.Requester.Role == Role.NormalUser)
-        {
-            predicate = br => (
-                br.Requester.Id == request.Requester.Id &&
-                br.Id == request.Id);
-        }
+            predicate = br => br.Requester.Id == request.Requester.Id &&
+                              br.Id == request.Id;
 
         var borrowRequest = await _borrowRequestRepository.GetAsync(predicate);
 
@@ -106,15 +97,9 @@ public class BorrowRequestService : IBorrowRequestService
 
     public async Task<string> CheckRequestLimit(CreateBorrowRequestRequest request)
     {
-        if (request.BookIds.Count < Settings.MinBooksPerRequest)
-        {
-            return ErrorMessages.BooksPerRequestLimitNotReached;
-        }
+        if (request.BookIds.Count < Settings.MinBooksPerRequest) return ErrorMessages.BooksPerRequestLimitNotReached;
 
-        if (request.BookIds.Count > Settings.MaxBooksPerRequest)
-        {
-            return ErrorMessages.BooksPerRequestLimitExceeded;
-        }
+        if (request.BookIds.Count > Settings.MaxBooksPerRequest) return ErrorMessages.BooksPerRequestLimitExceeded;
 
         var currentMonth = DateTime.UtcNow.Month;
 
@@ -124,9 +109,7 @@ public class BorrowRequestService : IBorrowRequestService
                 br.RequestedAt.Month == currentMonth);
 
         if (bookRequestsThisMonth.Count() >= Settings.MaxBorrowRequestsPerMonth)
-        {
             return ErrorMessages.RequestsPerMonthLimitExceeded;
-        }
 
         return string.Empty;
     }

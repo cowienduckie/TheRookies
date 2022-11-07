@@ -8,6 +8,5 @@ public class CreateBorrowRequestRequest
 {
     [Required] public List<int> BookIds { get; set; } = null!;
 
-    [JsonIgnore]
-    public UserModel Requester { get; set; } = null!;
+    [JsonIgnore] public UserModel Requester { get; set; } = null!;
 }

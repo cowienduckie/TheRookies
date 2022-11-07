@@ -6,7 +6,6 @@ public static class PagedListExtension
 {
     public static object ToObject<T>(this IPagedList<T> pagedList)
     {
-
         return new
         {
             pagedList.PageIndex,

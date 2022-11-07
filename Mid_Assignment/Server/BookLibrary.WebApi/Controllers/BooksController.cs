@@ -1,5 +1,4 @@
-﻿using System.Text.Json;
-using BookLibrary.WebApi.Attributes;
+﻿using BookLibrary.WebApi.Attributes;
 using BookLibrary.WebApi.Dtos.Book;
 using BookLibrary.WebApi.Filters;
 using BookLibrary.WebApi.Services.Interfaces;
