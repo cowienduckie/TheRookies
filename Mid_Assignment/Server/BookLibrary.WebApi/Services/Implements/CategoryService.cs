@@ -1,7 +1,11 @@
 ﻿using BookLibrary.Data.Entities;
 using BookLibrary.Data.Interfaces;
 using BookLibrary.WebApi.Dtos.Category;
+using BookLibrary.WebApi.Filters;
+using BookLibrary.WebApi.Helpers;
 using BookLibrary.WebApi.Services.Interfaces;
+using Common.DataType;
+using Common.Enums;
 
 namespace BookLibrary.WebApi.Services.Implements;
 
@@ -77,14 +81,27 @@ public class CategoryService : ICategoryService
         }
     }
 
-    public async Task<IEnumerable<GetCategoryResponse>> GetAllAsync()
+    public async Task<IPagedList<GetCategoryResponse>> GetAllAsync(PagingFilter pagingFilter, SortFilter sortFilter)
     {
-        return (await _categoryRepository.GetAllAsync())
+        var categories = (await _categoryRepository.GetAllAsync()).AsQueryable();
+
+        var validSortFields = new[]
+        {
+            SortField.Id,
+            SortField.Name
+        };
+
+        var sortedCategories = categories
+            .SortData(validSortFields, sortFilter.SortField, sortFilter.SortOrder)
             .Select(category => new GetCategoryResponse
             {
                 Id = category.Id,
                 Name = category.Name
-            });
+            })
+            .AsQueryable();
+
+        return new PagedList<GetCategoryResponse>
+            (sortedCategories, pagingFilter.PageIndex, pagingFilter.PageSize);
     }
 
     public async Task<GetCategoryResponse?> GetByIdAsync(int id)

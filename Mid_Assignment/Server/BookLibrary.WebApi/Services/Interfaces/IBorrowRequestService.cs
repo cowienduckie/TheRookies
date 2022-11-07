@@ -1,10 +1,13 @@
 ﻿using BookLibrary.WebApi.Dtos.BorrowRequest;
+using BookLibrary.WebApi.Filters;
+using Common.DataType;
 
 namespace BookLibrary.WebApi.Services.Interfaces;
 
 public interface IBorrowRequestService
 {
-    Task<IEnumerable<GetBorrowRequestResponse>> GetAllAsync(GetBorrowRequestRequest request);
+    Task<IPagedList<GetBorrowRequestResponse>> GetAllAsync(
+        GetBorrowRequestRequest request, PagingFilter pagingFilter, SortFilter sortFilter);
     Task<GetBorrowRequestResponse?> GetByIdAsync(GetBorrowRequestRequest request);
     Task<CreateBorrowRequestResponse?> CreateAsync(CreateBorrowRequestRequest requestModel);
     Task<ApproveBorrowRequestResponse?> ApproveAsync(ApproveBorrowRequestRequest requestModel);

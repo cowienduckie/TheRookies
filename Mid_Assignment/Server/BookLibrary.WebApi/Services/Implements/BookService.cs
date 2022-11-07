@@ -120,7 +120,7 @@ public class BookService : IBookService
         };
 
         var sortedBooks = books
-            .SortData(validSortFields, sortFilter.Field, sortFilter.Order)
+            .SortData(validSortFields, sortFilter.SortField, sortFilter.SortOrder)
             .Select(book => new GetBookResponse(book))
             .AsQueryable();
 

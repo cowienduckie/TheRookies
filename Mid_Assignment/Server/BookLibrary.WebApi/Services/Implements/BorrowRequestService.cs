@@ -2,8 +2,13 @@
 using BookLibrary.Data.Entities;
 using BookLibrary.Data.Interfaces;
 using BookLibrary.WebApi.Dtos.BorrowRequest;
+using BookLibrary.WebApi.Dtos.Category;
+using BookLibrary.WebApi.Dtos.User;
+using BookLibrary.WebApi.Filters;
+using BookLibrary.WebApi.Helpers;
 using BookLibrary.WebApi.Services.Interfaces;
 using Common.Constants;
+using Common.DataType;
 using Common.Enums;
 
 namespace BookLibrary.WebApi.Services.Implements;
@@ -63,14 +68,36 @@ public class BorrowRequestService : IBorrowRequestService
         }
     }
 
-    public async Task<IEnumerable<GetBorrowRequestResponse>> GetAllAsync(GetBorrowRequestRequest request)
+    public async Task<IPagedList<GetBorrowRequestResponse>> GetAllAsync(
+        GetBorrowRequestRequest request, 
+        PagingFilter pagingFilter, 
+        SortFilter sortFilter)
     {
         Expression<Func<BorrowRequest, bool>>? predicate = null;
 
         if (request.Requester.Role == Role.NormalUser) predicate = br => br.Requester.Id == request.Requester.Id;
 
-        return (await _borrowRequestRepository.GetAllAsync(predicate))
-            .Select(borrowRequest => new GetBorrowRequestResponse(borrowRequest));
+        var borrowRequests = 
+            (await _borrowRequestRepository.GetAllAsync(predicate))
+            .AsQueryable();
+
+        var validSortFields = new[]
+        {
+            SortField.Id,
+            SortField.RequestedAt,
+            SortField.RequestedBy,
+            SortField.ApprovedAt,
+            SortField.ApprovedBy,
+            SortField.RequestStatus
+        };
+
+        var sortedBorrowRequests = borrowRequests
+            .SortData(validSortFields, sortFilter.SortField, sortFilter.SortOrder)
+            .Select(br => new GetBorrowRequestResponse(br))
+            .AsQueryable();
+
+        return new PagedList<GetBorrowRequestResponse>
+            (sortedBorrowRequests, pagingFilter.PageIndex, pagingFilter.PageSize);
     }
 
     public async Task<GetBorrowRequestResponse?> GetByIdAsync(GetBorrowRequestRequest request)

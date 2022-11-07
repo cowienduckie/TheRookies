@@ -6,10 +6,10 @@ public class SortFilter
 {
     public SortFilter()
     {
-        Order = SortOrder.Ascending;
-        Field = SortField.Id;
+        SortOrder = SortOrder.Ascending;
+        SortField = SortField.Id;
     }
 
-    public SortOrder Order { get; set; }
-    public SortField Field { get; set; }
+    public SortOrder SortOrder { get; set; }
+    public SortField SortField { get; set; }
 }

@@ -1,9 +1,13 @@
 ﻿using BookLibrary.WebApi.Attributes;
 using BookLibrary.WebApi.Dtos.BorrowRequest;
 using BookLibrary.WebApi.Dtos.User;
+using BookLibrary.WebApi.Filters;
+using BookLibrary.WebApi.Services.Implements;
 using BookLibrary.WebApi.Services.Interfaces;
 using Common.Constants;
+using Common.DataType;
 using Common.Enums;
+using Common.Extensions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookLibrary.WebApi.Controllers;
@@ -22,7 +26,9 @@ public class BorrowRequestsController : BaseController
 
     [HttpGet]
     [Authorize(Role.NormalUser, Role.SuperUser)]
-    public async Task<ActionResult<IEnumerable<GetBorrowRequestResponse>>> GetAll()
+    public async Task<ActionResult<IPagedList<GetBorrowRequestResponse>>> GetAll(
+        [FromQuery] PagingFilter pagingFilter,
+        [FromQuery] SortFilter sortFilter)
     {
         if (CurrentUser == null) return Unauthorized();
 
@@ -37,11 +43,9 @@ public class BorrowRequestsController : BaseController
 
         try
         {
-            var results = await _borrowRequestService.GetAllAsync(request);
+            var result = await _borrowRequestService.GetAllAsync(request, pagingFilter, sortFilter);
 
-            if (!results.Any()) return NotFound();
-
-            return Ok(results);
+            return Ok(result.ToObject());
         }
         catch (Exception exception)
         {
