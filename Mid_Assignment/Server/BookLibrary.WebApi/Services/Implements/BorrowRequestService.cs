@@ -2,8 +2,6 @@
 using BookLibrary.Data.Entities;
 using BookLibrary.Data.Interfaces;
 using BookLibrary.WebApi.Dtos.BorrowRequest;
-using BookLibrary.WebApi.Dtos.Category;
-using BookLibrary.WebApi.Dtos.User;
 using BookLibrary.WebApi.Filters;
 using BookLibrary.WebApi.Helpers;
 using BookLibrary.WebApi.Services.Interfaces;
@@ -69,15 +67,15 @@ public class BorrowRequestService : IBorrowRequestService
     }
 
     public async Task<IPagedList<GetBorrowRequestResponse>> GetAllAsync(
-        GetBorrowRequestRequest request, 
-        PagingFilter pagingFilter, 
+        GetBorrowRequestRequest request,
+        PagingFilter pagingFilter,
         SortFilter sortFilter)
     {
         Expression<Func<BorrowRequest, bool>>? predicate = null;
 
         if (request.Requester.Role == Role.NormalUser) predicate = br => br.Requester.Id == request.Requester.Id;
 
-        var borrowRequests = 
+        var borrowRequests =
             (await _borrowRequestRepository.GetAllAsync(predicate))
             .AsQueryable();
 
