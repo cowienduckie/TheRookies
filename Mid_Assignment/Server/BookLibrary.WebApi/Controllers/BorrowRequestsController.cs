@@ -1,5 +1,6 @@
 ﻿using BookLibrary.WebApi.Attributes;
 using BookLibrary.WebApi.Dtos.BorrowRequest;
+using BookLibrary.WebApi.Dtos.User;
 using BookLibrary.WebApi.Services.Interfaces;
 using Common.Constants;
 using Common.Enums;
@@ -23,9 +24,23 @@ public class BorrowRequestsController : BaseController
     [Authorize(Role.NormalUser, Role.SuperUser)]
     public async Task<ActionResult<IEnumerable<GetBorrowRequestResponse>>> GetAll()
     {
+        if (CurrentUser == null)
+        {
+            return Unauthorized();
+        }
+
+        var request = new GetBorrowRequestRequest
+        {
+            Requester = new UserModel
+            {
+                Id = CurrentUser.Id,
+                Role = CurrentUser.Role
+            }
+        };
+
         try
         {
-            var results = await _borrowRequestService.GetAllAsync();
+            var results = await _borrowRequestService.GetAllAsync(request);
 
             if (!results.Any()) return NotFound();
 
@@ -41,9 +56,24 @@ public class BorrowRequestsController : BaseController
     [Authorize(Role.NormalUser, Role.SuperUser)]
     public async Task<ActionResult<GetBorrowRequestResponse>> GetById(int id)
     {
+        if (CurrentUser == null)
+        {
+            return Unauthorized();
+        }
+
+        var request = new GetBorrowRequestRequest
+        {
+            Requester = new UserModel
+            {
+                Id = CurrentUser.Id,
+                Role = CurrentUser.Role
+            },
+            Id = id
+        };
+
         try
         {
-            var result = await _borrowRequestService.GetByIdAsync(id);
+            var result = await _borrowRequestService.GetByIdAsync(request);
 
             if (result == null) return NotFound();
 
@@ -60,16 +90,34 @@ public class BorrowRequestsController : BaseController
     public async Task<ActionResult<CreateBorrowRequestResponse>> Create(
         [FromBody] CreateBorrowRequestRequest requestModel)
     {
+        if (CurrentUser == null || 
+            CurrentUser.Role == Role.SuperUser)
+        {
+            return Unauthorized();
+        }
+
+        requestModel.Requester = new UserModel
+        {
+            Id = CurrentUser.Id,
+            Role = CurrentUser.Role
+        };
+
         try
         {
             var limitCheckMessage =
-                await _borrowRequestService.CheckRequestLimit(1, requestModel); // TODO: Pass current userId here
+                await _borrowRequestService.CheckRequestLimit(requestModel);
 
-            if (!string.IsNullOrEmpty(limitCheckMessage)) return BadRequest(limitCheckMessage);
+            if (!string.IsNullOrEmpty(limitCheckMessage))
+            {
+                return BadRequest(limitCheckMessage);
+            }
 
             var result = await _borrowRequestService.CreateAsync(requestModel);
 
-            if (result == null) return StatusCode(500, ErrorMessages.CreateError);
+            if (result == null)
+            {
+                return StatusCode(500, ErrorMessages.CreateError);
+            }
 
             return CreatedAtRoute(new {id = result.Id.ToString()}, result);
         }
@@ -84,6 +132,18 @@ public class BorrowRequestsController : BaseController
     public async Task<ActionResult<ApproveBorrowRequestResponse>> Approve(
         [FromBody] ApproveBorrowRequestRequest requestModel)
     {
+        if (CurrentUser == null || 
+            CurrentUser.Role == Role.NormalUser)
+        {
+            return Unauthorized();
+        }
+
+        requestModel.Approver = new UserModel
+        {
+            Id = CurrentUser.Id,
+            Role = CurrentUser.Role
+        };
+
         var isExist = _borrowRequestService.IsExist(requestModel.Id);
 
         if (!isExist) return NotFound();
@@ -92,7 +152,10 @@ public class BorrowRequestsController : BaseController
         {
             var result = await _borrowRequestService.ApproveAsync(requestModel);
 
-            if (result == null) return StatusCode(500, ErrorMessages.UpdateError);
+            if (result == null)
+            {
+                return StatusCode(500, ErrorMessages.UpdateError);
+            }
 
             return Ok(result);
         }

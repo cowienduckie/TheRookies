@@ -1,4 +1,5 @@
-﻿using BookLibrary.Data.Entities;
+﻿using System.Linq.Expressions;
+using BookLibrary.Data.Entities;
 using BookLibrary.Data.Interfaces;
 using BookLibrary.WebApi.Dtos.BorrowRequest;
 using BookLibrary.WebApi.Services.Interfaces;
@@ -40,7 +41,7 @@ public class BorrowRequestService : IBorrowRequestService
             {
                 Status = RequestStatus.Waiting,
                 Books = books,
-                RequestedBy = 1, // TODO: Get current user ID
+                RequestedBy = requestModel.Requester.Id, 
                 RequestedAt = DateTime.UtcNow
             };
 
@@ -62,15 +63,36 @@ public class BorrowRequestService : IBorrowRequestService
         }
     }
 
-    public async Task<IEnumerable<GetBorrowRequestResponse>> GetAllAsync()
+    public async Task<IEnumerable<GetBorrowRequestResponse>> GetAllAsync(GetBorrowRequestRequest request)
     {
-        return (await _borrowRequestRepository.GetAllAsync())
+        Expression<Func<BorrowRequest, bool>>? predicate = null;
+
+        if (request.Requester.Role == Role.NormalUser)
+        {
+            predicate = br => br.Requester.Id == request.Requester.Id;
+        }
+
+        return (await _borrowRequestRepository.GetAllAsync(predicate))
             .Select(borrowRequest => new GetBorrowRequestResponse(borrowRequest));
     }
 
-    public async Task<GetBorrowRequestResponse?> GetByIdAsync(int id)
+    public async Task<GetBorrowRequestResponse?> GetByIdAsync(GetBorrowRequestRequest request)
     {
-        var borrowRequest = await _borrowRequestRepository.GetAsync(borrowRequest => borrowRequest.Id == id);
+        if (request.Id == null)
+        {
+            return null;
+        }
+
+        Expression<Func<BorrowRequest, bool>>? predicate = borrowRequest => borrowRequest.Id == request.Id;
+
+        if (request.Requester.Role == Role.NormalUser)
+        {
+            predicate = br => (
+                br.Requester.Id == request.Requester.Id &&
+                br.Id == request.Id);
+        }
+
+        var borrowRequest = await _borrowRequestRepository.GetAsync(predicate);
 
         if (borrowRequest == null) return null;
 
@@ -82,19 +104,29 @@ public class BorrowRequestService : IBorrowRequestService
         return _borrowRequestRepository.IsExist(borrowRequest => borrowRequest.Id == id);
     }
 
-    public async Task<string> CheckRequestLimit(int userId, CreateBorrowRequestRequest request)
+    public async Task<string> CheckRequestLimit(CreateBorrowRequestRequest request)
     {
-        if (request.BookIds.Count > Settings.MaxBooksPerRequest) return ErrorMessages.BooksPerRequestLimitExceeded;
+        if (!request.BookIds.Any())
+        {
+            return ErrorMessages.NoBookInRequest;
+        }
+
+        if (request.BookIds.Count > Settings.MaxBooksPerRequest)
+        {
+            return ErrorMessages.BooksPerRequestLimitExceeded;
+        }
 
         var currentMonth = DateTime.UtcNow.Month;
 
         var bookRequestsThisMonth = await _borrowRequestRepository
             .GetAllAsync(br =>
-                br.RequestedBy == userId &&
+                br.RequestedBy == request.Requester.Id &&
                 br.RequestedAt.Month == currentMonth);
 
         if (bookRequestsThisMonth.Count() >= Settings.MaxBorrowRequestsPerMonth)
+        {
             return ErrorMessages.RequestsPerMonthLimitExceeded;
+        }
 
         return string.Empty;
     }
@@ -113,7 +145,7 @@ public class BorrowRequestService : IBorrowRequestService
             borrowRequest.Status = requestModel.IsApproved
                 ? RequestStatus.Approved
                 : RequestStatus.Rejected;
-            borrowRequest.ApprovedBy = 4; // TODO: Get current super user approved this
+            borrowRequest.ApprovedBy = requestModel.Approver.Id;
             borrowRequest.ApprovedAt = DateTime.UtcNow;
 
             var updatedBorrowRequest = _borrowRequestRepository.Update(borrowRequest);
