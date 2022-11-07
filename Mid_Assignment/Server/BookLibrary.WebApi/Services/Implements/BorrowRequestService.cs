@@ -30,6 +30,8 @@ public class BorrowRequestService : IBorrowRequestService
 
         try
         {
+            if (requestModel.Requester == null) return null;
+
             var bookIds = requestModel.BookIds.Distinct();
 
             var books = await _bookRepository
@@ -122,6 +124,8 @@ public class BorrowRequestService : IBorrowRequestService
 
     public async Task<string> CheckRequestLimit(CreateBorrowRequestRequest request)
     {
+        if (request.Requester == null) return ErrorMessages.RequestHasNoRequester;
+
         if (request.BookIds.Count < Settings.MinBooksPerRequest) return ErrorMessages.BooksPerRequestLimitNotReached;
 
         if (request.BookIds.Count > Settings.MaxBooksPerRequest) return ErrorMessages.BooksPerRequestLimitExceeded;
@@ -145,6 +149,8 @@ public class BorrowRequestService : IBorrowRequestService
 
         try
         {
+            if (requestModel.Approver == null) return null;
+
             var borrowRequest =
                 await _borrowRequestRepository.GetAsync(borrowRequest => borrowRequest.Id == requestModel.Id);
 

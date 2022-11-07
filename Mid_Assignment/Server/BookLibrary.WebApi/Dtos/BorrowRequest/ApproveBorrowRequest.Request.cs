@@ -10,5 +10,6 @@ public class ApproveBorrowRequestRequest
 
     [Required] public bool IsApproved { get; set; }
 
-    [JsonIgnore] public UserModel Approver { get; set; } = null!;
+    [JsonIgnore]
+    public UserModel? Approver { get; set; }
 }
