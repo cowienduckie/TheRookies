@@ -8,7 +8,6 @@ public interface IBorrowRequestService
 {
     Task<IPagedList<GetBorrowRequestResponse>> GetAllAsync(
         GetBorrowRequestRequest request, PagingFilter pagingFilter, SortFilter sortFilter);
-
     Task<GetBorrowRequestResponse?> GetByIdAsync(GetBorrowRequestRequest request);
     Task<CreateBorrowRequestResponse?> CreateAsync(CreateBorrowRequestRequest requestModel);
     Task<ApproveBorrowRequestResponse?> ApproveAsync(ApproveBorrowRequestRequest requestModel);

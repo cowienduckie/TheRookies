@@ -34,13 +34,14 @@ public class BorrowRequestService : IBorrowRequestService
 
             var bookIds = requestModel.BookIds.Distinct();
 
-            var books = await _bookRepository
-                    .GetAllAsync(book => bookIds.Contains(book.Id))
-                as List<Book>;
+            var books = (List<Book>)await _bookRepository
+                    .GetAllAsync(book => bookIds.Contains(book.Id));
 
             if (books == null ||
                 books.Count != bookIds.Count())
+            {
                 return null;
+            }
 
             var newBorrowRequest = new BorrowRequest
             {
@@ -107,8 +108,10 @@ public class BorrowRequestService : IBorrowRequestService
         Expression<Func<BorrowRequest, bool>>? predicate = borrowRequest => borrowRequest.Id == request.Id;
 
         if (request.Requester.Role == Role.NormalUser)
+        {
             predicate = br => br.Requester.Id == request.Requester.Id &&
                               br.Id == request.Id;
+        }
 
         var borrowRequest = await _borrowRequestRepository.GetAsync(predicate);
 
@@ -124,11 +127,20 @@ public class BorrowRequestService : IBorrowRequestService
 
     public async Task<string> CheckRequestLimit(CreateBorrowRequestRequest request)
     {
-        if (request.Requester == null) return ErrorMessages.RequestHasNoRequester;
+        if (request.Requester == null)
+        {
+            return ErrorMessages.RequestHasNoRequester;
+        }
 
-        if (request.BookIds.Count < Settings.MinBooksPerRequest) return ErrorMessages.BooksPerRequestLimitNotReached;
+        if (request.BookIds.Count < Settings.MinBooksPerRequest)
+        {
+            return ErrorMessages.BooksPerRequestLimitNotReached;
+        }
 
-        if (request.BookIds.Count > Settings.MaxBooksPerRequest) return ErrorMessages.BooksPerRequestLimitExceeded;
+        if (request.BookIds.Count > Settings.MaxBooksPerRequest)
+        {
+            return ErrorMessages.BooksPerRequestLimitExceeded;
+        }
 
         var currentMonth = DateTime.UtcNow.Month;
 
@@ -138,7 +150,9 @@ public class BorrowRequestService : IBorrowRequestService
                 br.RequestedAt.Month == currentMonth);
 
         if (bookRequestsThisMonth.Count() >= Settings.MaxBorrowRequestsPerMonth)
+        {
             return ErrorMessages.RequestsPerMonthLimitExceeded;
+        }
 
         return string.Empty;
     }

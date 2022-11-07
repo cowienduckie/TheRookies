@@ -89,7 +89,9 @@ public class BorrowRequestsController : BaseController
     {
         if (CurrentUser == null ||
             CurrentUser.Role == Role.SuperUser)
+        {
             return Unauthorized();
+        }
 
         requestModel.Requester = new UserModel
         {
@@ -123,7 +125,9 @@ public class BorrowRequestsController : BaseController
     {
         if (CurrentUser == null ||
             CurrentUser.Role == Role.NormalUser)
+        {
             return Unauthorized();
+        }
 
         requestModel.Approver = new UserModel
         {

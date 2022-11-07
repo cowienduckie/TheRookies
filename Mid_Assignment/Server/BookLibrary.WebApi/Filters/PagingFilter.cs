@@ -7,7 +7,6 @@ public class PagingFilter
     private int _pageIndex;
     private int _pageSize;
 
-
     public PagingFilter()
     {
         PageIndex = Settings.DefaultPageIndex;

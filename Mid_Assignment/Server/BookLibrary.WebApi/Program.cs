@@ -10,9 +10,8 @@ builder.Services.AddControllers();
 var configuration = builder.Configuration;
 
 builder.Services.AddDbContext<BookLibraryContext>(options =>
-{
-    options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
-});
+    options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"))
+);
 
 builder.Services.ConfigureRepositories();
 

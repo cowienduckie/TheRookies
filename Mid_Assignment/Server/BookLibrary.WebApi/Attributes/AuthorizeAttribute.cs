@@ -28,10 +28,12 @@ public class AuthorizeAttribute : Attribute, IAuthorizationFilter
 
         var user = (UserModel?) context.HttpContext.Items[Settings.CurrentUserContextKey];
 
-        if (user == null || (_roles.Any() && !_roles.Contains(user.Role)))
+        if (user == null || (_roles.Count > 0 && !_roles.Contains(user.Role)))
+        {
             context.Result = new JsonResult(new {message = ErrorMessages.Unauthorized})
             {
                 StatusCode = StatusCodes.Status401Unauthorized
             };
+        }
     }
 }

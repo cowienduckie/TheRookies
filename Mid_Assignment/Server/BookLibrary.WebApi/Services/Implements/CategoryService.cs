@@ -130,7 +130,10 @@ public class CategoryService : ICategoryService
         {
             var category = await _categoryRepository.GetAsync(category => category.Id == requestModel.Id);
 
-            if (category == null) return null;
+            if (category == null)
+            {
+                return null;
+            }
 
             category.Name = requestModel.Name;
 
