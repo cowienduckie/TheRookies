@@ -3,22 +3,15 @@ using System.Security.Claims;
 using System.Text;
 using BookLibrary.WebApi.Dtos.User;
 using Common.Constants;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
 namespace BookLibrary.WebApi.Helpers;
 
-public class JwtHelper : IJwtHelper
+public static class JwtHelper
 {
-    private const string TOKEN_CLAIM_TYPE = "id";
-    private readonly byte[] _securityKey;
+    private static readonly byte[] SecurityKey = Encoding.ASCII.GetBytes(JwtSettings.SecurityKey);
 
-    public JwtHelper(IOptions<AppSettings> appSettings)
-    {
-        _securityKey = Encoding.ASCII.GetBytes(appSettings.Value.Secret);
-    }
-
-    public string GenerateJwtToken(UserModel user)
+    public static string GenerateJwtToken(UserModel user)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
 
@@ -26,15 +19,18 @@ public class JwtHelper : IJwtHelper
         {
             Subject = new ClaimsIdentity(new[]
             {
-                new Claim(TOKEN_CLAIM_TYPE, user.Id.ToString())
+                new Claim(JwtSettings.IdTokenClaimName, user.Id.ToString())
             }),
 
             Expires = DateTime.UtcNow
-                .AddSeconds(Settings.JwtTokenExpiredTimeInSecond),
+                .AddDays(JwtSettings.ExpiredTimeInDay),
 
             SigningCredentials = new SigningCredentials(
-                new SymmetricSecurityKey(_securityKey),
-                SecurityAlgorithms.HmacSha256Signature)
+                new SymmetricSecurityKey(SecurityKey),
+                SecurityAlgorithms.HmacSha256Signature),
+
+            Issuer = JwtSettings.Issuer,
+            Audience = JwtSettings.Audience
         };
 
         var token = tokenHandler.CreateToken(tokenDescriptor);
@@ -42,7 +38,7 @@ public class JwtHelper : IJwtHelper
         return tokenHandler.WriteToken(token);
     }
 
-    public int? ValidateJwtToken(string? token)
+    public static int? ValidateJwtToken(string? token)
     {
         if (token == null) return null;
 
@@ -53,16 +49,20 @@ public class JwtHelper : IJwtHelper
             tokenHandler.ValidateToken(token, new TokenValidationParameters
                 {
                     ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(_securityKey),
-                    ValidateIssuer = false,
-                    ValidateAudience = false,
+                    IssuerSigningKey = new SymmetricSecurityKey(SecurityKey),
+                    ValidateIssuer = true,
+                    ValidIssuer = JwtSettings.Issuer,
+                    ValidateAudience = true,
+                    ValidAudience = JwtSettings.Audience,
                     ClockSkew = TimeSpan.Zero
                 },
                 out var validatedToken);
 
             var jwtToken = (JwtSecurityToken) validatedToken;
 
-            var userId = int.Parse(jwtToken.Claims.First(c => c.Type == TOKEN_CLAIM_TYPE).Value);
+            var userId = int.Parse(jwtToken.Claims
+                .First(c => c.Type == JwtSettings.IdTokenClaimName)
+                .Value);
 
             return userId;
         }

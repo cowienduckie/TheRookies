@@ -7,13 +7,11 @@ namespace BookLibrary.WebApi.Services.Implements;
 
 public class UserService : IUserService
 {
-    private readonly IJwtHelper _jwtHelper;
     private readonly IUserRepository _userRepository;
 
-    public UserService(IUserRepository userRepository, IJwtHelper jwtHelper)
+    public UserService(IUserRepository userRepository)
     {
         _userRepository = userRepository;
-        _jwtHelper = jwtHelper;
     }
 
     public async Task<UserModel?> GetByIdAsync(int id)
@@ -36,7 +34,7 @@ public class UserService : IUserService
                                     user.Password == requestModel.Password);
         if (user == null) return null;
 
-        var token = _jwtHelper.GenerateJwtToken(new UserModel
+        var token = JwtHelper.GenerateJwtToken(new UserModel
         {
             Id = user.Id,
             Role = user.Role

@@ -1,6 +1,5 @@
 using BookLibrary.Data;
 using BookLibrary.WebApi.Extensions;
-using BookLibrary.WebApi.Helpers;
 using BookLibrary.WebApi.Middlewares;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,18 +9,14 @@ builder.Services.AddControllers();
 
 var configuration = builder.Configuration;
 
-builder.Services.AddDbContext<BookLibraryContext>(opt =>
+builder.Services.AddDbContext<BookLibraryContext>(options =>
 {
-    opt.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
+    options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
 });
-
-builder.Services.Configure<AppSettings>(configuration.GetSection("AppSettings"));
 
 builder.Services.ConfigureRepositories();
 
 builder.Services.ConfigureServices();
-
-builder.Services.ConfigureHelpers();
 
 builder.Services.ConfigureUnitOfWork();
 

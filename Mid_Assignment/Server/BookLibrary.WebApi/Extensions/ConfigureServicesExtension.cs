@@ -1,7 +1,6 @@
 ﻿using BookLibrary.Data;
 using BookLibrary.Data.Interfaces;
 using BookLibrary.Data.Repositories;
-using BookLibrary.WebApi.Helpers;
 using BookLibrary.WebApi.Services.Implements;
 using BookLibrary.WebApi.Services.Interfaces;
 using Microsoft.OpenApi.Models;
@@ -25,11 +24,6 @@ public static class ConfigureServicesExtension
         services.AddTransient<ICategoryService, CategoryService>();
         services.AddTransient<IBorrowRequestService, BorrowRequestService>();
         services.AddTransient<IUserService, UserService>();
-    }
-
-    public static void ConfigureHelpers(this IServiceCollection services)
-    {
-        services.AddTransient<IJwtHelper, JwtHelper>();
     }
 
     public static void ConfigureUnitOfWork(this IServiceCollection services)

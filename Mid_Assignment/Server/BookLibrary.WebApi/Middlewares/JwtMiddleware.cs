@@ -13,14 +13,14 @@ public class JwtMiddleware
         _next = next;
     }
 
-    public async Task Invoke(HttpContext context, IUserService userService, IJwtHelper jwtHelper)
+    public async Task Invoke(HttpContext context, IUserService userService)
     {
         var token = context.Request.Headers[Settings.AuthorizationRequestHeader]
             .FirstOrDefault()
             ?.Split(" ")
             .Last();
 
-        var userId = jwtHelper.ValidateJwtToken(token);
+        var userId = JwtHelper.ValidateJwtToken(token);
 
         if (userId != null)
             context.Items[Settings.CurrentUserContextKey] = await userService.GetByIdAsync(userId.Value);

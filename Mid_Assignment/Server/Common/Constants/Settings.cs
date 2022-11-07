@@ -7,5 +7,4 @@ public static class Settings
     public const string BaseBookCoverUrl = "https://dummyimage.com/150x300/";
     public const string AuthorizationRequestHeader = "Authorization";
     public const string CurrentUserContextKey = "CurrentUser";
-    public const int JwtTokenExpiredTimeInSecond = 3600;
 }
