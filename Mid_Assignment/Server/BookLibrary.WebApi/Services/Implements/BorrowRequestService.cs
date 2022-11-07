@@ -106,9 +106,9 @@ public class BorrowRequestService : IBorrowRequestService
 
     public async Task<string> CheckRequestLimit(CreateBorrowRequestRequest request)
     {
-        if (!request.BookIds.Any())
+        if (request.BookIds.Count < Settings.MinBooksPerRequest)
         {
-            return ErrorMessages.NoBookInRequest;
+            return ErrorMessages.BooksPerRequestLimitNotReached;
         }
 
         if (request.BookIds.Count > Settings.MaxBooksPerRequest)

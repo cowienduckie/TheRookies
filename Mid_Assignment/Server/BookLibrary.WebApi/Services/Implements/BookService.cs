@@ -1,9 +1,15 @@
-﻿using BookLibrary.Data.Entities;
+﻿using System.Linq.Expressions;
+using System.Reflection;
+using BookLibrary.Data.Entities;
 using BookLibrary.Data.Interfaces;
 using BookLibrary.WebApi.Dtos.Book;
 using BookLibrary.WebApi.Dtos.Category;
+using BookLibrary.WebApi.Filters;
+using BookLibrary.WebApi.Helpers;
 using BookLibrary.WebApi.Services.Interfaces;
 using Common.Constants;
+using Common.DataType;
+using Common.Enums;
 
 namespace BookLibrary.WebApi.Services.Implements;
 
@@ -103,45 +109,32 @@ public class BookService : IBookService
         }
     }
 
-    public async Task<IEnumerable<GetBookResponse>> GetAllAsync()
+    public async Task<PagedList<GetBookResponse>> GetAllAsync(
+        PagingFilter pagingFilter, 
+        SortFilter sortFilter)
     {
-        return (await _bookRepository.GetAllAsync())
-            .Select(book => new GetBookResponse
-            {
-                Id = book.Id,
-                Name = book.Name,
-                Description = book.Description,
-                Cover = book.Cover,
-                Categories = book.Categories
-                    .Select(category => new CategoryModel
-                    {
-                        Id = category.Id,
-                        Name = category.Name
-                    })
-                    .ToList()
-            });
+        var books = (await _bookRepository.GetAllAsync()).AsQueryable();
+
+        var validSortFields = new []
+        {
+            SortField.Id,
+            SortField.Name
+        };
+
+        var sortedBooks = books
+            .SortData(validSortFields, sortFilter.Field, sortFilter.Order)
+            .Select(book => new GetBookResponse(book))
+            .AsQueryable();
+
+        return new PagedList<GetBookResponse>
+            (sortedBooks, pagingFilter.PageIndex, pagingFilter.PageSize);
     }
 
     public async Task<GetBookResponse?> GetByIdAsync(int id)
     {
         var book = await _bookRepository.GetAsync(book => book.Id == id);
 
-        if (book == null) return null;
-
-        return new GetBookResponse
-        {
-            Id = book.Id,
-            Name = book.Name,
-            Description = book.Description,
-            Cover = book.Cover,
-            Categories = book.Categories
-                .Select(category => new CategoryModel
-                {
-                    Id = category.Id,
-                    Name = category.Name
-                })
-                .ToList()
-        };
+        return book == null ? null : new GetBookResponse(book);
     }
 
     public bool IsExist(int id)
