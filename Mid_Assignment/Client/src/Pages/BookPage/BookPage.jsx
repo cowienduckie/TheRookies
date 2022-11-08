@@ -1,5 +1,9 @@
 import { Box, Divider, Heading } from "@chakra-ui/react";
 
+export function loader() {
+  
+}
+
 export function BookPage() {
   return (
     <Box p={10}>

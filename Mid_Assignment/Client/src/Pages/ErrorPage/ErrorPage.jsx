@@ -3,8 +3,7 @@ import { NavLink, useRouteError } from "react-router-dom";
 
 export function ErrorPage() {
   const error = useRouteError();
-  console.error(error);
-
+  
   return (
     <Center id="error-page" h="100vh">
       <VStack spacing={5} >
