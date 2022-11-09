@@ -8,6 +8,7 @@ using BookLibrary.WebApi.Services.Interfaces;
 using Common.Constants;
 using Common.DataType;
 using Common.Enums;
+using Common.Wrappers;
 
 namespace BookLibrary.WebApi.Services.Implements;
 
@@ -107,25 +108,28 @@ public class BorrowRequestService : IBorrowRequestService
         return _borrowRequestRepository.IsExist(borrowRequest => borrowRequest.Id == id);
     }
 
-    public async Task<string> CheckRequestLimit(CreateBorrowRequestRequest request)
+    public async Task<ValidCheckingWrapper> IsRequestValid(CreateBorrowRequestRequest request)
     {
-        if (request.Requester == null) return ErrorMessages.RequestHasNoRequester;
+        if (request.Requester == null)
+        {
+            return new ValidCheckingWrapper(ErrorMessages.RequestHasNoRequester);
+        }
 
-        if (request.BookIds.Count < Settings.MinBooksPerRequest) return ErrorMessages.BooksPerRequestLimitNotReached;
+        var booksPerRequestCheckingResult = IsBooksPerRequestValid(request);
 
-        if (request.BookIds.Count > Settings.MaxBooksPerRequest) return ErrorMessages.BooksPerRequestLimitExceeded;
+        if (!booksPerRequestCheckingResult.IsValid)
+        {
+            return booksPerRequestCheckingResult;
+        }
 
-        var currentMonth = DateTime.UtcNow.Month;
+        var requestsPerMonthCheckingResult = await IsRequestsPerMonthValid(request);
 
-        var bookRequestsThisMonth = await _borrowRequestRepository
-            .GetAllAsync(br =>
-                br.RequestedBy == request.Requester.Id &&
-                br.RequestedAt.Month == currentMonth);
+        if (!requestsPerMonthCheckingResult.IsValid)
+        {
+            return requestsPerMonthCheckingResult;
+        }
 
-        if (bookRequestsThisMonth.Count() >= Settings.MaxBorrowRequestsPerMonth)
-            return ErrorMessages.RequestsPerMonthLimitExceeded;
-
-        return string.Empty;
+        return new ValidCheckingWrapper();
     }
 
     public async Task<ApproveBorrowRequestResponse?> ApproveAsync(ApproveBorrowRequestRequest requestModel)
@@ -148,5 +152,37 @@ public class BorrowRequestService : IBorrowRequestService
         await _unitOfWork.SaveChangesAsync();
 
         return new ApproveBorrowRequestResponse(updatedBorrowRequest);
+    }
+
+    private static ValidCheckingWrapper IsBooksPerRequestValid(CreateBorrowRequestRequest request)
+    {
+        if (request.BookIds.Count < Settings.MinBooksPerRequest)
+        {
+            return new ValidCheckingWrapper(ErrorMessages.BooksPerRequestLimitNotReached);
+        }
+
+        if (request.BookIds.Count > Settings.MaxBooksPerRequest)
+        {
+            return new ValidCheckingWrapper(ErrorMessages.BooksPerRequestLimitExceeded);
+        }
+
+        return new ValidCheckingWrapper();
+    }
+
+    private async Task<ValidCheckingWrapper> IsRequestsPerMonthValid(CreateBorrowRequestRequest request)
+    {
+        var currentMonth = DateTime.UtcNow.Month;
+
+        var bookRequestsThisMonth = await _borrowRequestRepository
+            .GetAllAsync(br =>
+                br.RequestedBy == request.Requester!.Id &&
+                br.RequestedAt.Month == currentMonth);
+
+        if (bookRequestsThisMonth.Count() >= Settings.MaxBorrowRequestsPerMonth)
+        {
+            return new ValidCheckingWrapper(ErrorMessages.RequestsPerMonthLimitExceeded);
+        }
+
+        return new ValidCheckingWrapper();
     }
 }

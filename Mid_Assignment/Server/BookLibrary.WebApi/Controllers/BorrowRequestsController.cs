@@ -101,10 +101,10 @@ public class BorrowRequestsController : BaseController
 
         try
         {
-            var limitCheckMessage =
-                await _borrowRequestService.CheckRequestLimit(requestModel);
+            var checkingResult =
+                await _borrowRequestService.IsRequestValid(requestModel);
 
-            if (!string.IsNullOrEmpty(limitCheckMessage)) return BadRequest(limitCheckMessage);
+            if (!checkingResult.IsValid) return BadRequest(checkingResult.Message);
 
             var result = await _borrowRequestService.CreateAsync(requestModel);
 

@@ -1,6 +1,7 @@
 ﻿using BookLibrary.WebApi.Dtos.BorrowRequest;
 using BookLibrary.WebApi.Filters;
 using Common.DataType;
+using Common.Wrappers;
 
 namespace BookLibrary.WebApi.Services.Interfaces;
 
@@ -17,5 +18,5 @@ public interface IBorrowRequestService
 
     bool IsExist(int id);
 
-    Task<string> CheckRequestLimit(CreateBorrowRequestRequest request);
+    Task<ValidCheckingWrapper> IsRequestValid(CreateBorrowRequestRequest request);
 }
