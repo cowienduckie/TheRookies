@@ -89,7 +89,9 @@ public class BorrowRequestsController : BaseController
     {
         if (CurrentUser == null ||
             CurrentUser.Role == Role.SuperUser)
+        {
             return Unauthorized();
+        }
 
         requestModel.Requester = new UserModel
         {
@@ -108,7 +110,7 @@ public class BorrowRequestsController : BaseController
 
             if (result == null) return StatusCode(500, ErrorMessages.CreateError);
 
-            return CreatedAtRoute(new {id = result.Id.ToString()}, result);
+            return CreatedAtRoute(new { id = result.Id.ToString() }, result);
         }
         catch (Exception exception)
         {
@@ -123,7 +125,9 @@ public class BorrowRequestsController : BaseController
     {
         if (CurrentUser == null ||
             CurrentUser.Role == Role.NormalUser)
+        {
             return Unauthorized();
+        }
 
         requestModel.Approver = new UserModel
         {

@@ -31,7 +31,7 @@ public class BorrowRequestService : IBorrowRequestService
 
         var bookIds = requestModel.BookIds.Distinct();
 
-        var books = (List<Book>) await _bookRepository
+        var books = (List<Book>)await _bookRepository
             .GetAllAsync(book => bookIds.Contains(book.Id));
 
         if (books.Count != bookIds.Count()) return null;
@@ -90,8 +90,10 @@ public class BorrowRequestService : IBorrowRequestService
         Expression<Func<BorrowRequest, bool>> predicate = borrowRequest => borrowRequest.Id == request.Id;
 
         if (request.Requester.Role == Role.NormalUser)
+        {
             predicate = br => br.Requester.Id == request.Requester.Id &&
-                              br.Id == request.Id;
+                          br.Id == request.Id;
+        }
 
         var borrowRequest = await _borrowRequestRepository.GetSingleAsync(predicate);
 
