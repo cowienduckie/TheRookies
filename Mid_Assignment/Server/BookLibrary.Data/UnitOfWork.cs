@@ -1,6 +1,4 @@
-﻿using BookLibrary.Data.Entities;
-using BookLibrary.Data.Interfaces;
-using BookLibrary.Data.Repositories;
+﻿using BookLibrary.Data.Interfaces;
 
 namespace BookLibrary.Data;
 
@@ -11,16 +9,6 @@ public class UnitOfWork : IUnitOfWork
     public UnitOfWork(BookLibraryContext context)
     {
         _context = context;
-    }
-
-    public IDatabaseTransaction GetDatabaseTransaction()
-    {
-        return new EntityDatabaseTransaction(_context);
-    }
-
-    public BaseRepository<T> GetRepository<T>() where T : BaseEntity
-    {
-        return new BaseRepository<T>(_context);
     }
 
     public async Task<int> SaveChangesAsync()

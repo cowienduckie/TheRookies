@@ -20,8 +20,8 @@ public class GetBookResponse
     }
 
     public int Id { get; set; }
-    public string Name { get; set; } = null!;
+    public string Name { get; set; }
     public string? Description { get; set; }
     public string? Cover { get; set; }
-    public List<CategoryModel> Categories { get; set; } = null!;
+    public List<CategoryModel> Categories { get; set; }
 }

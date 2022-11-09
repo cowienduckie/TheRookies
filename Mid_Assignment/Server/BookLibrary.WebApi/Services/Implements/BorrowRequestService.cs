@@ -13,60 +13,45 @@ namespace BookLibrary.WebApi.Services.Implements;
 
 public class BorrowRequestService : IBorrowRequestService
 {
-    private readonly IBaseRepository<Book> _bookRepository;
+    private readonly IBookRepository _bookRepository;
     private readonly IBorrowRequestRepository _borrowRequestRepository;
     private readonly IUnitOfWork _unitOfWork;
 
-    public BorrowRequestService(IUnitOfWork unitOfWork, IBorrowRequestRepository borrowRequestRepository)
+    public BorrowRequestService(
+        IUnitOfWork unitOfWork, IBorrowRequestRepository borrowRequestRepository, IBookRepository bookRepository)
     {
         _unitOfWork = unitOfWork;
         _borrowRequestRepository = borrowRequestRepository;
-        _bookRepository = _unitOfWork.GetRepository<Book>();
+        _bookRepository = bookRepository;
     }
 
     public async Task<CreateBorrowRequestResponse?> CreateAsync(CreateBorrowRequestRequest requestModel)
     {
-        using var transaction = _unitOfWork.GetDatabaseTransaction();
+        if (requestModel.Requester == null) return null;
 
-        try
+        var bookIds = requestModel.BookIds.Distinct();
+
+        var books = (List<Book>)await _bookRepository
+            .GetAllAsync(book => bookIds.Contains(book.Id));
+
+        if (books.Count != bookIds.Count())
         {
-            if (requestModel.Requester == null) return null;
-
-            var bookIds = requestModel.BookIds.Distinct();
-
-            var books = (List<Book>)await _bookRepository
-                    .GetAllAsync(book => bookIds.Contains(book.Id));
-
-            if (books == null ||
-                books.Count != bookIds.Count())
-            {
-                return null;
-            }
-
-            var newBorrowRequest = new BorrowRequest
-            {
-                Status = RequestStatus.Waiting,
-                Books = books,
-                RequestedBy = requestModel.Requester.Id,
-                RequestedAt = DateTime.UtcNow
-            };
-
-            var createdBorrowRequest = _borrowRequestRepository.Create(newBorrowRequest);
-
-            await _unitOfWork.SaveChangesAsync();
-
-            await transaction.CommitAsync();
-
-            return new CreateBorrowRequestResponse(createdBorrowRequest);
-        }
-        catch (Exception exception)
-        {
-            Console.WriteLine(exception);
-
-            await transaction.RollbackAsync();
-
             return null;
         }
+
+        var newBorrowRequest = new BorrowRequest
+        {
+            Status = RequestStatus.Waiting,
+            Books = books,
+            RequestedBy = requestModel.Requester.Id,
+            RequestedAt = DateTime.UtcNow
+        };
+
+        var createdBorrowRequest = _borrowRequestRepository.Create(newBorrowRequest);
+
+        await _unitOfWork.SaveChangesAsync();
+
+        return new CreateBorrowRequestResponse(createdBorrowRequest);
     }
 
     public async Task<IPagedList<GetBorrowRequestResponse>> GetAllAsync(
@@ -105,7 +90,7 @@ public class BorrowRequestService : IBorrowRequestService
     {
         if (request.Id == null) return null;
 
-        Expression<Func<BorrowRequest, bool>>? predicate = borrowRequest => borrowRequest.Id == request.Id;
+        Expression<Func<BorrowRequest, bool>> predicate = borrowRequest => borrowRequest.Id == request.Id;
 
         if (request.Requester.Role == Role.NormalUser)
         {
@@ -159,38 +144,23 @@ public class BorrowRequestService : IBorrowRequestService
 
     public async Task<ApproveBorrowRequestResponse?> ApproveAsync(ApproveBorrowRequestRequest requestModel)
     {
-        using var transaction = _unitOfWork.GetDatabaseTransaction();
+        if (requestModel.Approver == null) return null;
 
-        try
-        {
-            if (requestModel.Approver == null) return null;
+        var borrowRequest =
+            await _borrowRequestRepository.GetSingleAsync(borrowRequest => borrowRequest.Id == requestModel.Id);
 
-            var borrowRequest =
-                await _borrowRequestRepository.GetSingleAsync(borrowRequest => borrowRequest.Id == requestModel.Id);
+        if (borrowRequest == null) return null;
 
-            if (borrowRequest == null) return null;
+        borrowRequest.Status = requestModel.IsApproved
+            ? RequestStatus.Approved
+            : RequestStatus.Rejected;
+        borrowRequest.ApprovedBy = requestModel.Approver.Id;
+        borrowRequest.ApprovedAt = DateTime.UtcNow;
 
-            borrowRequest.Status = requestModel.IsApproved
-                ? RequestStatus.Approved
-                : RequestStatus.Rejected;
-            borrowRequest.ApprovedBy = requestModel.Approver.Id;
-            borrowRequest.ApprovedAt = DateTime.UtcNow;
+        var updatedBorrowRequest = _borrowRequestRepository.Update(borrowRequest);
 
-            var updatedBorrowRequest = _borrowRequestRepository.Update(borrowRequest);
+        await _unitOfWork.SaveChangesAsync();
 
-            await _unitOfWork.SaveChangesAsync();
-
-            await transaction.CommitAsync();
-
-            return new ApproveBorrowRequestResponse(updatedBorrowRequest);
-        }
-        catch (Exception exception)
-        {
-            Console.WriteLine(exception);
-
-            await transaction.RollbackAsync();
-
-            return null;
-        }
+        return new ApproveBorrowRequestResponse(updatedBorrowRequest);
     }
 }

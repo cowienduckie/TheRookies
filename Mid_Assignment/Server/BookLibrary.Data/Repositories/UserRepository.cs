@@ -12,8 +12,8 @@ public class UserRepository : BaseRepository<User>, IUserRepository
     {
     }
 
-    public async Task<User?> GetSingleAsync(Expression<Func<User, bool>> predicate)
+    public override Task<User?> GetSingleAsync(Expression<Func<User, bool>>? predicate = null)
     {
-        return await _dbSet.SingleOrDefaultAsync(predicate);
+        return predicate == null ? _dbSet.SingleOrDefaultAsync() : _dbSet.SingleOrDefaultAsync(predicate);
     }
 }

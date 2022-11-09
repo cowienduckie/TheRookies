@@ -11,74 +11,44 @@ namespace BookLibrary.WebApi.Services.Implements;
 
 public class CategoryService : ICategoryService
 {
-    private readonly IBaseRepository<Category> _categoryRepository;
+    private readonly ICategoryRepository _categoryRepository;
     private readonly IUnitOfWork _unitOfWork;
 
-    public CategoryService(IUnitOfWork unitOfWork)
+    public CategoryService(IUnitOfWork unitOfWork, ICategoryRepository categoryRepository)
     {
         _unitOfWork = unitOfWork;
-        _categoryRepository = _unitOfWork.GetRepository<Category>();
+        _categoryRepository = categoryRepository;
     }
 
     public async Task<CreateCategoryResponse?> CreateAsync(CreateCategoryRequest requestModel)
     {
-        using var transaction = _unitOfWork.GetDatabaseTransaction();
-
-        try
+        var newCategory = new Category
         {
-            var newCategory = new Category
-            {
-                Name = requestModel.Name
-            };
+            Name = requestModel.Name
+        };
 
-            var createdCategory = _categoryRepository.Create(newCategory);
+        var createdCategory = _categoryRepository.Create(newCategory);
 
-            await _unitOfWork.SaveChangesAsync();
+        await _unitOfWork.SaveChangesAsync();
 
-            await transaction.CommitAsync();
-
-            return new CreateCategoryResponse
-            {
-                Id = createdCategory.Id,
-                Name = createdCategory.Name
-            };
-        }
-        catch (Exception exception)
+        return new CreateCategoryResponse
         {
-            Console.WriteLine(exception);
-
-            await transaction.RollbackAsync();
-
-            return null;
-        }
+            Id = createdCategory.Id,
+            Name = createdCategory.Name
+        };
     }
 
     public async Task<bool> Delete(int id)
     {
-        using var transaction = _unitOfWork.GetDatabaseTransaction();
+        var category = await _categoryRepository.GetSingleAsync(category => category.Id == id);
 
-        try
-        {
-            var category = await _categoryRepository.GetSingleAsync(category => category.Id == id);
+        if (category == null) return false;
 
-            if (category == null) return false;
+        _categoryRepository.Delete(category);
 
-            _categoryRepository.Delete(category);
+        await _unitOfWork.SaveChangesAsync();
 
-            await _unitOfWork.SaveChangesAsync();
-
-            await transaction.CommitAsync();
-
-            return true;
-        }
-        catch (Exception exception)
-        {
-            Console.WriteLine(exception);
-
-            await transaction.RollbackAsync();
-
-            return false;
-        }
+        return true;
     }
 
     public async Task<IPagedList<GetCategoryResponse>> GetAllAsync(PagingFilter pagingFilter, SortFilter sortFilter)
@@ -124,38 +94,23 @@ public class CategoryService : ICategoryService
 
     public async Task<UpdateCategoryResponse?> UpdateAsync(UpdateCategoryRequest requestModel)
     {
-        using var transaction = _unitOfWork.GetDatabaseTransaction();
+        var category = await _categoryRepository.GetSingleAsync(category => category.Id == requestModel.Id);
 
-        try
+        if (category == null)
         {
-            var category = await _categoryRepository.GetSingleAsync(category => category.Id == requestModel.Id);
-
-            if (category == null)
-            {
-                return null;
-            }
-
-            category.Name = requestModel.Name;
-
-            var updatedCategory = _categoryRepository.Update(category);
-
-            await _unitOfWork.SaveChangesAsync();
-
-            await transaction.CommitAsync();
-
-            return new UpdateCategoryResponse
-            {
-                Id = updatedCategory.Id,
-                Name = updatedCategory.Name
-            };
-        }
-        catch (Exception exception)
-        {
-            Console.WriteLine(exception);
-
-            await transaction.RollbackAsync();
-
             return null;
         }
+
+        category.Name = requestModel.Name;
+
+        var updatedCategory = _categoryRepository.Update(category);
+
+        await _unitOfWork.SaveChangesAsync();
+
+        return new UpdateCategoryResponse
+        {
+            Id = updatedCategory.Id,
+            Name = updatedCategory.Name
+        };
     }
 }

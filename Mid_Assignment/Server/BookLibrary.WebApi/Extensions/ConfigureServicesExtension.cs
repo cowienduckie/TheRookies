@@ -11,11 +11,10 @@ public static class ConfigureServicesExtension
 {
     public static void ConfigureRepositories(this IServiceCollection services)
     {
-        services.AddTransient(typeof(IBaseRepository<>), typeof(BaseRepository<>));
-
         services.AddTransient<IBookRepository, BookRepository>();
         services.AddTransient<IBorrowRequestRepository, BorrowRequestRepository>();
         services.AddTransient<IUserRepository, UserRepository>();
+        services.AddTransient<ICategoryRepository, CategoryRepository>();
     }
 
     public static void ConfigureServices(this IServiceCollection services)
