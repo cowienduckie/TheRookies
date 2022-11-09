@@ -1,9 +1,9 @@
-﻿using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
-using BookLibrary.WebApi.Dtos.User;
+﻿using BookLibrary.WebApi.Dtos.User;
 using Common.Constants;
 using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace BookLibrary.WebApi.Helpers;
 
@@ -47,18 +47,18 @@ public static class JwtHelper
         try
         {
             tokenHandler.ValidateToken(token, new TokenValidationParameters
-                {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(SecurityKey),
-                    ValidateIssuer = true,
-                    ValidIssuer = JwtSettings.Issuer,
-                    ValidateAudience = true,
-                    ValidAudience = JwtSettings.Audience,
-                    ClockSkew = TimeSpan.Zero
-                },
+            {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(SecurityKey),
+                ValidateIssuer = true,
+                ValidIssuer = JwtSettings.Issuer,
+                ValidateAudience = true,
+                ValidAudience = JwtSettings.Audience,
+                ClockSkew = TimeSpan.Zero
+            },
                 out var validatedToken);
 
-            var jwtToken = (JwtSecurityToken) validatedToken;
+            var jwtToken = (JwtSecurityToken)validatedToken;
 
             var userId = int.Parse(jwtToken.Claims
                 .First(c => c.Type == JwtSettings.IdTokenClaimName)
