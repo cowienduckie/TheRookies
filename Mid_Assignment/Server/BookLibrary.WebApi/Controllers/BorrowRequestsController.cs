@@ -108,7 +108,7 @@ public class BorrowRequestsController : BaseController
 
             var result = await _borrowRequestService.CreateAsync(requestModel);
 
-            if (result == null) return StatusCode(500, ErrorMessages.CreateError);
+            if (result == null) return StatusCode(500, ErrorMessages.InternalServerError);
 
             return CreatedAtRoute(new { id = result.Id.ToString() }, result);
         }
@@ -143,7 +143,7 @@ public class BorrowRequestsController : BaseController
         {
             var result = await _borrowRequestService.ApproveAsync(requestModel);
 
-            if (result == null) return StatusCode(500, ErrorMessages.UpdateError);
+            if (result == null) return StatusCode(500, ErrorMessages.InternalServerError);
 
             return Ok(result);
         }

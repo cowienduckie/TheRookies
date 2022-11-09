@@ -66,7 +66,7 @@ public class BooksController : BaseController
         {
             var result = await _bookService.CreateAsync(requestModel);
 
-            if (result == null) return StatusCode(500, ErrorMessages.CreateError);
+            if (result == null) return StatusCode(500, ErrorMessages.InternalServerError);
 
             return CreatedAtRoute(new {id = result.Id.ToString()}, result);
         }
@@ -88,7 +88,7 @@ public class BooksController : BaseController
         {
             var result = await _bookService.UpdateAsync(requestModel);
 
-            if (result == null) return StatusCode(500, ErrorMessages.UpdateError);
+            if (result == null) return StatusCode(500, ErrorMessages.InternalServerError);
 
             return Ok(result);
         }
@@ -110,7 +110,7 @@ public class BooksController : BaseController
         {
             var result = await _bookService.Delete(id);
 
-            if (!result) return StatusCode(500, ErrorMessages.DeleteError);
+            if (!result) return StatusCode(500, ErrorMessages.InternalServerError);
 
             return NoContent();
         }
