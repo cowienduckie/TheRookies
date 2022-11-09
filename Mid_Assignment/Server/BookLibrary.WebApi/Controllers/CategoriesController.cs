@@ -68,7 +68,7 @@ public class CategoriesController : BaseController
 
             if (result == null) return StatusCode(500, ErrorMessages.CreateError);
 
-            return CreatedAtRoute(new { id = result.Id.ToString() }, result);
+            return CreatedAtRoute(new {id = result.Id.ToString()}, result);
         }
         catch (Exception exception)
         {

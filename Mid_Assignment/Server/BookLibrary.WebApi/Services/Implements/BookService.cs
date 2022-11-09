@@ -28,13 +28,10 @@ public class BookService : IBookService
     {
         var categoryIds = requestModel.CategoryIds.Distinct();
 
-        var categories = (List<Category>)await _categoryRepository
+        var categories = (List<Category>) await _categoryRepository
             .GetAllAsync(category => categoryIds.Contains(category.Id));
 
-        if (categories.Count != categoryIds.Count())
-        {
-            return null;
-        }
+        if (categories.Count != categoryIds.Count()) return null;
 
         var newBook = new Book
         {
@@ -114,13 +111,10 @@ public class BookService : IBookService
     {
         var categoryIds = requestModel.CategoryIds.Distinct();
 
-        var categories = (List<Category>)await _categoryRepository
+        var categories = (List<Category>) await _categoryRepository
             .GetAllAsync(category => categoryIds.Contains(category.Id));
 
-        if (categories.Count != categoryIds.Count())
-        {
-            return null;
-        }
+        if (categories.Count != categoryIds.Count()) return null;
 
         var book = await _bookRepository.GetSingleAsync(book => book.Id == requestModel.Id);
 

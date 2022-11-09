@@ -96,10 +96,7 @@ public class CategoryService : ICategoryService
     {
         var category = await _categoryRepository.GetSingleAsync(category => category.Id == requestModel.Id);
 
-        if (category == null)
-        {
-            return null;
-        }
+        if (category == null) return null;
 
         category.Name = requestModel.Name;
 
