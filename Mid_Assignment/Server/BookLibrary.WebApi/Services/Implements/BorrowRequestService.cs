@@ -113,7 +113,7 @@ public class BorrowRequestService : IBorrowRequestService
                               br.Id == request.Id;
         }
 
-        var borrowRequest = await _borrowRequestRepository.GetAsync(predicate);
+        var borrowRequest = await _borrowRequestRepository.GetSingleAsync(predicate);
 
         if (borrowRequest == null) return null;
 
@@ -166,7 +166,7 @@ public class BorrowRequestService : IBorrowRequestService
             if (requestModel.Approver == null) return null;
 
             var borrowRequest =
-                await _borrowRequestRepository.GetAsync(borrowRequest => borrowRequest.Id == requestModel.Id);
+                await _borrowRequestRepository.GetSingleAsync(borrowRequest => borrowRequest.Id == requestModel.Id);
 
             if (borrowRequest == null) return null;
 

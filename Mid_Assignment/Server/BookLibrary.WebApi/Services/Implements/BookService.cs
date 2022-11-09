@@ -86,7 +86,7 @@ public class BookService : IBookService
 
         try
         {
-            var book = await _bookRepository.GetAsync(book => book.Id == id);
+            var book = await _bookRepository.GetSingleAsync(book => book.Id == id);
 
             if (book == null) return false;
 
@@ -131,7 +131,7 @@ public class BookService : IBookService
 
     public async Task<GetBookResponse?> GetByIdAsync(int id)
     {
-        var book = await _bookRepository.GetAsync(book => book.Id == id);
+        var book = await _bookRepository.GetSingleAsync(book => book.Id == id);
 
         return book == null ? null : new GetBookResponse(book);
     }
@@ -158,7 +158,7 @@ public class BookService : IBookService
                 return null;
             }
 
-            var book = await _bookRepository.GetAsync(book => book.Id == requestModel.Id);
+            var book = await _bookRepository.GetSingleAsync(book => book.Id == requestModel.Id);
 
             if (book == null) return null;
 

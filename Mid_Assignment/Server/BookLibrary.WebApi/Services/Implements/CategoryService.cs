@@ -59,7 +59,7 @@ public class CategoryService : ICategoryService
 
         try
         {
-            var category = await _categoryRepository.GetAsync(category => category.Id == id);
+            var category = await _categoryRepository.GetSingleAsync(category => category.Id == id);
 
             if (category == null) return false;
 
@@ -106,7 +106,7 @@ public class CategoryService : ICategoryService
 
     public async Task<GetCategoryResponse?> GetByIdAsync(int id)
     {
-        var category = await _categoryRepository.GetAsync(category => category.Id == id);
+        var category = await _categoryRepository.GetSingleAsync(category => category.Id == id);
 
         if (category == null) return null;
 
@@ -128,7 +128,7 @@ public class CategoryService : ICategoryService
 
         try
         {
-            var category = await _categoryRepository.GetAsync(category => category.Id == requestModel.Id);
+            var category = await _categoryRepository.GetSingleAsync(category => category.Id == requestModel.Id);
 
             if (category == null)
             {

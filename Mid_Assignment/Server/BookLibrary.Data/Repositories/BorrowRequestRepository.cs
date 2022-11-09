@@ -24,7 +24,7 @@ public class BorrowRequestRepository : BaseRepository<BorrowRequest>, IBorrowReq
             .ToListAsync();
     }
 
-    public override async Task<BorrowRequest?> GetAsync(Expression<Func<BorrowRequest, bool>>? predicate = null)
+    public override async Task<BorrowRequest?> GetSingleAsync(Expression<Func<BorrowRequest, bool>>? predicate = null)
     {
         var dbSet = predicate == null ? _dbSet : _dbSet.Where(predicate);
 

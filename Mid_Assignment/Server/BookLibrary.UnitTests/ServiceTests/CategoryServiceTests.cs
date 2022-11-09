@@ -40,7 +40,7 @@ public class CategoryServiceTests
         };
 
         _categoryRepository
-            .Setup(cr => cr.GetAsync(c => c.Id == It.IsAny<int>()))
+            .Setup(cr => cr.GetSingleAsync(c => c.Id == It.IsAny<int>()))
             .ReturnsAsync(new Category
             {
                 Id = inputId,

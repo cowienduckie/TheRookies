@@ -24,7 +24,7 @@ public class BaseRepository<T> : IBaseRepository<T> where T : BaseEntity
         _dbSet.Remove(entity);
     }
 
-    public virtual Task<T?> GetAsync(Expression<Func<T, bool>>? predicate = null)
+    public virtual Task<T?> GetSingleAsync(Expression<Func<T, bool>>? predicate = null)
     {
         return predicate == null ? _dbSet.FirstOrDefaultAsync() : _dbSet.FirstOrDefaultAsync(predicate);
     }

@@ -16,7 +16,7 @@ public class UserService : IUserService
 
     public async Task<UserModel?> GetByIdAsync(int id)
     {
-        var user = await _userRepository.GetAsync(user => user.Id == id);
+        var user = await _userRepository.GetSingleAsync(user => user.Id == id);
 
         if (user == null) return null;
 

@@ -21,7 +21,7 @@ public class BookRepository : BaseRepository<Book>, IBookRepository
             .ToListAsync();
     }
 
-    public override async Task<Book?> GetAsync(Expression<Func<Book, bool>>? predicate = null)
+    public override async Task<Book?> GetSingleAsync(Expression<Func<Book, bool>>? predicate = null)
     {
         var dbSet = predicate == null ? _dbSet : _dbSet.Where(predicate);
 
