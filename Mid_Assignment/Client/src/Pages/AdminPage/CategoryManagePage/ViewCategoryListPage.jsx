@@ -36,6 +36,7 @@ export function ViewCategoryListPage() {
         resourcePath={"/admin/categories"}
         hasIndex
         hasAction
+        hasDetailView={false}
       />
       <Pagination
         my={10}

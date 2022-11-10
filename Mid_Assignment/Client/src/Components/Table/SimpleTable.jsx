@@ -2,7 +2,7 @@ import { Table, TableContainer, Tbody, Thead, Tr, Th, Td } from "@chakra-ui/reac
 import { TableAction } from "./TableAction";
 
 export function SimpleTable(props) {
-  const { data = [], headers = [], fields = [], hasIndex = true, hasAction = false, resourcePath, ...otherProps } = props;
+  const { data = [], headers = [], fields = [], hasIndex = true, hasAction = false, resourcePath, hasDetailView, ...otherProps } = props;
 
   return (
     <TableContainer>
@@ -23,7 +23,7 @@ export function SimpleTable(props) {
               {fields.map(fieldName =>
                 <Td key={`${index}-${fieldName}`}>{value[fieldName]}</Td>
               )}
-              {hasAction && <Td><TableAction objectId={value.id} resourcePath={resourcePath} /></Td>}
+              {hasAction && <Td><TableAction objectId={value.id} resourcePath={resourcePath} hasDetailView={hasDetailView} /></Td>}
             </Tr>
           )}
         </Tbody>

@@ -6,7 +6,7 @@ import { BorrowBookAction, BorrowBookLoader } from './Pages/BorrowBookPage';
 import { AuthenticateAction, AuthenticateLoader } from './Pages/AuthenticatePage';
 import { AdminPageLoader, ViewBookListPage } from './Pages/AdminPage';
 import { BookManageLoader, BookManagePage, CreateBookAction, CreateBookLoader, CreateBookPage, DeleteBookAction, UpdateBookAction, UpdateBookLoader, UpdateBookPage, ViewBookListLoader, ViewBookPage } from './Pages/AdminPage/BookManagePage';
-import { CategoryManageLoader, CategoryManagePage, CreateCategoryAction, CreateCategoryLoader, CreateCategoryPage, DeleteCategoryAction, UpdateCategoryAction, UpdateCategoryLoader, UpdateCategoryPage, ViewCategoryListLoader, ViewCategoryListPage, ViewCategoryLoader, ViewCategoryPage } from './Pages/AdminPage/CategoryManagePage';
+import { CategoryManageLoader, CategoryManagePage, CreateCategoryAction, CreateCategoryLoader, CreateCategoryPage, DeleteCategoryAction, UpdateCategoryAction, UpdateCategoryLoader, UpdateCategoryPage, ViewCategoryListLoader, ViewCategoryListPage} from './Pages/AdminPage/CategoryManagePage';
 import { ApproveRequestAction, ApproveRequestLoader, ApproveRequestPage, BorrowRequestManageLoader, BorrowRequestManagePage, ViewRequestListLoader, ViewRequestListPage, ViewRequestLoader, ViewRequestPage } from './Pages/AdminPage/BorrowRequestManagePage';
 
 const homeRouter = {
@@ -91,11 +91,6 @@ const adminCategoryRouter = {
       index: true,
       element: <ViewCategoryListPage />,
       loader: ViewCategoryListLoader
-    },
-    {
-      path: "/admin/categories/:categoryId",
-      element: <ViewCategoryPage />,
-      loader: ViewCategoryLoader
     },
     {
       path: "/admin/categories/new",

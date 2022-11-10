@@ -6,5 +6,5 @@ export { AuthenticatePage } from "./AuthenticatePage";
 export  { 
   AdminPage, 
   ViewBookListPage, ViewBookPage, CreateBookPage, UpdateBookPage,
-  ViewCategoryListPage, ViewCategoryPage, CreateCategoryPage, UpdateCategoryPage,
+  ViewCategoryListPage, CreateCategoryPage, UpdateCategoryPage,
   ViewRequestListPage, ViewRequestPage, ApproveRequestPage } from "./AdminPage";
