@@ -1,4 +1,5 @@
 import { MenuButton, Button, Menu, MenuList, MenuOptionGroup, MenuItemOption, MenuDivider } from "@chakra-ui/react";
+import { useState } from "react";
 
 export function SortMenu(props) {
   const {
@@ -9,7 +10,11 @@ export function SortMenu(props) {
     closeOnSelect = true,
     buttonText,
     buttonProps = {},
+    handleChange,
+    queryState,
     ...otherProps } = props;
+
+  const [query, setQuery] = useState(queryState)
 
   return (
     <Menu closeOnSelect={closeOnSelect}>
@@ -18,9 +23,13 @@ export function SortMenu(props) {
       </MenuButton>
       <MenuList>
         <MenuOptionGroup
-          defaultValue={defaultOrder}
+          value={query.sortOrder}
           title='Order'
           type='radio'
+          onChange={(value) => {
+            setQuery({...query, ['sortOrder']: value});
+            handleChange({...query, ['sortOrder']: value});
+          }}
         >
           {sortOrders.map(order =>
             <MenuItemOption
@@ -33,11 +42,15 @@ export function SortMenu(props) {
         </MenuOptionGroup>
         <MenuDivider />
         <MenuOptionGroup
-          defaultValue={defaultOption}
-          title='Option'
+          value={query.sortField}
+          title='Field'
           type='radio'
+          onChange={(value) => {
+            setQuery({...query, ['sortField']: value})
+            handleChange({...query, ['sortField']: value});
+          }}
         >
-          <MenuItemOption value=''>(none)</MenuItemOption>
+          <MenuItemOption value={""}>(none)</MenuItemOption>
           {sortOptions.map(option =>
             <MenuItemOption
               key={option.value}

@@ -1,23 +1,64 @@
 import { Heading } from "@chakra-ui/react";
-import { useLoaderData } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { redirect, useLoaderData, useNavigate } from "react-router-dom";
 import { getCategories } from "../../../Apis/CategoryApis";
 import { SimpleTable, ToolBar } from "../../../Components";
 import { Pagination } from "../../../Components/Table/Pagination";
+import { sortOrders } from "../../../Constants/FilterOptions";
+import { DEFAULT_PAGE_INDEX, DEFAULT_PAGE_SIZE, DEFAULT_SORT_FIELD, DEFAULT_SORT_ORDER } from "../../../Constants/SystemConstants";
 
-export async function loader() {
-  return await getCategories();
+const queryToString = (query) => '?' +
+  `pageIndex=${query.pageIndex}&` +
+  `pageSize=${query.pageSize}&` +
+  `sortOrder=${query.sortOrder}&` +
+  `sortField=${query.sortField}`;
+
+export async function loader({ request }) {
+  const url = new URL(request.url);
+  const pageIndex = url.searchParams.get("pageIndex") ?? DEFAULT_PAGE_INDEX;
+  const pageSize = url.searchParams.get("pageSize") ?? DEFAULT_PAGE_SIZE;
+  const sortOrder = url.searchParams.get("sortOrder") ?? DEFAULT_SORT_ORDER;
+  const sortField = url.searchParams.get("sortField") ?? DEFAULT_SORT_FIELD;
+
+  const queryFromUrl = {
+    pageIndex,
+    pageSize,
+    sortOrder,
+    sortField
+  }
+
+  const queriesText = queryToString(queryFromUrl);
+
+  const wrapper = await getCategories(queriesText);
+
+  return { wrapper, queryFromUrl };
 }
 
 export function ViewCategoryListPage() {
-  const wrapper = useLoaderData();
+  const { wrapper, queryFromUrl } = useLoaderData();
+  const navigate = useNavigate();
 
-  const sortOrders = [
-    { value: 'asc', text: 'Ascending' },
-    { value: 'desc', text: 'Descending' }
-  ];
+  const [query, setQuery] = useState(queryFromUrl);
+
+  const onToolBarChange = (newState) => {
+    setQuery(newState);
+  };
+
+  const onPaginationChange = (pageIndex) => {
+    setQuery({...query, ['pageIndex']: parseInt(pageIndex)});
+  }
+
+  useEffect(() => {
+    const queriesText = queryToString(query);
+
+    console.log(queriesText);
+
+    navigate(queriesText)
+  }, [query])
+
   const sortOptions = [
-    { value: 'id', text: 'Id' },
-    { value: 'name', text: 'Name' },
+    { value: '0', text: 'Id' },
+    { value: '1', text: 'Name' },
   ];
 
   const headers = ['Id', 'Name'];
@@ -40,6 +81,7 @@ export function ViewCategoryListPage() {
       />
       <Pagination
         my={10}
+        onClick={onPaginationChange}
         pageIndex={wrapper.pageIndex} 
         pageSize={wrapper.pageSize} 
         totalPage={wrapper.totalPage} 
@@ -52,6 +94,8 @@ export function ViewCategoryListPage() {
 
   return <>
     <ToolBar
+      handleChange={onToolBarChange}
+      queryState={query}
       createPath='/admin/categories/new'
       sortOrders={sortOrders}
       sortOptions={sortOptions}

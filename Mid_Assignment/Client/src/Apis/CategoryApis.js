@@ -3,8 +3,8 @@ import { callApi } from "../Helpers/ApiHelper";
 
 const url = `${BASE_URL}/api/categories`;
 
-export async function getCategories() {
-  return await callApi('get', url);
+export async function getCategories(queries = '') {
+  return await callApi('get', url + queries);
 }
 
 export async function getCategoryById(id) {
