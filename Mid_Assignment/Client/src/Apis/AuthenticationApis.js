@@ -1,24 +1,23 @@
 import axios from "axios";
-import { TOKEN_KEY } from "../Constants/SystemConstants";
+import { BASE_URL, TOKEN_KEY } from "../Constants/SystemConstants";
 
-export async function callApi(method, url, data = null) {
+export async function logIn(loginInfo) {  
+  const url = `${BASE_URL}/api/authentication`;
+
   let response = undefined;
 
-  await axios({
-    method: method,
-    url: url,
-    headers: { "Authorization": localStorage.getItem(TOKEN_KEY) },
-    data: data
-  })
+  await axios.post(url, loginInfo)
     .then(result => {
       response = result.data;
+
+      localStorage.setItem(TOKEN_KEY, response.token);
     })
     .catch(error => {
       throw new Response("", {
         status: error.response.status,
         statusText: error.message
       })
-    })
+    });
 
   return response;
 }

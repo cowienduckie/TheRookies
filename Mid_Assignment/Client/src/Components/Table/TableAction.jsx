@@ -4,24 +4,24 @@ import { FormIconButton } from "../FormIconButton";
 import { LinkIconButton } from "../LinkButton/LinkIconButton";
 
 export function TableAction(props) {
-  const { objectId, ...otherProps } = props;
+  const { objectId, resourcePath, ...otherProps } = props;
 
   return (
     <ButtonGroup>
       <LinkIconButton
-        path={`/rookies/${objectId}`}
+        path={`${resourcePath}/${objectId}`}
         label='Details'
         colorScheme='blue'
         icon={ViewIcon}
       />
       <LinkIconButton
-        path={`/rookies/${objectId}/edit`}
+        path={`${resourcePath}/${objectId}/edit`}
         label='Edit'
         colorScheme='teal'
         icon={EditIcon}
       />
       <FormIconButton
-        path={`/rookies/${objectId}/delete`}
+        path={`${resourcePath}/${objectId}/delete`}
         method='post'
         label='Delete'
         colorScheme='red'

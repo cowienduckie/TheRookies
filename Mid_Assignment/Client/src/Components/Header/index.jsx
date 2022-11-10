@@ -24,15 +24,15 @@ export function Header() {
       <Heading size="md">BOOK LIBRARY</Heading>
       <Link as={NavLink} to='/'>HOME</Link>
       <Link as={NavLink} to='/books'>BOOKS</Link>
+      <Link as={NavLink} to="/admin/categories">ADMIN CATEGORY</Link>
       <Spacer />
       {!authenticated ?
         (
-          <LinkBox as={NavLink} to='/login'>
+          <LinkBox as={NavLink} to='/authenticate'>
             <Button colorScheme='blue'>Login</Button>
           </LinkBox>
         ) : (
           <>
-            <Link as={NavLink} to='/profile'>Profile</Link>
             <Link as={NavLink} to='/' onClick={onLogOut}>Logout</Link>
           </>
         )}

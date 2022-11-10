@@ -11,7 +11,7 @@ export function ErrorPage() {
         <Spacer/>
         <Text fontSize="3xl">Sorry, an unexpected error has occurred. <Link as={NavLink} to="/" color="blue.200">Back to Home</Link></Text>
         <Spacer/>
-        <Text fontSize="2xl">{error.statusText || error.message}</Text>
+        <Text fontSize="2xl"><strong>[{error.status}]</strong> {error.statusText || error.message}</Text>
       </VStack>
     </Center>
   );

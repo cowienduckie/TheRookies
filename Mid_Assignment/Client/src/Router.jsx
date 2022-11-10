@@ -89,7 +89,6 @@ const adminCategoryRouter = {
   children: [
     {
       index: true,
-      path: "/admin/categories/list",
       element: <ViewCategoryListPage />,
       loader: ViewCategoryListLoader
     },
