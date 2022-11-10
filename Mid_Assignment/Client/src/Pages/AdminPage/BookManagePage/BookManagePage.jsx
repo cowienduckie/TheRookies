@@ -1,10 +1,10 @@
 import { Outlet } from "react-router-dom";
 
 export function loader() {
-  
+
 }
 
-export function AdminPage() {
+export function BookManagePage() {
   return (
     <>
       <Outlet />
