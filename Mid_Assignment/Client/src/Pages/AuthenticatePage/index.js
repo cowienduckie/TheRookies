@@ -1,1 +1,0 @@
-export { AuthenticatePage, loader as AuthenticateLoader, action as AuthenticateAction } from "./AuthenticatePage";
