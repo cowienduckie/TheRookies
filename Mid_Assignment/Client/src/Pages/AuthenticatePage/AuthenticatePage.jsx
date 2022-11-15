@@ -32,7 +32,8 @@ export function AuthenticatePage() {
     password: "",
   });
 
-  const sendRequest = () => {
+  const sendRequest = (event) => {
+    event.preventDefault();
     if (isSending) return;
 
     setIsSending(true);
